@@ -1,9 +1,13 @@
 Package: sysid
 Type: Package
-Title: What the package does (short line)
+Title: System Identification in R
 Version: 1.0
 Date: 2015-01-17
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Suraj Yerramilli
+Maintainer: Suraj Yerramilli <surajyerramilli@outlook.com>
+Description: The package provides functions for constructing mathematical models of dynamic
+systems from measured input-output data. It lets you create and use models of dynamic systems
+not easily modeled from first principles or specifications. You can use time-domain and 
+frequency-domain input-output data to identify discrete-time input-output models, transfer 
+functions and state space models.
+License: GPL-3
