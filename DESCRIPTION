@@ -3,7 +3,7 @@ Type: Package
 Title: System Identification in R
 Version: 1.0
 Date: 2015-01-17
-Author: Suraj Yerramilli
+Author: Suraj Yerramilli, Narasimhan Balakrishnan, Arun Tangirala 
 Maintainer: Suraj Yerramilli <surajyerramilli@outlook.com>
 Description: The package provides functions for constructing mathematical models of dynamic
 systems from measured input-output data. It lets you create and use models of dynamic systems
