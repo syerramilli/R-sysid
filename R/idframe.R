@@ -5,6 +5,14 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
                      t.start=0,t.end=NA, timeUnit = "seconds", 
                      frequencies = NA, freqUnit= "Hz"){
   
+  ## Input Validation
+  if(!(type %in% c("time","freq"))) # type validation
+    stop("Unknown domain type")
+  
+  if(dim(output)[1]!=dim(input)[1]) # observation validation
+    stop("Dimensions don't matach")
+  
+  # Object Constructor
   dat <- list(output=data.frame(output),input=data.frame(input),type=type,Ts=Ts)
   n <- dim(output)[1]
   p <- dim(output)[2];m <- dim(input)[2]
@@ -57,4 +65,3 @@ plot.idframe <- function(object,...){
 summary.idframe <- function(object,...){
   
 }
-
