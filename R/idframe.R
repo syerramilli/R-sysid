@@ -53,12 +53,42 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
 
 # print method for idframe class
 print.idframe <- function(object,...){
-  
+  print(object)
 }
 
 # plot method for idframe object
 plot.idframe <- function(object,...){
   
+  p <- dim(object$output)[2];m <- dim(object$input)[2]
+  
+  if(p!=1 && m!=1){
+    oask <- devAskNewPage(TRUE)
+    on.exit(devAskNewPage(oask))
+    
+    for(i in seq(m)){
+      for(j in seq(p)){
+        par(mfrow=c(2,1))
+        plot(.index(object),object$output[,p],xlab=object$type,
+             ylab=colnames(object$output)[p],type="l",...)
+        plot(.index(object),object$input[,m],xlab=object$type,
+             ylab=colnames(object$input)[m],type="l",...)
+      }
+    }
+  } else {
+    par(mfrow=c(2,1))
+    plot(.index(object),object$output[,1],xlab=object$type,
+         ylab=colnames(object$output),type="l",...)
+    plot(.index(object),object$input[,1],xlab=object$type,
+         ylab=colnames(object$input),type="l",...)
+  }  
+}
+
+.index <- function(object){
+  if(object$type=="time"){
+    return(seq(from=object$tStart,to=object$tEnd,by=object$Ts)) 
+  } else {
+    return(object$frequencies) 
+  }
 }
 
 # summary method for idframe object
