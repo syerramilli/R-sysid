@@ -18,10 +18,10 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
   p <- dim(output)[2];m <- dim(input)[2]
   
   if(outputnames==NULL)
-    outputnames <- sapply(1:p,FUN=function(x){paste("y",as.character(x),sep="")}})
+    outputnames <- sapply(1:p,FUN=function(x){paste("y",as.character(x),sep="")})
   
   if(inputnames==NULL)
-    inputnames <- sapply(1:m,FUN=function(x){paste("u",as.character(x),sep="")}})
+    inputnames <- sapply(1:m,FUN=function(x){paste("u",as.character(x),sep="")})
   
   colnames(dat$output) <- outputnames
   colnames(dat$input) <- inputnames
