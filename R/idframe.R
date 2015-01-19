@@ -1,5 +1,5 @@
 # class idframe
-idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
+idframe <- function(output=numeric(0),input=numeric(0),
                      type=c("time","freq")[1],Ts = 1,
                      outputnames = colnames(output),inputnames = colnames(input),
                      t.start=0,t.end=NA, timeUnit = "seconds", 
@@ -9,18 +9,20 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
   if(!(type %in% c("time","freq"))) # type validation
     stop("Unknown domain type")
   
-  if(dim(output)[1]!=dim(input)[1]) # observation validation
-    stop("Dimensions don't matach")
+  if(length(output)!=0 && length(input)!=0){
+    if(dim(output)[1]!=dim(input)[1]) # observation validation
+      stop("Dimensions don't matach")
+  }
   
   # Object Constructor
   dat <- list(output=data.frame(output),input=data.frame(input),type=type,Ts=Ts)
   n <- dim(output)[1]
   p <- dim(output)[2];m <- dim(input)[2]
   
-  if(outputnames==NULL)
+  if(outputnames==NULL && length(output)!=0)
     outputnames <- sapply(1:p,FUN=function(x){paste("y",as.character(x),sep="")})
   
-  if(inputnames==NULL)
+  if(inputnames==NULL && length(input)!=0)
     inputnames <- sapply(1:m,FUN=function(x){paste("u",as.character(x),sep="")})
   
   colnames(dat$output) <- outputnames
@@ -40,11 +42,11 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
     if(is.na(t.end)) {
       t.end <- t.start + Ts*(n-1)
     } else {
-      out$Ts <- (t.end-t.start)/(n-1)
+      dat$Ts <- (t.end-t.start)/(n-1)
     }
     
-    out$tStart <- t.start; out$tEnd <- t.end
-    out$timeUnit <- timeUnit
+    dat$tStart <- t.start; dat$tEnd <- t.end
+    dat$timeUnit <- timeUnit
   }
       
   class(dat) <- "idframe"
@@ -52,9 +54,9 @@ idframe <- function(output=data.frame(numeric(0)),input=data.frame(numeric(0)),
 }
 
 # print method for idframe class
-print.idframe <- function(object,...){
-  print(object)
-}
+#print.idframe <- function(object,...){
+#  print(object)
+#}
 
 # plot method for idframe object
 plot.idframe <- function(object,...){
