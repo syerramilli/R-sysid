@@ -59,11 +59,11 @@ plot.idframe <- function(object,...){
     
     for(i in seq(m)){
       for(j in seq(p)){
-        par(mfrow=c(2,1))
-        plot(.index(object),object$output[,p],xlab=object$type,
-             ylab=colnames(object$output)[p],type="l",...)
-        plot(.index(object),object$input[,m],xlab=object$type,
-             ylab=colnames(object$input)[m],type="l",...)
+        par(mfrow=c(2,1),mar=c(3,4,3,2))
+        plot(.index(object),object$output[,j],xlab=object$type,
+             ylab=colnames(object$output)[j],type="l",...)
+        plot(.index(object),object$input[,i],xlab=object$type,
+             ylab=colnames(object$input)[i],type="l",...)
       }
     }
   } else {
@@ -87,3 +87,5 @@ plot.idframe <- function(object,...){
 summary.idframe <- function(object,...){
   
 }
+
+# Assigning names to the output variables
