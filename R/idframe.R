@@ -2,8 +2,8 @@
 idframe <- function(output=numeric(0),input=numeric(0),
                      type=c("time","freq")[1],Ts = 1,
                      outputnames = colnames(output),inputnames = colnames(input),
-                     t.start=0,t.end=NA, timeUnit = "seconds", 
-                     frequencies = NA, freqUnit= "Hz"){
+                     t.start=0,t.end=NA, tUnit = "seconds", 
+                     frequencies = NA, fUnit= "Hz"){
   
   ## Input Validation
   if(!(type %in% c("time","freq"))) # type validation
@@ -35,7 +35,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
     }
     
     dat$frequencies <- frequencies
-    dat$freqUnit <- freqUnit
+    dat$fUnit <- fUnit
     
   } else {
     
@@ -46,7 +46,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
     }
     
     dat$tStart <- t.start; dat$tEnd <- t.end
-    dat$timeUnit <- timeUnit
+    dat$tUnit <- tUnit
   }
       
   class(dat) <- "idframe"
