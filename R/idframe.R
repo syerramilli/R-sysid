@@ -87,5 +87,3 @@ plot.idframe <- function(object,...){
 summary.idframe <- function(object,...){
   
 }
-
-# Assigning names to the output variables
