@@ -43,11 +43,6 @@ idframe <- function(output=numeric(0),input=numeric(0),
   return(dat)
 }
 
-# print method for idframe class
-#print.idframe <- function(object,...){
-#  print(object)
-#}
-
 # plot method for idframe object
 plot.idframe <- function(object,...){
   
@@ -85,5 +80,16 @@ plot.idframe <- function(object,...){
 
 # summary method for idframe object
 summary.idframe <- function(object,...){
+  output <- summary(object$output)
+  input <- summary(object$input)
   
+  out <- list(outputs=out_sum,inputs=input_sum,Ts=object$Ts,type=object$type,
+              tUnit=object$tUnit)
+  if(type=="time"){
+    out$tStart <- object$tStart;out$tEnd <- object$tEnd
+  } else{
+    out$frequencies <- object$frequencies;out$fUnit <- object$fUnit
+  }
+  
+  return(out)
 }
