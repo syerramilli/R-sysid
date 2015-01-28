@@ -88,8 +88,31 @@ summary.idframe <- function(object,...){
   if(object$type=="time"){
     out$tStart <- object$tStart;out$tEnd <- object$tEnd
   } else{
-    out$frequencies <- object$frequencies;out$fUnit <- object$fUnit
+    out$frequencies <- summary(object$frequencies);out$fUnit <- object$fUnit
   }
   
+  class(out) <- "summary.idframe"
   return(out)
+}
+
+# print method for summary.idframe object
+print.summary.idframe <- function(object,...){
+  cat("Domain: ");cat(object$type)
+  cat("\t\t Number of samples:");cat(object$no_of_samples)
+  cat("\nSampling time: ")
+  cat(object$Ts);cat(" ");cat(object$tUnit)
+  
+  if(object$type=="frequency"){
+    cat("\t Frequency Unit: ");print(object$fUnit)
+    cat("\n\n Frequeny Summary:")
+    print(object$frequencies)
+  }
+  
+  cat("\n\n")
+  cat("Outputs \n")
+  print(object$outputs)
+  cat("\n")
+  
+  cat("Inputs \n")
+  print(object$inputs)
 }
