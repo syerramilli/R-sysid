@@ -84,7 +84,7 @@ summary.idframe <- function(object,...){
   in_sum <- summary(object$input)
   
   out <- list(outputs=out_sum,inputs=in_sum,Ts=object$Ts,type=object$type,
-              tUnit=object$tUnit,no_of_samples = dim(outputs)[1])
+              tUnit=object$tUnit,no_of_samples = dim(object$output)[1])
   if(object$type=="time"){
     out$tStart <- object$tStart;out$tEnd <- object$tEnd
   } else{
