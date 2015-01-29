@@ -1,4 +1,22 @@
-# Reading data from dataframes
+#' Data input into a idframe object
+#' 
+#' Read the contents of an file in table format into a \code{idframe} object.
+#' 
+#' @param data a \code{data.frame} object
+#' @param ninputs the number of input columns. (Default: 1)
+#' @param type indicates the domain of the data (Default:\code{"time"})
+#' @param Ts sampling interval (Default: 1)
+#' @param freqData a logical value indicating whether the file contains the list of
+#' frequencies. If \code{TRUE}, they need to be present in the first column. 
+#' (Default: \code{idframe})
+#' 
+#' @details
+#' 
+#' If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file 
+#' should contain the frequencies.
+#' 
+#' @return an idframe object
+#' @export 
 read.idframe <- function(data,ninputs=1,type=c("time","freq")[1],
                  Ts = 1,freqData=FALSE){
   
@@ -22,8 +40,38 @@ read.idframe <- function(data,ninputs=1,type=c("time","freq")[1],
   return(out)
 }
 
-# Reading from table-formatted files
-readtab.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
+#' Data input into a idframe object
+#' 
+#' Read the contents of an file in table format into a \code{idframe} object.
+#' 
+#' @param file the path to the file to read
+#' @param sep the field separator character. Values on each line of the file are 
+#' separated by this character. (Default: \code{","})
+#' @param header a logical value indicating whether the first row corresponding to 
+#' the first element of the rowIndex vector contains the names of the variables. 
+#' (Default: \code{TRUE})
+#' @param ninputs the number of input columns. (Default: 1)
+#' @param type indicates the domain of the data (Default:\code{"time"})
+#' @param Ts sampling interval (Default: 1)
+#' @param freqData a logical value indicating whether the file contains the list of
+#' frequencies. If \code{TRUE}, they need to be present in the first column. 
+#' (Default: \code{idframe})
+#' @param ... additional arguments to be passed to the \code{\link[utils]{read.table}} function
+#' 
+#' @details
+#' 
+#' The \code{readxlsx.idframe} function uses the \code{\link[utils]{read.table}} function, 
+#' provided by the \pkg{xlsx} package, to read data from an excel file and then calls the 
+#' \code{\link{read.idframe}} function to read the data into a idframe object
+#' 
+#' 
+#' If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file 
+#' should contain the frequencies.
+#' 
+#' @return an idframe object
+#' @export 
+#' @seealso  \code{\link[utils]{read.table}}
+read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
              type=c("time","freq")[1],Ts = 1,freqData=FALSE,...){
   
   # Read from file (default: csv file)
@@ -44,7 +92,7 @@ readtab.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' the first element of the rowIndex vector contains the names of the variables. 
 #' (Default: \code{TRUE})
 #' @param ninputs the number of input columns. (Default: 1)
-#' @param type ndicates the domain of the data (Default:\code{"time"})
+#' @param type indicates the domain of the data (Default:\code{"time"})
 #' @param Ts sampling interval (Default: 1)
 #' @param freqData a logical value indicating whether the file contains the list of
 #' frequencies. If \code{TRUE}, they need to be present in the first column. 
@@ -53,7 +101,7 @@ readtab.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' 
 #' @details
 #' 
-#' The \code{readxlsx.idframe} function uses the \code{\link[xlsx]{read.xlsx2}} function, 
+#' The \code{read.xlsx.idframe} function uses the \code{\link[xlsx]{read.xlsx2}} function, 
 #' provided by the \pkg{xlsx} package, to read data from an excel file and then calls the 
 #' \code{\link{read.idframe}} function to read the data into a idframe object
 #' 
@@ -68,7 +116,7 @@ readtab.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' @return an idframe object
 #' @export 
 #' @seealso  \code{\link[xlsx]{read.xlsx2}}
-readxls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
+read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
                 type=c("time","freq")[1],Ts = 1,freqData=FALSE,...){
   
   require(xlsx)
