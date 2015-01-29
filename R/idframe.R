@@ -1,4 +1,18 @@
-# class idframe
+#' S3 class for storing input-output data. 
+#'
+#' \code{idframe} is an S3 class for storisupports discrete time and frequency domain data.
+#'
+#' @param output dataframe/matrix/vector containing the outputs
+#' @param input dataframe/matrix/vector containing the inputs
+#' @param type indicates the domain of the data (Default:"time")
+#' @param Ts sampling interval (Default: 1)
+#' @param t.start Starting time (Valid only if type="time")
+#' @param t.end End time. Optional Argument (Valid only if type="time")
+#' @param tUnit Time Unit (Default: "seconds")
+#' @param frequencies Vector containing the list of frequencies at which the data was recorded (Valid only if type="frequency")
+#' @param fUnit Frequency Unit (Valid only if type="frequency")
+#' @return an idframe object
+#' @export
 idframe <- function(output=numeric(0),input=numeric(0),
                      type=c("time","freq")[1],Ts = 1,
                      t.start=0,t.end=NA, tUnit = "seconds", 
