@@ -2,14 +2,14 @@
 % Please edit documentation in R/idframe.R
 \name{summary.idframe}
 \alias{summary.idframe}
-\title{idframe-Object summaries}
+\title{idframe-object summaries}
 \usage{
 \method{summary}{idframe}(object)
 }
 \arguments{
-\item{object}{an object of class "idframe"}
+\item{object}{an object of class \code{idframe}}
 }
 \description{
-Generates a summary of objects inherting from class `idframe`
+Generates a summary of objects inherting from class \code{idframe}
 }
 

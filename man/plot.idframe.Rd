@@ -7,11 +7,11 @@
 \method{plot}{idframe}(object, ...)
 }
 \arguments{
-\item{object}{an object of class "idframe"}
+\item{object}{an object of class \code{idframe}}
 
-\item{...}{additional arguments to be passed to the `plot` function}
+\item{...}{additional arguments to be passed to the \code{plot} function}
 }
 \description{
-Plotting method for objects inherting from class "idframe"
+Plotting method for objects inherting from class \code{idframe}
 }
 

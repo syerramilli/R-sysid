@@ -60,10 +60,10 @@ idframe <- function(output=numeric(0),input=numeric(0),
 
 #' Plotting idframe objects
 #' 
-#' Plotting method for objects inherting from class "idframe"
+#' Plotting method for objects inherting from class \code{idframe}
 #' 
-#' @param object an object of class "idframe"
-#' @param ... additional arguments to be passed to the `plot` function
+#' @param object an object of class \code{idframe}
+#' @param ... additional arguments to be passed to the \code{plot} function
 #' @export
 plot.idframe <- function(object,...){
   
@@ -99,11 +99,11 @@ plot.idframe <- function(object,...){
   }
 }
 
-#' idframe-Object summaries
+#' idframe-object summaries
 #' 
-#' Generates a summary of objects inherting from class `idframe`
+#' Generates a summary of objects inherting from class \code{idframe}
 #' 
-#' @param object an object of class "idframe"
+#' @param object an object of class \code{idframe}
 #' @export
 summary.idframe <- function(object){
   out_sum <- summary(object$output)
