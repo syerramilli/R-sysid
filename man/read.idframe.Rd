@@ -4,11 +4,15 @@
 \alias{read.idframe}
 \title{Data input into a idframe object}
 \usage{
-read.idframe(data, ninputs = 1, type = c("time", "freq")[1], Ts = 1,
-  freqData = FALSE)
+read.idframe(data, freqData = FALSE, ninputs = 1, type = c("time",
+  "freq")[1], Ts = 1, tUnit = "time")
 }
 \arguments{
 \item{data}{a \code{data.frame} object}
+
+\item{freqData}{a logical value indicating whether the file contains the list of
+frequencies. If \code{TRUE}, they need to be present in the first column.
+(Default: \code{idframe})}
 
 \item{ninputs}{the number of input columns. (Default: 1)}
 
@@ -16,9 +20,7 @@ read.idframe(data, ninputs = 1, type = c("time", "freq")[1], Ts = 1,
 
 \item{Ts}{sampling interval (Default: 1)}
 
-\item{freqData}{a logical value indicating whether the file contains the list of
-frequencies. If \code{TRUE}, they need to be present in the first column.
-(Default: \code{idframe})}
+\item{tUnit}{Time Unit (Default: "seconds")}
 }
 \value{
 an idframe object

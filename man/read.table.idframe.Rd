@@ -5,7 +5,8 @@
 \title{Data input into a idframe object}
 \usage{
 read.table.idframe(file, header = TRUE, sep = ",", ninputs = 1,
-  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, ...)
+  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "time",
+  ...)
 }
 \arguments{
 \item{file}{the path to the file to read}
@@ -26,6 +27,8 @@ separated by this character. (Default: \code{","})}
 \item{freqData}{a logical value indicating whether the file contains the list of
 frequencies. If \code{TRUE}, they need to be present in the first column.
 (Default: \code{idframe})}
+
+\item{tUnit}{Time Unit (Default: "seconds")}
 
 \item{...}{additional arguments to be passed to the \code{\link[utils]{read.table}} function}
 }
