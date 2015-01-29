@@ -9,7 +9,8 @@
 #' @param t.start Starting time (Valid only if type="time")
 #' @param t.end End time. Optional Argument (Valid only if type="time")
 #' @param tUnit Time Unit (Default: "seconds")
-#' @param frequencies Vector containing the list of frequencies at which the data was recorded (Valid only if type="frequency")
+#' @param frequencies Vector containing the list of frequencies at which the data was 
+#' recorded (Valid only if type="frequency")
 #' @param fUnit Frequency Unit (Valid only if type="frequency")
 #' @return an idframe object
 #' @export

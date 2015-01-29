@@ -23,7 +23,8 @@ idframe(output = numeric(0), input = numeric(0), type = c("time",
 
 \item{tUnit}{Time Unit (Default: "seconds")}
 
-\item{frequencies}{Vector containing the list of frequencies at which the data was recorded (Valid only if type="frequency")}
+\item{frequencies}{Vector containing the list of frequencies at which the data was
+recorded (Valid only if type="frequency")}
 
 \item{fUnit}{Frequency Unit (Valid only if type="frequency")}
 }
