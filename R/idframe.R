@@ -1,6 +1,6 @@
 #' S3 class for storing input-output data. 
 #'
-#' \code{idframe} is an S3 class for storisupports discrete time and frequency domain data.
+#' \code{idframe} is an S3 class for storing and manipulating input-ouput data. It supports discrete time and frequency domain data.
 #'
 #' @param output dataframe/matrix/vector containing the outputs
 #' @param input dataframe/matrix/vector containing the inputs

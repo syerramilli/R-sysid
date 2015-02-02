@@ -32,6 +32,6 @@ recorded (Valid only if type="frequency")}
 an idframe object
 }
 \description{
-\code{idframe} is an S3 class for storisupports discrete time and frequency domain data.
+\code{idframe} is an S3 class for storing and manipulating input-ouput data. It supports discrete time and frequency domain data.
 }
 
