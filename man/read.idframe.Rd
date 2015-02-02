@@ -26,7 +26,7 @@ frequencies. If \code{TRUE}, they need to be present in the first column.
 an idframe object
 }
 \description{
-Read the contents of an file in table format into a \code{idframe} object.
+Read the contents of a \code{data.frame} object into a \code{idframe} object.
 }
 \details{
 If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file

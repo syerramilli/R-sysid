@@ -1,6 +1,6 @@
 #' Data input into a idframe object
 #' 
-#' Read the contents of an file in table format into a \code{idframe} object.
+#' Read the contents of a \code{data.frame} object into a \code{idframe} object.
 #' 
 #' @param data a \code{data.frame} object
 #' @param freqData a logical value indicating whether the file contains the list of
