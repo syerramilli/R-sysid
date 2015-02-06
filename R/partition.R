@@ -17,6 +17,35 @@ dataSlice <- function(object,indices){
   trim$output <- trim$output[indices,]
   trim$input <- trim$input[indices,]
   
-  if(trim$type=="freq")
-    trim$frequncies <- trim$frequencies[indices]
+  if(trim$type=="freq"){
+    trim$frequncies <- trim$frequencies[indices] 
+  } else {
+    trim$t.start <- trim$t.start + Ts*(indices[1]-1)
+    trim$t.end <- trim$t.start + Ts*(length(indices)-1)
+  }
+}
+
+#' Split data into training and validation sets
+#' 
+#' The function splits the data into training and validation sets and returns them bundled
+#' as a list. The size of the sets are determined by the parameter \code{p}.
+#' 
+#' @param object an object of class \code{idframe}
+#' @param p the percentage of the data that goes to training (Default : \code{0.6})
+#' @return list containing estimation and validation idframe objects
+#' @export
+dataPartition <- function(object,p=0.6){
+  # check if the class is correct
+  if(class(object)!='idframe')
+    stop("Not an idframe object")
+  
+  index <- seq_along(object$output[,1])
+  
+  trainIndex <- index[1:round(p*length(index))]
+  testIndex <- index[!(index %in% trainIndex)]
+  
+  train <- dataSlice(object,trainIndex)
+  test <- dataSlice(object,testIndex)
+  
+  return(estimation=train,validation=test)
 }
