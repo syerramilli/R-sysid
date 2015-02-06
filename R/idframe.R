@@ -50,7 +50,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
       dat$Ts <- (t.end-t.start)/(n-1)
     }
     
-    dat$tStart <- t.start; dat$tEnd <- t.end
+    dat$t.start <- t.start; dat$t.end <- t.end
     dat$tUnit <- tUnit
   }
       
@@ -93,7 +93,7 @@ plot.idframe <- function(object,...){
 
 .index <- function(object){
   if(object$type=="time"){
-    return(seq(from=object$tStart,to=object$tEnd,by=object$Ts)) 
+    return(seq(from=object$t.start,to=object$t.end,by=object$Ts)) 
   } else {
     return(object$frequencies) 
   }
@@ -112,7 +112,7 @@ summary.idframe <- function(object){
   out <- list(outputs=out_sum,inputs=in_sum,Ts=object$Ts,type=object$type,
               tUnit=object$tUnit,no_of_samples = dim(object$output)[1])
   if(object$type=="time"){
-    out$tStart <- object$tStart;out$tEnd <- object$tEnd
+    out$t.start <- object$t.start;out$t.end <- object$t.end
   } else{
     out$frequencies <- summary(object$frequencies);out$fUnit <- object$fUnit
   }
