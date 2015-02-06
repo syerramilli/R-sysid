@@ -14,8 +14,8 @@ dataSlice <- function(object,indices){
     stop("Invalid indices")
   
   trim <- object
-  trim$output <- trim$output[indices,]
-  trim$input <- trim$input[indices,]
+  trim$output <- trim$output[indices,,drop=F]
+  trim$input <- trim$input[indices,,drop=F]
   
   if(trim$type=="freq"){
     trim$frequncies <- trim$frequencies[indices] 
