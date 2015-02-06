@@ -69,29 +69,30 @@ plot.idframe <- function(object,...){
   
   p <- dim(object$output)[2];m <- dim(object$input)[2]
   
-  if(p!=1 && m!=1){
+  if(p!=1 || m!=1){
     oask <- devAskNewPage(TRUE)
     on.exit(devAskNewPage(oask))
     
     for(i in seq(m)){
       for(j in seq(p)){
-        par(mfrow=c(2,1),mar=c(3,4,3,2))
-        plot(.index(object),object$output[,j],xlab=object$type,
+        par(mfrow=c(2,1),mar=c(3,4,2,2))
+        plot(index(object),object$output[,j],xlab=object$type,
              ylab=colnames(object$output)[j],type="l",...)
-        plot(.index(object),object$input[,i],xlab=object$type,
+        plot(index(object),object$input[,i],xlab=object$type,
              ylab=colnames(object$input)[i],type="l",...)
       }
     }
   } else {
-    par(mfrow=c(2,1))
-    plot(.index(object),object$output[,1],xlab=object$type,
+    par(mfrow=c(2,1),mar=c(3,4,3,2))
+    plot(index(object),object$output[,1],xlab=object$type,
          ylab=colnames(object$output),type="l",...)
-    plot(.index(object),object$input[,1],xlab=object$type,
+    plot(index(object),object$input[,1],xlab=object$type,
          ylab=colnames(object$input),type="l",...)
   }  
 }
 
-.index <- function(object){
+#' @export
+index <- function(object){
   if(object$type=="time"){
     return(seq(from=object$t.start,to=object$t.end,by=object$Ts)) 
   } else {
