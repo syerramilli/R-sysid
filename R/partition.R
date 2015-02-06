@@ -35,6 +35,13 @@ dataSlice <- function(object,indices){
 #' @param object an object of class \code{idframe}
 #' @param p the percentage of the data that goes to training (Default : \code{0.6})
 #' @return list containing estimation and validation idframe objects
+#' 
+#' @examples
+#' data(cstr)
+#' splitList <- dataPartition(cstr,p=0.6)
+#' train <- splitList$estimation # training set 
+#' test <- splitList$validation # testing set
+#' 
 #' @export
 dataPartition <- function(object,p=0.6){
   # check if the class is correct

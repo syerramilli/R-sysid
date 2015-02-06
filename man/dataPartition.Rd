@@ -18,4 +18,10 @@ list containing estimation and validation idframe objects
 The function splits the data into training and validation sets and returns them bundled
 as a list. The size of the sets are determined by the parameter \code{p}.
 }
+\examples{
+data(cstr)
+splitList <- dataPartition(cstr,p=0.6)
+train <- splitList$estimation # training set
+test <- splitList$validation # testing set
+}
 
