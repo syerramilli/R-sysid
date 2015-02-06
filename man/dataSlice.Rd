@@ -2,16 +2,16 @@
 % Please edit documentation in R/partition.R
 \name{dataSlice}
 \alias{dataSlice}
-\title{Subset an idframe object}
+\title{Subset an idframe data}
 \usage{
-dataSlice(object, indices)
+dataSlice(data, indices)
 }
 \arguments{
-\item{object}{an object of class \code{idframe}}
+\item{data}{an object of class \code{idframe}}
 
 \item{indices}{the indices that need to be subsetted}
 }
 \description{
-Subsetting method for objects of class \code{idframe}
+Subsetting method for datas of class \code{idframe}
 }
 

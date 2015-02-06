@@ -4,15 +4,15 @@
 \alias{dataPartition}
 \title{Split data into training and validation sets}
 \usage{
-dataPartition(object, p = 0.6)
+dataPartition(data, p = 0.6)
 }
 \arguments{
-\item{object}{an object of class \code{idframe}}
+\item{data}{an object of class \code{idframe}}
 
 \item{p}{the percentage of the data that goes to training (Default : \code{0.6})}
 }
 \value{
-list containing estimation and validation idframe objects
+list containing estimation and validation idframe datas
 }
 \description{
 The function splits the data into training and validation sets and returns them bundled
