@@ -4,7 +4,7 @@
 \alias{dataImpute}
 \title{Impute missing values}
 \usage{
-dataImpute(data, m = 5)
+dataImpute(data, m = 1)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}

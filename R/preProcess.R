@@ -24,13 +24,30 @@
 #' 
 #' @seealso \code{\link[Amelia]{amelia}}
 #' @export 
-dataImpute <- function(data,m=5){
+dataImpute <- function(data,m=1){
   # check if the class is correct
   if(class(data)!='idframe')
     stop("Not an idframe data")
   
-  ninputs <- dim(data$input)[2]
   dataMatrix <- cbind(data$input,data$output)
   
-  a.out <- amelia(dataMatrix,m=5,p2s = 0)
+  a.out <- amelia(dataMatrix,m=m,p2s = 0)
+  
+  a.assign <- function(dataMatrix,data){
+    ninputs <- dim(data$input)[2]
+    out <- data
+    
+    colIndex <- 1:(dim(dataMatrix)[2])
+    inputIndex <- 1:ninputs
+    outputIndex <- colIndex[!(colIndex %in% inputIndex)]
+    
+    out$input <- dataMatrix[,1:inputIndex,drop=F]
+    out$output <- dataMatrix[,1:outputIndex,drop=F]
+    
+    return(out)
+  }
+  
+  imputations <- lapply(X=a.out$imputations,FUN=a.assign,data=data)
+  
+  return(list(imputations=imputations,m=m))
 }
