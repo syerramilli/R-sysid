@@ -20,9 +20,11 @@ dataSlice <- function(object,indices){
   if(trim$type=="freq"){
     trim$frequncies <- trim$frequencies[indices] 
   } else {
-    trim$t.start <- trim$t.start + Ts*(indices[1]-1)
-    trim$t.end <- trim$t.start + Ts*(length(indices)-1)
+    trim$t.start <- trim$t.start + trim$Ts*(indices[1]-1)
+    trim$t.end <- trim$t.start + trim$Ts*(length(indices)-1)
   }
+  
+  return(trim)
 }
 
 #' Split data into training and validation sets
@@ -47,5 +49,5 @@ dataPartition <- function(object,p=0.6){
   train <- dataSlice(object,trainIndex)
   test <- dataSlice(object,testIndex)
   
-  return(estimation=train,validation=test)
+  return(list(estimation=train,validation=test))
 }
