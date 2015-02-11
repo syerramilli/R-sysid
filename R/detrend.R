@@ -1,21 +1,39 @@
 #' Remove linear trends
 #' 
-#' Removes the mean value or (piecewise) linear function from the 
-#' input and output matrices
-#'  
+#' Removes the linear function from the input and output matrices. 
+#' 
+#' @param data an object of class \code{idframe}
+#' 
+#' @examples
+#' data(cstr)
+#' fit <- detrend(cstr)
+#' cstr_detrend <- predict(fit)
+#' 
+#' ## Examples for train and test sets
+#' data(cstr)
+#' splitList <- dataPartition(cstr,p=0.6)
+#' train <- splitList$estimation # training set 
+#' test <- splitList$validation # testing set
+#' fit <- detrend(trend)
+#' train_detrend <- predict(fit)
+#' test_detrend <- predict(fit,newdata=test)   
+#' 
+#' @seealso \code{\link[stats]{lm}}
 #' @export
-detrend.idframe <- function(data,tt="linear",bp=c()){
-  require(pracma)
+detrend.idframe <- function(data){
   
-  output0 <- as.data.frame(detrend(as.matrix(data$output),tt=tt,bp=bp))
-  input0 <- as.data.frame(detrend(as.matrix(data$input),tt=tt,bp=bp))
+  data_detrend <- data 
+    
+  output_trend <- lapply(data$output,trend.fit)
+  out <- detrend.predict(output_trend,data$output)
   
-  data0 <- data; data0$output <- output0; data0$input <- input0
-  output_d <- data$output - output0
-  input_d <- data$input - input0
+  input_trend <- lapply(data$input,trend.fit)
+  input <- detrend.predict(input_trend,data$input)
   
-  est <- list(fitted.values= data0,out.diff = output_d,inp.diff=input_d,
-              raw.values = data)
+  data_detrend$output <- out;data_detrend$input <- input
+    
+  est <- list(fitted.values=data_detrend,output.trend = output_trend,
+              input.trend = input_trend)
   
   class(est) <- "detrend.idframe"
   return(est)
@@ -31,8 +49,21 @@ predict.detrend.idframe <- function(object,newdata=NULL,...){
     data <- fitted(object)
   } else{
      data <- newdata
-     data$output <- newdata$output - object$out.diff
-     data$input <- newdata$input - object$inp.diff
+     out <- detrend.predict(object$output.trend,data$output)
+     input <- detrend.predict(object$input.trend,data$input)
+     data$output <- out;data$input <- input
   }
   return(data)
+}
+
+detrend.predict <- function(object,data){
+  pred_list <- lapply(X=object,FUN=predict,newdata=data)
+  pred <- data.frame(matrix(unlist(pred_list),ncol=ncol(data),byrow=T))
+  colnames(pred) <- colnames(data)
+  return(pred)
+}
+
+trend.fit <- function(x){
+  fit_self <- lm(x~time(x))
+  fit_self
 }
