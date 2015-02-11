@@ -4,21 +4,21 @@
 #' 
 #' @param data an object of class \code{idframe}
 #' 
+#' @return 
+#' A list containing the following elements
+#' 
+#' \tabular{ll}{
+#'    \code{fitted.values} \tab \code{idframe} object with detrended variables
+#'    \code{output.trend} \tab \code{list} containing trend fits for each output variable \cr
+#'    \code{input.trend} \tab \code{list} containing trend fits for each input variable
+#'  }
+#' 
 #' @examples
 #' data(cstr)
 #' fit <- detrend(cstr)
-#' cstr_detrend <- predict(fit)
+#' cstr_detrend <- predict(fit) 
 #' 
-#' ## Examples for train and test sets
-#' data(cstr)
-#' splitList <- dataPartition(cstr,p=0.6)
-#' train <- splitList$estimation # training set 
-#' test <- splitList$validation # testing set
-#' fit <- detrend(trend)
-#' train_detrend <- predict(fit)
-#' test_detrend <- predict(fit,newdata=test)   
-#' 
-#' @seealso \code{\link[stats]{lm}}
+#' @seealso \code{\link{predict.detrend.idframe}}, \code{\link[stats]{lm}}
 #' @export
 detrend.idframe <- function(data){
   
@@ -41,7 +41,23 @@ detrend.idframe <- function(data){
 
 #' Predict method for trend fits on idframe objects
 #' 
+#' Detrended \code{idframe} object based on linear trend fit
 #' 
+#' @param object an object of class \code{idframe}
+#' @param newdata An optional idframe object in whic to look for variables with which
+#' to predict. If ommited, the original detrended idframe object is used
+#' 
+#' @return an \code{idframe} object
+#' 
+#' @examples
+#' ## Examples for train and test sets
+#' data(cstr)
+#' splitList <- dataPartition(cstr,p=0.6)
+#' train <- splitList$estimation # training set 
+#' test <- splitList$validation # testing set
+#' fit <- detrend(trend)
+#' train_detrend <- predict(fit)
+#' test_detrend <- predict(fit,newdata=test)  
 #' @export
 predict.detrend.idframe <- function(object,newdata=NULL,...){
   
