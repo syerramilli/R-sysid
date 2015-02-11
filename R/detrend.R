@@ -15,7 +15,7 @@
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend(cstr)
+#' fit <- detrend.idframe(cstr)
 #' cstr_detrend <- predict(fit) 
 #' 
 #' @seealso \code{\link{predict.detrend.idframe}}, \code{\link[stats]{lm}}

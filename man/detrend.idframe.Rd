@@ -23,7 +23,7 @@ Removes the linear function from the input and output matrices.
 }
 \examples{
 data(cstr)
-fit <- detrend(cstr)
+fit <- detrend.idframe(cstr)
 cstr_detrend <- predict(fit)
 }
 \seealso{
