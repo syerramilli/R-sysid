@@ -14,8 +14,25 @@ detrend.idframe <- function(data,tt="linear",bp=c()){
   output_d <- data$output - output0
   input_d <- data$input - input0
   
-  est <- list(fitted.values= data0,out.diff = output_d,inp.diff=input_d)
+  est <- list(fitted.values= data0,out.diff = output_d,inp.diff=input_d,
+              raw.values = data)
   
   class(est) <- "detrend.idframe"
   return(est)
+}
+
+#' Predict method for trend fits on idframe objects
+#' 
+#' 
+#' @export
+predict.detrend.idframe <- function(object,newdata=NULL,...){
+  
+  if(is.null(newdata)){
+    data <- fitted(object)
+  } else{
+     data <- newdata
+     data$output <- newdata$output - object$out.diff
+     data$input <- newdata$input - object$inp.diff
+  }
+  return(data)
 }
