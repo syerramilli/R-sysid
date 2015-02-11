@@ -24,7 +24,7 @@ data(cstr)
 splitList <- dataPartition(cstr,p=0.6)
 train <- splitList$estimation # training set
 test <- splitList$validation # testing set
-fit <- detrend(train)
+fit <- detrend.idframe(train)
 train_detrend <- predict(fit)
 test_detrend <- predict(fit,newdata=test)
 }
