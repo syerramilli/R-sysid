@@ -8,7 +8,7 @@
 #' A list containing the following elements
 #' 
 #' \tabular{ll}{
-#'    \code{fitted.values} \tab \code{idframe} object with detrended variables
+#'    \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
 #'    \code{output.trend} \tab \code{list} containing trend fits for each output variable \cr
 #'    \code{input.trend} \tab \code{list} containing trend fits for each input variable
 #'  }
@@ -23,12 +23,20 @@
 detrend.idframe <- function(data){
   
   data_detrend <- data 
-    
-  output_trend <- lapply(data$output,trend.fit)
-  out <- detrend.predict(output_trend,data$output)
   
-  input_trend <- lapply(data$input,trend.fit)
-  input <- detrend.predict(input_trend,data$input)
+  out <- data$output;output_trend <- list()
+  t <- time(out[,1])
+  for(i in 1:ncol(out)){
+    output_trend[[i]] <- lm(out[,i]~t)
+    out[,i] <- fitted(output_trend[[i]])
+  }
+  
+  input <- data$input;input_trend <- list()
+  
+  for(i in 1:ncol(input)){
+    input_trend[[i]] <- lm(input[,i]~t)
+    input[,i] <- fitted(input_trend[[i]])
+  }
   
   data_detrend$output <- out;data_detrend$input <- input
     
@@ -73,13 +81,11 @@ predict.detrend.idframe <- function(object,newdata=NULL,...){
 }
 
 detrend.predict <- function(object,data){
-  pred_list <- lapply(X=object,FUN=predict,newdata=data)
+  pred_list <- list()
+  for(i in 1:ncol(data)){
+    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(t = time(data[,i])))
+  }
   pred <- data.frame(matrix(unlist(pred_list),ncol=ncol(data),byrow=T))
   colnames(pred) <- colnames(data)
   return(pred)
-}
-
-trend.fit <- function(x){
-  fit_self <- lm(x~time(x))
-  fit_self
 }

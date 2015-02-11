@@ -13,7 +13,7 @@ detrend.idframe(data)
 A list containing the following elements
 
 \tabular{ll}{
-   \code{fitted.values} \tab \code{idframe} object with detrended variables
+   \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
    \code{output.trend} \tab \code{list} containing trend fits for each output variable \cr
    \code{input.trend} \tab \code{list} containing trend fits for each input variable
  }
