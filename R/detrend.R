@@ -55,7 +55,7 @@ detrend.idframe <- function(data){
 #' splitList <- dataPartition(cstr,p=0.6)
 #' train <- splitList$estimation # training set 
 #' test <- splitList$validation # testing set
-#' fit <- detrend(trend)
+#' fit <- detrend(train)
 #' train_detrend <- predict(fit)
 #' test_detrend <- predict(fit,newdata=test)  
 #' @export
