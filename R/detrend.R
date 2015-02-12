@@ -38,7 +38,7 @@ detrend.idframe <- function(data){
     input[,i] <- fitted(input_trend[[i]])
   }
   
-  data_detrend$output <- out;data_detrend$input <- input
+  data_detrend$output <- data$output - out;data_detrend$input <- data$input - input
     
   est <- list(fitted.values=data_detrend,output.trend = output_trend,
               input.trend = input_trend)
@@ -75,7 +75,8 @@ predict.detrend.idframe <- function(object,newdata=NULL,...){
      data <- newdata
      out <- detrend.predict(object$output.trend,data$output)
      input <- detrend.predict(object$input.trend,data$input)
-     data$output <- out;data$input <- input
+     data$output <- data$output - out
+     data$input <- data$input - input
   }
   return(data)
 }
