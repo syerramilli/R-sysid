@@ -1,11 +1,24 @@
-# S3 class for defining transfer functions
+#' S3 class for transfer functions
+#' 
+#' \code{tf} is an S3 class for defining transfer functions.
+#' 
+#' @param num coefficients of the numerator plynomial in q^{-1}
+#' @param den coefficients of the denominator plynomial in q^{-1}
+#' @param Ts sampling time
+#' 
+#' @return an object of class tf
+#' @export
 tf <- function(num=c(1),den=c(1),Ts=1){
   out <- list(num=num,den=den,Ts=Ts)
   class(out) <- "tf"
   return(out)
 }
 
-# Display the Transfer Function
+#' Display the Transfer Function
+#' 
+#' Printing method for objects inheriting from class \code{tf}
+#' 
+#' @param G an object of class \code{tf}
 print.tf <- function(G){ 
   cat("Transfer Function \nG(q^{-1}) = B(q^{-1})/A(q^{-1}) \n\n")
   cat("A(q^{-1}) = ")
