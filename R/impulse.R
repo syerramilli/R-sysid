@@ -38,13 +38,27 @@ impulseest <- function(data,lags=30,conf=0.95){
   return(out)
 }
 
-# Impulse Response Plots
+#' Impulse Response Plots
+#' 
+#' Plots the estimated IR Coefficients
+#' 
+#' @param model an object of class \code{impulseest}
+#' 
+#' @seealso \code{\link{impulseest}},\code{\link{step}}
+#' @export
 impulse <- function(model){
   
 }
 
 
-# Step Response Plots
+#' Step Response Plots
+#' 
+#' Plots the step response of a system, given the IR model
+#' 
+#' @param model an object of class \code{impulseest}
+#' 
+#' @seealso \code{\link{impulseest}},\code{\link{impulse}}
+#' @export 
 step <- function(model){
   
 }
