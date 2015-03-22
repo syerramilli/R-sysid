@@ -52,7 +52,7 @@ detrend.idframe <- function(data){
 #' Detrended \code{idframe} object based on linear trend fit
 #' 
 #' @param object an object of class \code{idframe}
-#' @param newdata An optional idframe object in whic to look for variables with which
+#' @param newdata An optional idframe object in which to look for variables with which
 #' to predict. If ommited, the original detrended idframe object is used
 #' 
 #' @return an \code{idframe} object

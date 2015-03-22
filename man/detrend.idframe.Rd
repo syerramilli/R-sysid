@@ -19,7 +19,7 @@ A list containing the following elements
  }
 }
 \description{
-Removes the linear function from the input and output matrices.
+Removes the linear trends in the input and output matrices.
 }
 \examples{
 data(cstr)

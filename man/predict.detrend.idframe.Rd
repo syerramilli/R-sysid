@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{an object of class \code{idframe}}
 
-\item{newdata}{An optional idframe object in whic to look for variables with which
+\item{newdata}{An optional idframe object in which to look for variables with which
 to predict. If ommited, the original detrended idframe object is used}
 }
 \value{

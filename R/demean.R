@@ -15,8 +15,8 @@
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend.idframe(cstr)
-#' cstr_detrend <- predict(fit) 
+#' fit.mean <- demean(cstr)
+#' cstr_detrend <- predict(fit.mean) 
 #' 
 #' @seealso \code{\link{predict.demean}}, \code{\link[stats]{colMeans}}
 #' @export
@@ -42,8 +42,8 @@ demean <- function(data){
 #' Center an \code{idframe} object based on the training center means
 #' 
 #' @param object an object of class \code{idframe}
-#' @param newdata An optional idframe object in whic to look for variables with which
-#' to predict. If ommited, the original detrended idframe object is used
+#' @param newdata An optional idframe object in which to look for variables with which
+#' to predict. If ommited, the original idframe object is used
 #' 
 #' @return an \code{idframe} object
 #' 
@@ -53,9 +53,9 @@ demean <- function(data){
 #' splitList <- dataPartition(cstr,p=0.6)
 #' train <- splitList$estimation # training set 
 #' test <- splitList$validation # testing set
-#' fit <- detrend.idframe(train)
-#' train_detrend <- predict(fit)
-#' test_detrend <- predict(fit,newdata=test)  
+#' fit.mean <- demean(train)
+#' train_demean <- predict(fit.mean)
+#' test_demean <- predict(fit,newdata=test)  
 #' @export
 predict.demean <- function(object,newdata=NULL,...){
   
