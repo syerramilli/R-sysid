@@ -1,6 +1,6 @@
 #' Remove linear trends
 #' 
-#' Removes the linear function from the input and output matrices. 
+#' Removes the linear trends in the input and output matrices. 
 #' 
 #' @param data an object of class \code{idframe}
 #' 
