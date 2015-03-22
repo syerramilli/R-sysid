@@ -28,7 +28,7 @@ demean <- function(data){
   
   
   data_demean$output <- data$output - output.mean
-  data_demean$input <- data$input - input
+  data_demean$input <- data$input - input.mean
   
   est <- list(fitted.values=data_detrend,output.mean = output.mean,
               input.mean = input.mean)
