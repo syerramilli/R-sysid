@@ -10,13 +10,13 @@
 #' \tabular{ll}{
 #'    \code{fitted.values} \tab \code{idframe} object with mean-centered variables \cr
 #'    \code{output.mean} \tab \code{vector} containing means for each output variable \cr
-#'    \code{input.mean} \tab \code{vector} containing trend fits for each input variable
+#'    \code{input.mean} \tab \code{vector} containing means for each input variable
 #'  }
 #' 
 #' @examples
 #' data(cstr)
 #' fit.mean <- demean(cstr)
-#' cstr_detrend <- predict(fit.mean) 
+#' cstr_demean <- predict(fit.mean) 
 #' 
 #' @seealso \code{\link{predict.demean}}, \code{\link[stats]{colMeans}}
 #' @export
@@ -30,7 +30,7 @@ demean <- function(data){
   data_demean$output <- data$output - output.mean
   data_demean$input <- data$input - input.mean
   
-  est <- list(fitted.values=data_detrend,output.mean = output.mean,
+  est <- list(fitted.values=data_demean,output.mean = output.mean,
               input.mean = input.mean)
   
   class(est) <- "demean"
@@ -55,7 +55,7 @@ demean <- function(data){
 #' test <- splitList$validation # testing set
 #' fit.mean <- demean(train)
 #' train_demean <- predict(fit.mean)
-#' test_demean <- predict(fit,newdata=test)  
+#' test_demean <- predict(fit.mean,newdata=test)  
 #' @export
 predict.demean <- function(object,newdata=NULL,...){
   

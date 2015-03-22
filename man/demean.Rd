@@ -15,7 +15,7 @@ A list containing the following elements
 \tabular{ll}{
    \code{fitted.values} \tab \code{idframe} object with mean-centered variables \cr
    \code{output.mean} \tab \code{vector} containing means for each output variable \cr
-   \code{input.mean} \tab \code{vector} containing trend fits for each input variable
+   \code{input.mean} \tab \code{vector} containing means for each input variable
  }
 }
 \description{
@@ -24,7 +24,7 @@ Mean Centers the input and output matrices.
 \examples{
 data(cstr)
 fit.mean <- demean(cstr)
-cstr_detrend <- predict(fit.mean)
+cstr_demean <- predict(fit.mean)
 }
 \seealso{
 \code{\link{predict.demean}}, \code{\link[stats]{colMeans}}

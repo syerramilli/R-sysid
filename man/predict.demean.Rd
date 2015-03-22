@@ -26,6 +26,6 @@ train <- splitList$estimation # training set
 test <- splitList$validation # testing set
 fit.mean <- demean(train)
 train_demean <- predict(fit.mean)
-test_demean <- predict(fit,newdata=test)
+test_demean <- predict(fit.mean,newdata=test)
 }
 
