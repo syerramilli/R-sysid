@@ -18,25 +18,26 @@
 #' 
 #' @return an idframe object
 #' @examples
-#' dat <- read.idframe(data,freqData = FALSE, ninputs=2,type="time",
-#'                      Ts = 1,tUnit="min")
+#' data(cstr)
+#' data <- read.idframe(cstrData,ninputs=1,type="time",Ts= 1,tUnit="min")
+#' 
 #' @export 
 read.idframe <- function(data,freqData=FALSE,ninputs=1,
                     type=c("time","freq")[1],Ts = 1,tUnit="sec"){
   
   if((type=="freq") && (freqData)){
     
-    frequencies <- dat[,1] # the first column must contain frequencies
-    inputs <- dat[,seq(2,length.out=ninputs,by=1)]
-    outputs <- dat[,seq((ninputs+1),dim(dat)[2],by=1)]
+    frequencies <- data[,1] # the first column must contain frequencies
+    inputs <- data[,seq(2,length.out=ninputs,by=1)]
+    outputs <- data[,seq((ninputs+2),dim(data)[2],by=1)]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,
                    frequencies=frequencies,tUnit=tUnit)
     
   } else{
     
-    inputs <- dat[,1:ninputs]
-    outputs <- dat[,seq(ninputs,dim(dat)[2],by=1)]
+    inputs <- data[,1:ninputs]
+    outputs <- data[,seq(ninputs+1,dim(data)[2],by=1)]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,tUnit=tUnit)
   }
@@ -75,19 +76,23 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
 #' 
 #' @return an idframe object
 #' @examples
-#' 
+#' dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
+#' colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
+#' write.csv(dataMatrix,file="test.csv",row.names=F)
+#'  
+#' data <- read.table.idframe("test.csv",ninputs=2,tUnit="min")
 #' 
 #' @export 
 #' @seealso  \code{\link[utils]{read.table}}
 read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
              type=c("time","freq")[1],Ts = 1,freqData=FALSE,
-             tUnit="time",...){
+             tUnit="sec",...){
   
   # Read from file (default: csv file)
   dat <- read.table(file=file,header=header,sep=sep,...)
   
   # read from dataframe and return idframe object
-  out <- read.idframe(data,ninputs=ninputs,type=type,Ts = Ts,
+  out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,
                       freqData=freqData,tUnit=tUnit)
   return(out)
 }
