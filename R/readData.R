@@ -82,8 +82,8 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
 #'  
 #' data <- read.table.idframe("test.csv",ninputs=2,tUnit="min")
 #' 
-#' @export 
 #' @seealso  \code{\link[utils]{read.table}}
+#' @export 
 read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
              type=c("time","freq")[1],Ts = 1,freqData=FALSE,
              tUnit="sec",...){
@@ -130,8 +130,16 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' the \pkg{xlsx} package).
 #' 
 #' @return an idframe object
-#' @export 
+#' @examples
+#' library(xlsx)
+#' dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
+#' colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
+#' write.xlsx2(dataMatrix,file="test.xlsx",row.names=F)
+#'  
+#' data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,tUnit="min")
+#' 
 #' @seealso  \code{\link[xlsx]{read.xlsx2}}
+#' @export
 read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
                 type=c("time","freq")[1],Ts = 1,freqData=FALSE,tUnit="time",
                 ...){
@@ -142,7 +150,7 @@ read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
   dat <- read.xlsx2(file=file,sheetName=sheetName,header=header,...)
   
   # read from dataframe and return idframe object
-  out <- read.idframe(data,ninputs=ninputs,type=type,Ts = Ts,
+  out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,
                       freqData=freqData,tUnit=tUnit)
   return(out)
 }
