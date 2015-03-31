@@ -13,6 +13,10 @@
 #' recorded (Valid only if type="frequency")
 #' @param fUnit Frequency Unit (Valid only if type="frequency")
 #' @return an idframe object
+#' 
+#' @examples
+#' 
+#' 
 #' @export
 idframe <- function(output=numeric(0),input=numeric(0),
                      type=c("time","freq")[1],Ts = 1,
@@ -91,7 +95,6 @@ plot.idframe <- function(object,...){
   }  
 }
 
-#' @export
 index <- function(object){
   if(object$type=="time"){
     return(seq(from=object$t.start,to=object$t.end,by=object$Ts)) 
@@ -122,7 +125,7 @@ summary.idframe <- function(object){
   return(out)
 }
 
-#' @export
+
 print.summary.idframe <- function(object,...){
   cat("Domain: ");cat(object$type)
   cat("\t\t Number of samples:");cat(object$no_of_samples)

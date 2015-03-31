@@ -17,9 +17,12 @@
 #' should contain the frequencies.
 #' 
 #' @return an idframe object
+#' @examples
+#' dat <- read.idframe(data,freqData = FALSE, ninputs=2,type="time",
+#'                      Ts = 1,tUnit="min")
 #' @export 
 read.idframe <- function(data,freqData=FALSE,ninputs=1,
-                    type=c("time","freq")[1],Ts = 1,tUnit="time"){
+                    type=c("time","freq")[1],Ts = 1,tUnit="sec"){
   
   if((type=="freq") && (freqData)){
     
@@ -71,6 +74,9 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
 #' should contain the frequencies.
 #' 
 #' @return an idframe object
+#' @examples
+#' 
+#' 
 #' @export 
 #' @seealso  \code{\link[utils]{read.table}}
 read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
