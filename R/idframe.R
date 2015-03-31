@@ -14,8 +14,13 @@
 #' @param fUnit Frequency Unit (Valid only if type="frequency")
 #' @return an idframe object
 #' 
+#' @seealso  \code{\link{plot.idframe}}, the plot method for idframe objects, 
+#' \code{\link{summary.idframe}}, the summary method for idrame objects
+#' 
 #' @examples
 #' 
+#' dataMatrix <- matrix(rnorm(1000),ncol=5) 
+#' data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
 #' 
 #' @export
 idframe <- function(output=numeric(0),input=numeric(0),
@@ -68,6 +73,11 @@ idframe <- function(output=numeric(0),input=numeric(0),
 #' 
 #' @param object an object of class \code{idframe}
 #' @param ... additional arguments to be passed to the \code{plot} function
+#' 
+#' @examples
+#' data(distill)
+#' plot(distill,col="blue")
+#' 
 #' @export
 plot.idframe <- function(object,...){
   
@@ -108,6 +118,11 @@ index <- function(object){
 #' Generates a summary of objects inherting from class \code{idframe}
 #' 
 #' @param object an object of class \code{idframe}
+#' 
+#' @examples
+#' data(cstr)
+#' summary(cstr)
+#' 
 #' @export
 summary.idframe <- function(object){
   out_sum <- summary(object$output)
