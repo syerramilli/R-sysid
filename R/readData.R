@@ -148,6 +148,8 @@ read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
   
   # Read from file into an R data.frame
   dat <- read.xlsx2(file=file,sheetName=sheetName,header=header,...)
+  l <- as.list(dat)
+  dat <- as.data.frame(l,as.numeric)
   
   # read from dataframe and return idframe object
   out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,
