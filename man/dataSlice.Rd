@@ -4,14 +4,38 @@
 \alias{dataSlice}
 \title{Subset an idframe data}
 \usage{
-dataSlice(data, indices)
+dataSlice(data, start = NULL, end = NULL, freq = NULL)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}
 
-\item{indices}{the indices that need to be subsetted}
+\item{start}{the start index}
+
+\item{end}{the end index}
+
+\item{freq}{the new sampling frequency}
+}
+\value{
+an idframe object
 }
 \description{
-Subsetting method for datas of class \code{idframe}
+\code{dataSlice} is a Subsetting method for objects of class \code{idframe}. It
+extracts the subset of the object \code{data} observed between indices \code{start}
+and \code{end}.  If a frequency is specified, the series is then re-sampled at the
+new frequency.
+}
+\details{
+The dataSlice function extends the \code{\link[stats]{window}} function for idframe
+objects
+}
+\examples{
+data(cstr)
+cstrsub <- dataSlice(cstr,start=200,end=400) # extract between indices 200 and 400
+cstrTrain <- dataSlice(cstr,end=4500) # extract upto index 4500
+cstrTest <- dataSlice(cstr,start=6501) # extract from index 6501 till the end
+cstr_new <- dataSlice(cstr,freq=3) # resample data at thrice the frequency
+}
+\seealso{
+\code{\link[stats]{window}}
 }
 
