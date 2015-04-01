@@ -12,7 +12,7 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
   
   nin <- dim(data$input)[2]; nout <- dim(data$output)[2]
   dataMatrix <- cbind(data$input,data$output)
-  if(type=="freq"){
+  if(data$type=="freq"){
     dataMatrix <- cbind(dataMatrix,data$frequencies)
   } else {
     timeSeq <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
@@ -22,8 +22,9 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
   l <- as.list(dataMatrix)
   trimData <- as.data.frame(sapply(l,window,start=start,end=end,deltat=freq))
   
-  trim <- idframe(output=trimData[,(nin+1):(nin+nout+1)],input=trimData[,1:nin],
-                  type=data$type,Ts=data$tTs,tUnit=data$tUnit)
+  trim <- idframe(output=trimData[,(nin+1):(nin+nout),drop=F],
+                  input=trimData[,1:nin,drop=F],type=data$type,Ts=data$Ts,
+                  tUnit=data$tUnit)
   
   if(trim$type=="freq"){
     trim$frequncies <- trimData[,ncol(trimData)]
