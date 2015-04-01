@@ -12,4 +12,8 @@
 \description{
 Generates a summary of objects inherting from class \code{idframe}
 }
+\examples{
+data(cstr)
+summary(cstr)
+}
 

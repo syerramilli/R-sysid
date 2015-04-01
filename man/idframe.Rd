@@ -34,4 +34,12 @@ an idframe object
 \description{
 \code{idframe} is an S3 class for storing and manipulating input-ouput data. It supports discrete time and frequency domain data.
 }
+\examples{
+dataMatrix <- matrix(rnorm(1000),ncol=5)
+data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
+}
+\seealso{
+\code{\link{plot.idframe}}, the plot method for idframe objects,
+\code{\link{summary.idframe}}, the summary method for idrame objects
+}
 

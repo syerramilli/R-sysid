@@ -5,7 +5,7 @@
 \title{Data input into a idframe object}
 \usage{
 read.idframe(data, freqData = FALSE, ninputs = 1, type = c("time",
-  "freq")[1], Ts = 1, tUnit = "time")
+  "freq")[1], Ts = 1, tUnit = "sec")
 }
 \arguments{
 \item{data}{a \code{data.frame} object}
@@ -31,5 +31,9 @@ Read the contents of a \code{data.frame} object into a \code{idframe} object.
 \details{
 If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file
 should contain the frequencies.
+}
+\examples{
+data(cstr)
+data <- read.idframe(cstrData,ninputs=1,type="time",Ts= 1,tUnit="min")
 }
 

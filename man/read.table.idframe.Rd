@@ -5,7 +5,7 @@
 \title{Data input into a idframe object}
 \usage{
 read.table.idframe(file, header = TRUE, sep = ",", ninputs = 1,
-  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "time",
+  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "sec",
   ...)
 }
 \arguments{
@@ -46,6 +46,13 @@ provided by the \pkg{xlsx} package, to read data from an excel file and then cal
 
 If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file
 should contain the frequencies.
+}
+\examples{
+dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
+colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
+write.csv(dataMatrix,file="test.csv",row.names=F)
+
+data <- read.table.idframe("test.csv",ninputs=2,tUnit="min")
 }
 \seealso{
 \code{\link[utils]{read.table}}

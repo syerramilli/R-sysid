@@ -14,4 +14,8 @@
 \description{
 Plotting method for objects inherting from class \code{idframe}
 }
+\examples{
+data(distill)
+plot(distill,col="blue")
+}
 

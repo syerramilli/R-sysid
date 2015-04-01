@@ -50,6 +50,14 @@ should contain the frequencies.
 The function requires the java runtime to be installed on the system (Requirement of
 the \pkg{xlsx} package).
 }
+\examples{
+library(xlsx)
+dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
+colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
+write.xlsx2(dataMatrix,file="test.xlsx",row.names=F)
+
+data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,tUnit="min")
+}
 \seealso{
 \code{\link[xlsx]{read.xlsx2}}
 }
