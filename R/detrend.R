@@ -99,7 +99,7 @@ predict.detrend <- function(object,newdata=NULL,...){
 detrend.predict <- function(object,data){
   pred_list <- list()
   for(i in 1:ncol(data)){
-    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(t = time(data[,i])))
+    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(reg = time(data[,i])))
   }
   pred <- data.frame(matrix(unlist(pred_list),ncol=ncol(data),byrow=T))
   colnames(pred) <- colnames(data)
