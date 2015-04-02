@@ -18,8 +18,11 @@
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend(cstr)
-#' Zdetrend <- predict(fit) 
+#' fit <- detrend(cstr) # remove linear trends 
+#' Zdetrend <- predict(fit) # get the detrended data
+#' 
+#' demean <- detrend(cstr,type="constant") # remove mean values
+#' Zcent <- predict(demean) # get the centered data
 #' 
 #' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
@@ -65,10 +68,18 @@ detrend <- function(data,type=c("constant","linear")[2]){
 #' Detrended \code{idframe} object based on linear trend fit
 #' 
 #' @param object an object of class \code{idframe}
-#' @param newdata An optional idframe object in which to look for variables with which
-#' to predict. If ommited, the original detrended idframe object is used
+#' @param newdata An optional idframe object in which to look for variables with 
+#' which to predict. If ommited, the original detrended idframe object is used
 #' 
 #' @return an \code{idframe} object
+#' 
+#' @examples
+#' data(distill)
+#' train <- dataSlice(distill,end=60) # subset the first 60 indices
+#' test <- dataSlice(distill,start=61) # subset from index 61 till the end
+#' fit <- detrend(train)
+#' Ztrain <- predict(fit)
+#' Ztest <- predict(fit,test)
 #' 
 #' @export
 predict.detrend <- function(object,newdata=NULL,...){
