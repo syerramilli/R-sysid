@@ -14,11 +14,6 @@ tf <- function(num=c(1),den=c(1),Ts=1){
   return(out)
 }
 
-#' Display the Transfer Function
-#' 
-#' Printing method for objects inheriting from class \code{tf}
-#' 
-#' @param G an object of class \code{tf}
 #' @export
 print.tf <- function(G){ 
   cat("Transfer Function \nG(q^{-1}) = B(q^{-1})/A(q^{-1}) \n\n")

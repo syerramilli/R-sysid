@@ -54,7 +54,7 @@ the \pkg{xlsx} package).
 library(xlsx)
 dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
-write.xlsx2(dataMatrix,file="test.xlsx",row.names=F)
+write.xlsx2(dataMatrix,file="test.xlsx",row.names=FALSE)
 
 data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,tUnit="min")
 }

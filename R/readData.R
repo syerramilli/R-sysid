@@ -28,16 +28,16 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
   if((type=="freq") && (freqData)){
     
     frequencies <- data[,1] # the first column must contain frequencies
-    inputs <- data[,seq(2,length.out=ninputs,by=1)]
-    outputs <- data[,seq((ninputs+2),dim(data)[2],by=1)]
+    inputs <- data[,seq(2,length.out=ninputs,by=1),drop=F]
+    outputs <- data[,seq((ninputs+2),dim(data)[2],by=1),drop=F]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,
                    frequencies=frequencies,tUnit=tUnit)
     
   } else{
     
-    inputs <- data[,1:ninputs]
-    outputs <- data[,seq(ninputs+1,dim(data)[2],by=1)]
+    inputs <- data[,1:ninputs,drop=F]
+    outputs <- data[,seq(ninputs+1,dim(data)[2],by=1),drop=F]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,tUnit=tUnit)
   }
@@ -78,7 +78,7 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
 #' @examples
 #' dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 #' colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
-#' write.csv(dataMatrix,file="test.csv",row.names=F)
+#' write.csv(dataMatrix,file="test.csv",row.names=FALSE)
 #'  
 #' data <- read.table.idframe("test.csv",ninputs=2,tUnit="min")
 #' 
@@ -134,7 +134,7 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' library(xlsx)
 #' dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 #' colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
-#' write.xlsx2(dataMatrix,file="test.xlsx",row.names=F)
+#' write.xlsx2(dataMatrix,file="test.xlsx",row.names=FALSE)
 #'  
 #' data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,tUnit="min")
 #' 
@@ -149,7 +149,7 @@ read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
   # Read from file into an R data.frame
   dat <- read.xlsx2(file=file,sheetName=sheetName,header=header,...)
   l <- as.list(dat)
-  dat <- as.data.frame(l,as.numeric)
+  dat <- as.data.frame(sapply(l,as.numeric))
   
   # read from dataframe and return idframe object
   out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,

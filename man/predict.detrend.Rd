@@ -21,7 +21,7 @@ Detrended \code{idframe} object based on linear trend fit
 \examples{
 data(cstr)
 train <- dataSlice(cstr,end=5000) # subset the first 5000 indices
-test <- dataSlice(distill,start=6001) # subset from index 6001 till the end
+test <- dataSlice(cstr,start=6001) # subset from index 6001 till the end
 fit <- detrend(train)
 Ztrain <- predict(fit)
 Ztest <- predict(fit,test)
