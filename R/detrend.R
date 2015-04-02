@@ -43,14 +43,14 @@ detrend <- function(data,type=c("constant","linear")[2]){
   data_detrend <- data
   out <- data$output;output_trend <- list()
   for(i in 1:ncol(out)){
-    output_trend[[i]] <- lm(formula,data=data.frame(X=out[,i]))
+    output_trend[[i]] <- lm(formula,data=data.frame(X=out[,i],reg=reg))
     out[,i] <- fitted(output_trend[[i]])
   }
   
   input <- data$input;input_trend <- list()
   
   for(i in 1:ncol(input)){
-    input_trend[[i]] <- lm(formula,data=data.frame(X=input[,i]))
+    input_trend[[i]] <- lm(formula,data=data.frame(X=input[,i],reg=reg))
     input[,i] <- fitted(input_trend[[i]])
   }
   
@@ -74,9 +74,9 @@ detrend <- function(data,type=c("constant","linear")[2]){
 #' @return an \code{idframe} object
 #' 
 #' @examples
-#' data(distill)
-#' train <- dataSlice(distill,end=60) # subset the first 60 indices
-#' test <- dataSlice(distill,start=61) # subset from index 61 till the end
+#' data(cstr)
+#' train <- dataSlice(cstr,end=5000) # subset the first 5000 indices
+#' test <- dataSlice(distill,start=6001) # subset from index 6001 till the end
 #' fit <- detrend(train)
 #' Ztrain <- predict(fit)
 #' Ztest <- predict(fit,test)
