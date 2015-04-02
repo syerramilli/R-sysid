@@ -40,14 +40,14 @@ detrend <- function(data,type=c("constant","linear")[2]){
   data_detrend <- data
   out <- data$output;output_trend <- list()
   for(i in 1:ncol(out)){
-    output_trend[[i]] <- lm(formula,X=out[,i])
+    output_trend[[i]] <- lm(formula,data=data.frame(X=out[,i]))
     out[,i] <- fitted(output_trend[[i]])
   }
   
   input <- data$input;input_trend <- list()
   
   for(i in 1:ncol(input)){
-    input_trend[[i]] <- lm(formula,X=input[,i])
+    input_trend[[i]] <- lm(formula,data=data.frame(X=input[,i]))
     input[,i] <- fitted(input_trend[[i]])
   }
   
