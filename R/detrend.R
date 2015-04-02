@@ -1,40 +1,53 @@
 #' Remove linear trends
 #' 
-#' Removes the linear trends in the input and output matrices. 
+#' Removes the mean value or linear trends in each of the input and output matrices. 
 #' 
 #' @param data an object of class \code{idframe}
+#' @param type trend type - "constant" or "linear". (Default: \code{"linear"})
 #' 
 #' @return 
 #' A list containing the following elements
 #' 
 #' \tabular{ll}{
 #'    \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
-#'    \code{output.trend} \tab \code{list} containing trend fits for each output variable \cr
-#'    \code{input.trend} \tab \code{list} containing trend fits for each input variable
+#'    \code{output.trend} \tab \code{list} containing trend fits for each output 
+#'    variable \cr
+#'    \code{input.trend} \tab \code{list} containing trend fits for each input 
+#'    variable
 #'  }
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend.idframe(cstr)
-#' cstr_detrend <- predict(fit) 
+#' fit <- detrend(cstr)
+#' Zdetrend <- predict(fit) 
 #' 
-#' @seealso \code{\link{predict.detrend.idframe}}, \code{\link[stats]{lm}}
+#' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
-detrend.idframe <- function(data){
+detrend <- function(data,type=c("constant","linear")[2]){ 
   
-  data_detrend <- data 
+  if(!(type %in% c("constant","linear"))){
+    stop("Error: Invalid trend type")
+  }
   
+  reg <- time(data$output[,1])
+  
+  if(type=="linear"){
+    formula <- X ~ reg
+  } else {
+    formula <- X ~ 1 + offset(0*reg)  
+  }
+  
+  data_detrend <- data
   out <- data$output;output_trend <- list()
-  t <- time(out[,1])
   for(i in 1:ncol(out)){
-    output_trend[[i]] <- lm(out[,i]~t)
+    output_trend[[i]] <- lm(formula,X=out[,i])
     out[,i] <- fitted(output_trend[[i]])
   }
   
   input <- data$input;input_trend <- list()
   
   for(i in 1:ncol(input)){
-    input_trend[[i]] <- lm(input[,i]~t)
+    input_trend[[i]] <- lm(formula,X=input[,i])
     input[,i] <- fitted(input_trend[[i]])
   }
   
@@ -43,7 +56,7 @@ detrend.idframe <- function(data){
   est <- list(fitted.values=data_detrend,output.trend = output_trend,
               input.trend = input_trend)
   
-  class(est) <- "detrend.idframe"
+  class(est) <- "detrend"
   return(est)
 }
 
@@ -57,17 +70,8 @@ detrend.idframe <- function(data){
 #' 
 #' @return an \code{idframe} object
 #' 
-#' @examples
-#' ## Examples for train and test sets
-#' data(cstr)
-#' splitList <- dataPartition(cstr,p=0.6)
-#' train <- splitList$estimation # training set 
-#' test <- splitList$validation # testing set
-#' fit <- detrend.idframe(train)
-#' train_detrend <- predict(fit)
-#' test_detrend <- predict(fit,newdata=test)  
 #' @export
-predict.detrend.idframe <- function(object,newdata=NULL,...){
+predict.detrend <- function(object,newdata=NULL,...){
   
   if(is.null(newdata)){
     data <- fitted(object)
