@@ -34,7 +34,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
   
   if(length(output)!=0 && length(input)!=0){
     if(dim(output)[1]!=dim(input)[1]) # observation validation
-      stop("Dimensions don't matach")
+      stop("Dimensions don't match")
   }
   
   # Object Constructor
