@@ -45,8 +45,8 @@ plot.impulseest <- function(model){
 #' 
 #' @param model an object of class \code{impulseest}
 #' 
-#' @seealso \code{\link{impulseest}},\code{\link{impulse}}
+#' @seealso \code{\link{impulseest}}
 #' @export 
 step <- function(model){
-  
+    
 }
