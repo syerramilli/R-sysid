@@ -4,25 +4,24 @@
 #' given data
 #' 
 #' @param data an object of class \code{idframe}
-#' @param lags The number of lags upto which the estimate is to be
-#' calculated. (Default:\code{30})
-#' @param delay The transport delay 
+#' @param M Order of the FIR Model (Default:\code{30})
+#' @param K Transport delay in the estimated impulse response
 #' 
 #' @seealso \code{\link{plot.impulseest}}, \code{\link{step}}
 #' @export
-impulseest <- function(data,lags=30){
+impulseest <- function(data,M=30,K){
   
   N <- dim(data$output)[1]
-  ind <- (lags+1):N
+  ind <- (M+1):N
   
-  z_reg <- function(i) data$input[i:(i-lags),]
+  z_reg <- function(i) data$input[i:(i-M),]
   Z <- t(sapply(ind,z_reg))
   Y <- data$output[ind,]
   
   fit <- lm(Y~Z-1)
   
   out <- list(coefficients=coef(fit),residuals=resid(fit),
-              lags=0:lags)
+              lags=0:M)
   class(out) <- "impulseest"
   return(out)
 }
