@@ -4,14 +4,15 @@
 \alias{impulseest}
 \title{Estimate Impulse Response Models}
 \usage{
-impulseest(data, M = 30, K)
+impulseest(data, M = 30, K = 0)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}
 
 \item{M}{Order of the FIR Model (Default:\code{30})}
 
-\item{K}{Transport delay in the estimated impulse response}
+\item{K}{Transport delay in the estimated impulse response
+(Default:\code{0})}
 }
 \description{
 \code{impulseest} is used to estimate impulse response models in the
