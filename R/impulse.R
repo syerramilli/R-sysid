@@ -19,10 +19,15 @@ impulseest <- function(data,M=30,K=0){
   Z <- t(sapply(ind,z_reg))
   Y <- data$output[ind,]
   
+  # Fit Linear Model and find standard errors
   fit <- lm(Y~Z-1)
+  df <- nrow(Z)-ncol(Z);sigma2 <- resid(fit)^2/df
+  vcov <- sigma2 * inv(t(Z)*Z)
+  se <- sqrt(diag(vcov))
+  
   
   out <- list(coefficients=coef(fit),residuals=resid(fit),lags=K:M+K,
-              x=colnames(data$input),y=colnames(data$output))
+              x=colnames(data$input),y=colnames(data$output),se=)
   class(out) <- "impulseest"
   return(out)
 }
