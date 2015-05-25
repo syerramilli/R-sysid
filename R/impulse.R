@@ -52,5 +52,9 @@ plot.impulseest <- function(model){
 #' @seealso \code{\link{impulseest}}
 #' @export 
 step <- function(model){
-    
+  title <- paste("Step Response \n From",model$x,"to",model$y)
+  stepResp <- cumsum(coef(model))
+  plot(model$lags,stepResp,type="h",xlab="Lag",ylab= model$y,
+       main = title)
+  abline(h=0)
 }
