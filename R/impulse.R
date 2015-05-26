@@ -8,7 +8,15 @@
 #' @param K Transport delay in the estimated impulse response 
 #' (Default:\code{0})
 #' 
-#' @seealso \code{\link{plot.impulseest}}, \code{\link{step}}
+#' @seealso \code{\link{step}}
+#' 
+#' @examples
+#' uk <- rnorm(1000,1)
+#' yk <- filter (uk,c(0.9,-0.4),method="recursive") + rnorm(1000,1)
+#' data <- idframe(output=data.frame(yk),input=data.frame(uk))
+#' fit <- impulseest(data)
+#' plot(fit)
+#' 
 #' @export
 impulseest <- function(data,M=30,K=0){
   

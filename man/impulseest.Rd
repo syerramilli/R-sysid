@@ -18,7 +18,14 @@ impulseest(data, M = 30, K = 0)
 \code{impulseest} is used to estimate impulse response models in the
 given data
 }
+\examples{
+uk <- rnorm(1000,1)
+yk <- filter (uk,c(0.9,-0.4),method="recursive") + rnorm(1000,1)
+data <- idframe(output=data.frame(yk),input=data.frame(uk))
+fit <- impulseest(data)
+plot(fit)
+}
 \seealso{
-\code{\link{plot.impulseest}}, \code{\link{step}}
+\code{\link{step}}
 }
 
