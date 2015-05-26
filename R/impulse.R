@@ -73,7 +73,7 @@ plot.impulseest <- function(model,sig=0.975){
 step <- function(model){
   title <- paste("Step Response \n From",model$x,"to",model$y)
   stepResp <- cumsum(coef(model))
-  plot(model$lags,stepResp,type="h",xlab="Lag",ylab= model$y,
+  plot(model$lags,stepResp,type="s",xlab="Lag",ylab= model$y,
        main = title)
   abline(h=0)
 }
