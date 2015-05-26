@@ -4,10 +4,12 @@
 \alias{plot.impulseest}
 \title{Impulse Response Plots}
 \usage{
-\method{plot}{impulseest}(model)
+\method{plot}{impulseest}(model, sig = 0.975)
 }
 \arguments{
 \item{model}{an object of class \code{impulseest}}
+
+\item{sig}{Significance Limits (Default: \code{0.975})}
 }
 \description{
 Plots the estimated IR Coefficients

@@ -35,7 +35,7 @@ impulseest <- function(data,M=30,K=0){
   
   
   out <- list(coefficients=coef(fit),residuals=resid(fit),lags=K:(M+K),
-              x=colnames(data$input),y=colnames(data$output),se = se,df=df)
+              x=colnames(data$input),y=colnames(data$output),se = se)
   class(out) <- "impulseest"
   return(out)
 }
