@@ -45,14 +45,20 @@ impulseest <- function(data,M=30,K=0){
 #' Plots the estimated IR Coefficients
 #' 
 #' @param model an object of class \code{impulseest}
+#' @param sig Significance Limits (Default: \code{0.975})
 #' 
 #' @seealso \code{\link{impulseest}},\code{\link{step}}
 #' @export
-plot.impulseest <- function(model){
+plot.impulseest <- function(model,sig=0.975){
+  lim <- model$se*qnorm(0.975)
+  
+  ylim <- c(min(coef(model)),max(coef(model)))
+  
   title <- paste("Impulse Response \n From",model$x,"to",model$y)
   plot(model$lags,coef(model),type="h",xlab="Lag",ylab= model$y,
        main = title)
-  abline(h=0)
+  abline(h=0);points(x=model$lags,y=lim,col="blue",lty=2,type="l")
+  points(x=model$lags,y=-lim,col="blue",lty=2,type="l")
 }
 
 
