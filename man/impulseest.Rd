@@ -4,7 +4,7 @@
 \alias{impulseest}
 \title{Estimate Impulse Response Models}
 \usage{
-impulseest(data, M = 30, K = 0)
+impulseest(data, M = 30, K = 0, regul = F, lambda = 1)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}
@@ -13,6 +13,12 @@ impulseest(data, M = 30, K = 0)
 
 \item{K}{Transport delay in the estimated impulse response
 (Default:\code{0})}
+
+\item{regul}{Parameter indicating whether regularization should be
+used. (Default:\code{FALSE})}
+
+\item{lambda}{The value of the regularization parameter. Valid only if
+\code{regul=TRUE}. (Default:\code{1})}
 }
 \description{
 \code{impulseest} is used to estimate impulse response models in the

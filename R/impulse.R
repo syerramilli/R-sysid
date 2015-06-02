@@ -7,6 +7,10 @@
 #' @param M Order of the FIR Model (Default:\code{30})
 #' @param K Transport delay in the estimated impulse response 
 #' (Default:\code{0})
+#' @param regul Parameter indicating whether regularization should be 
+#' used. (Default:\code{FALSE})
+#' @param lambda The value of the regularization parameter. Valid only if
+#' \code{regul=TRUE}. (Default:\code{1})
 #' 
 #' @seealso \code{\link{step}}
 #' 
@@ -18,7 +22,7 @@
 #' plot(fit)
 #' 
 #' @export
-impulseest <- function(data,M=30,K=0){
+impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   
   N <- dim(data$output)[1]
   ind <- (M+K+1):N
