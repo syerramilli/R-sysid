@@ -31,6 +31,11 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   Z <- t(sapply(ind,z_reg))
   Y <- data$output[ind,]
   
+  # Dealing with Regularization
+  if(regul==F){
+    lambda = 0
+  }
+  
   # Fit Linear Model and find standard errors
   fit <- lm(Y~Z-1)
   df <- nrow(Z)-ncol(Z);sigma2 <- sum(resid(fit)^2)/df
