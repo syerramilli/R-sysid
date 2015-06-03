@@ -87,7 +87,6 @@ step <- function(model){
   abline(h=0)
 }
 
-#'
 #' Estimate frequency response 
 #' 
 #' Estimates Frequency Response with fixed frequency resolution using 
@@ -112,12 +111,12 @@ spa <- function(data,npad=255){
 #' 
 #' @export
 etfe <- function(data){
-  require(sapa)
   temp <- cbind(as.ts(data$output),as.ts(data$input))
   tempfft <- mvfft(temp)/dim(temp)[1]
-  freq <- seq(from=1,to=dim(temp)[1],by=1)/dim(temp)[1]*pi/data$Ts
-  
-  out <- idfrd(response=as.complex(tempfft[,1]/tempfft[,2]),freq=freq,
+  freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
+              by=1)/ceiling(dim(tempfft)[1]/2)*pi/data$Ts
+  resp <- as.complex(tempfft[,1]/tempfft[,2])
+  out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
                Ts=data$Ts)
   return(out)
 }
