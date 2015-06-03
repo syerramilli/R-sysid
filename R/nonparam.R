@@ -91,7 +91,23 @@ step <- function(model){
 #' spectral analysis
 #' 
 spa <- function(data,WinSize=NULL){
+  require(sapa)
+  temp <- cbind(data$y,data$u)
   
+  # Non-parametric Estimation of Spectral Densities - 
+  # WOSA and Hanning window
+  
+  if(WinSize==NULL){
+    M <- min(dim(temp,1),30)
+  } else{
+    M <- WinSize
+  }
+  
+  gamma <- SDF(temp,method="wosa",
+               taper. = taper(type="hanning",n.sample=M))
+  out <- list(response = gamma[,2]/gamma[,3])
+  class(out) <- "spa"
+  return(out)
 }
 
 #' Estimate empirical transfer function
