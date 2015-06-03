@@ -101,12 +101,22 @@ spa <- function(data,npad=255){
   # Non-parametric Estimation of Spectral Densities - 
   # WOSA and Hanning window
   gamma <- SDF(temp,method="wosa",sampling.interval = data$Ts,npad=npad)
-  out <- list(response = gamma[,2]/gamma[,3],spec=gamma)
+  freq <- seq(from=1,to=ceiling(npad/2),by=1)/ceiling(npad/2)*pi/data$Ts
+  out <- idfrd(response = gamma[,2]/gamma[,3],freq=freq,Ts= data$Ts)
   return(out)
 }
 
 #' Estimate empirical transfer function
 #' 
+#' Estimates the emperical transfer function
+#' 
+#' @export
 etfe <- function(data){
+  require(sapa)
+  temp <- cbind(data$output,data$input)
+  tempfft <- mvfft(temp)/dim(temp)[1]
+  freq <- seq(from=1,to=dim(temp)[1],by=1)/dim(temp)[1]*pi/data$Ts
   
+  out <- idfrd(response=tempfft[,1]/tempfft[,2],freq=freq,Ts=data$Ts)
+  return(out)
 }

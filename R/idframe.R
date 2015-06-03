@@ -180,7 +180,7 @@ plot.idfrd <- function(object){
   melted_sys_df <- melt(sys_df, id.var = c("Frequency"))
   
   bode <-  ggplot(sys_df, aes(x = Frequency)) + 
-    geom_line() + scale_x_log10()
+    geom_line() + scale_x_log10() + theme_bw()
   bode_gain <- bode + aes(y = Gain)
   bode_phase <- bode + aes(y = Phase)
   
