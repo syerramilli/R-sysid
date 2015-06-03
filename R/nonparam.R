@@ -86,3 +86,16 @@ step <- function(model){
        main = title)
   abline(h=0)
 }
+
+#' Estimate frequency response with fixed frequency resolution using 
+#' spectral analysis
+#' 
+spa <- function(data,WinSize=NULL){
+  
+}
+
+#' Estimate empirical transfer function
+#' 
+etfe <- function(data){
+  
+}
