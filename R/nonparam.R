@@ -87,29 +87,21 @@ step <- function(model){
   abline(h=0)
 }
 
+#'
 #' Estimate frequency response 
 #' 
 #' Estimates Frequency Response with fixed frequency resolution using 
 #' spectral analysis
 #' 
 #' @export
-spa <- function(data,WinSize=NULL){
+spa <- function(data,npad=255){
   require(sapa)
-  temp <- cbind(data$y,data$u)
+  temp <- cbind(data$output,data$input)
   
   # Non-parametric Estimation of Spectral Densities - 
   # WOSA and Hanning window
-  
-  if(is.null(WinSize)){
-    M <- min(dim(temp,1),30)
-  } else{
-    M <- WinSize
-  }
-  
-  gamma <- SDF(temp,method="wosa",sampling.interval = data$Ts,
-               taper. = taper(type="hanning",n.sample=M))
-  out <- list(response = gamma[,2]/gamma[,3])
-  class(out) <- "spa"
+  gamma <- SDF(temp,method="wosa",sampling.interval = data$Ts,npad=npad)
+  out <- list(response = gamma[,2]/gamma[,3],spec=gamma)
   return(out)
 }
 
