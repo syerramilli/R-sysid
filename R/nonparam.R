@@ -103,7 +103,7 @@ spa <- function(data,WinSize=NULL){
     M <- WinSize
   }
   
-  gamma <- SDF(temp,method="wosa",
+  gamma <- SDF(temp,method="wosa",sampling.interval = data$Ts,
                taper. = taper(type="hanning",n.sample=M))
   out <- list(response = gamma[,2]/gamma[,3])
   class(out) <- "spa"
