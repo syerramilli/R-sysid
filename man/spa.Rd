@@ -4,7 +4,7 @@
 \alias{spa}
 \title{Estimate frequency response}
 \usage{
-spa(data, WinSize = NULL)
+spa(data, npad = 255)
 }
 \description{
 Estimates Frequency Response with fixed frequency resolution using

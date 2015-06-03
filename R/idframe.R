@@ -140,7 +140,7 @@ summary.idframe <- function(object){
   return(out)
 }
 
-
+#' @export
 print.summary.idframe <- function(object,...){
   cat("Domain: ");cat(object$type)
   cat("\t\t Number of samples:");cat(object$no_of_samples)
