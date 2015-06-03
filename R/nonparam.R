@@ -113,10 +113,11 @@ spa <- function(data,npad=255){
 #' @export
 etfe <- function(data){
   require(sapa)
-  temp <- cbind(data$output,data$input)
+  temp <- cbind(as.ts(data$output),as.ts(data$input))
   tempfft <- mvfft(temp)/dim(temp)[1]
   freq <- seq(from=1,to=dim(temp)[1],by=1)/dim(temp)[1]*pi/data$Ts
   
-  out <- idfrd(response=tempfft[,1]/tempfft[,2],freq=freq,Ts=data$Ts)
+  out <- idfrd(response=as.complex(tempfft[,1]/tempfft[,2]),freq=freq,
+               Ts=data$Ts)
   return(out)
 }
