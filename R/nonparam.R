@@ -100,7 +100,7 @@ spa <- function(data,WinSize=NULL){
   # Non-parametric Estimation of Spectral Densities - 
   # WOSA and Hanning window
   
-  if(WinSize==NULL){
+  if(is.null(WinSize)){
     M <- min(dim(temp,1),30)
   } else{
     M <- WinSize
