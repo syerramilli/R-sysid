@@ -173,14 +173,16 @@ idfrd <- function(response,freq,Ts){
 
 #' @export
 plot.idfrd <- function(object){
-  require(ggplot2);require(reshape2)
+  require(ggplot2);require(reshape2);require(signal)
   
-  mag <- 20*log10(Mod(object$resp)); phase <- Arg(object$resp)
-  sys_df <- data.frame(Frequency = object$freq,Gain = mag,Phase = phase)
+  mag <- 20*log10(Mod(object$resp))
+  phase <- unwrap(Arg(object$resp))
+  sys_df <- data.frame(Frequency = object$freq,Gain = mag,Phase = -phase)
   melted_sys_df <- melt(sys_df, id.var = c("Frequency"))
   
   bode <-  ggplot(sys_df, aes(x = Frequency)) + 
-    geom_line() + scale_x_log10() + theme_bw()
+    geom_line(colour="steelblue") + scale_x_log10() + theme_bw() + 
+    geom_vline(aes(xintercept=max(object$freq),size=1.2))
   bode_gain <- bode + aes(y = Gain)
   bode_phase <- bode + aes(y = Phase)
   
