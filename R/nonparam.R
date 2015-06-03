@@ -87,9 +87,12 @@ step <- function(model){
   abline(h=0)
 }
 
-#' Estimate frequency response with fixed frequency resolution using 
+#' Estimate frequency response 
+#' 
+#' Estimates Frequency Response with fixed frequency resolution using 
 #' spectral analysis
 #' 
+#' @export
 spa <- function(data,WinSize=NULL){
   require(sapa)
   temp <- cbind(data$y,data$u)
