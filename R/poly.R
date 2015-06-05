@@ -13,6 +13,41 @@ arx <- function(A,B,ioDelay=0){
 }
 
 #' @export
+print.arx <- function(obj){
+  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n\n")
+  cat("A(q^{-1}) = ")
+  for(i in seq_along(obj$A)){
+    if(i-1==0){
+      cat(obj$A[i])
+    } else{
+      if(obj$A[i]>0) cat(" + ") else cat("- ")
+      
+      if(!(abs(obj$A[i])==1)) cat(abs(obj$A[i]))
+      cat("q^{-",i-1,"}",sep="")
+    }
+    cat("\t")
+  }
+  cat("\n")
+  cat("B(q^{-1}) = ")
+  for(i in seq_along(obj$B)){
+    if(i+obj$ioDelay-1==0){
+      cat(obj$B[i])
+    } else{
+      
+      if(!((obj$ioDelay!=0) && (i==1))){
+        if(obj$B[i]>0) cat(" + ") else cat("- ")
+      } else{
+        if(obj$B[i]<0) cat("-")
+      }
+      
+      if(!(abs(obj$B[i])==1)) cat(abs(obj$B[i]))
+      cat("q^{-",i+obj$ioDelay-1,"}",sep="")
+    }
+    cat("\t")
+  }
+}
+
+#' @export
 armax <- function(A,B,C,ioDelay=0){
   out <- idpoly(A=A,B=B,C=C,D=1,E=1,F1=1,ioDelay = ioDelay)
   class(out) <- c("armax","idpoly")
