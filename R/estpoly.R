@@ -1,3 +1,6 @@
+#' Estimate ARX Models
+#' 
+#' @export
 estARX <- function(data,order=c(0,1,0)){
   y <- as.matrix(data$output)
   u <- as.matrix(data$input); N <- dim(y)[1]
@@ -18,8 +21,11 @@ estARX <- function(data,order=c(0,1,0)){
   vcov <- sigma2 * chol2inv(qx$qr)
   colnames(vcov) <- rownames(vcov) <- colnames(X)
   
-  list(coefficients = coef,
-       vcov = vcov,
-       sigma = sqrt(sigma2),
-       df = df)
+  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:nb1],ioDelay = nk)
+  
+  est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+              df = df,fitted.values=X%*%coef,residuals=Y-X%*%coef,
+              call=match.call())
+  class(est) <- "estARX"
+  est
 }
