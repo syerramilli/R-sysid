@@ -39,9 +39,11 @@ summary.estARX <- function(object)
                StdErr = se,
                t.value = tval,
                p.value = 2*pt(-abs(tval), df=object$df))
-  TAB <- 
+  na <- length(object$A) - 1; nk <- object$ioDelay; 
+  nb <- length(object$B) - nk
   
-  res <- list(call=object$call,coefficients=TAB)
+  
+  res <- list(call=object$call,coefficients=TAB,order=c(na,nb,nk))
   class(res) <- "summary.estARX"
   res
 }
