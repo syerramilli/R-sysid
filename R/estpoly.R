@@ -43,12 +43,22 @@ summary.estARX <- function(object)
   nb <- length(coef(object)$B) - nk
   
   rownames(TAB) <- rep("a",nrow(TAB))
-  for(i in 1:na) rownames(TAB)[i] <- paste("a.",i,sep="")
+  for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
   for(j in (na+1):nrow(TAB)) {
-    rownames(TAB)[j] <- paste("b.",j-na-1+nk,sep="")
+    rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
   }
-  
-  res <- list(call=object$call,coefficients=TAB,model=coef(object))
+  res <- list(call=object$call,coefficients=TAB,sigma=object$sigma,
+              df=object$df)
   class(res) <- "summary.estARX"
   res
+}
+
+#' @export
+print.summary.estARX <- function(object){
+  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n")
+  cat("Call: ");print(object$call);cat("\n\n")
+  
+  print(coef(object))
+  cat(paste("\nsigma:",format(object$sigma,digits=4)))
+  cat(paste("\nDoF:",object$df))
 }
