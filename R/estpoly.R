@@ -24,8 +24,8 @@ estARX <- function(data,order=c(0,1,0)){
   model <- arx(A = c(1,coef[1:na]),B = coef[na+1:nb1],ioDelay = nk)
   
   est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
-              df = df,fitted.values=X%*%coef,residuals=Y-X%*%coef,
-              call=match.call())
+              df = df,fitted.values=(X%*%coef)[1:N,],
+              residuals=(Y-X%*%coef)[1:N,],call=match.call())
   class(est) <- "estARX"
   est
 }
