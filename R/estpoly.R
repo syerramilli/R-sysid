@@ -30,6 +30,15 @@ estARX <- function(data,order=c(0,1,0)){
 }
 
 #' @export
+predict.estARX <- function(model,newdata=NULL){
+  if(is.null(newdata)){
+    return(fitted(model))
+  } else{
+    return(sim(coef(model),newdata))
+  }
+}
+
+#' @export
 summary.estARX <- function(object)
 {
   coefs <- c(coef(object)$A[-1],coef(object)$B)
