@@ -114,15 +114,15 @@ misdata <- function(data){
   
   f <- function(var,start,end,Ts){
     var <- ts(data=var,start=start,end=end,frequency=floor(1/Ts))
-    out <- na.approx(var)
+    out <- na.approx(var,)
     return(as.numeric(out))
   }
   
   dataout <- data
-  dataout$output <- data.frame(apply(data$output,2,f),start=data$t.start,
-                     end=data$t.end,Ts= data$Ts)
-  dataout$input <- data.frame(apply(data$input,2,f),start=data$t.start,
-                     end=data$t.end,Ts= data$Ts)
+  dataout$output <- data.frame(apply(data$output,2,f,start=data$t.start,
+                     end=data$t.end,Ts= data$Ts))
+  dataout$input <- data.frame(apply(data$input,2,f,start=data$t.start,
+                     end=data$t.end,Ts= data$Ts))
   
   return(dataout)
 }
