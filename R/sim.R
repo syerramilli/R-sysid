@@ -1,5 +1,10 @@
 #' @export
-sim <- function(x) useMethod("sim")
+sim <- function(model,input) UseMethod("sim")
+
+#' @export
+sim.default <- function(model,input){
+  return(NULL)
+}
 
 #' @export
 sim.arx <- function(model,input,sigma=0){
