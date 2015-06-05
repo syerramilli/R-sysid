@@ -6,7 +6,7 @@
 #' @param freqData a logical value indicating whether the file contains the list of
 #' frequencies. If \code{TRUE}, they need to be present in the first column. 
 #' (Default: \code{idframe})
-#' @param ninputs the number of input columns. (Default: 1)
+#' @param ninputs the number of input columns. (Default: NULL)
 #' @param type indicates the domain of the data (Default:\code{"time"})
 #' @param Ts sampling interval (Default: 1)
 #' @param tUnit Time Unit (Default: "seconds")
@@ -22,7 +22,7 @@
 #' data <- read.idframe(cstrData,ninputs=1,type="time",Ts= 1,tUnit="min")
 #' 
 #' @export 
-read.idframe <- function(data,freqData=FALSE,ninputs=1,
+read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
                     type=c("time","freq")[1],Ts = 1,tUnit="sec"){
   
   if((type=="freq") && (freqData)){
@@ -35,9 +35,12 @@ read.idframe <- function(data,freqData=FALSE,ninputs=1,
                    frequencies=frequencies,tUnit=tUnit)
     
   } else{
-    
-    inputs <- data[,1:ninputs,drop=F]
-    outputs <- data[,seq(ninputs+1,dim(data)[2],by=1),drop=F]
+    outIndex <- 1:dim(data)[2]; inputs <- NULL
+    if(!is.null(ninputs)){
+      inputs <- data[,1:ninputs,drop=F]
+      outIndex <- seq(ninputs+1,dim(data)[2]
+    }
+    outputs <- data[,outIndex,by=1),drop=F]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,tUnit=tUnit)
   }
