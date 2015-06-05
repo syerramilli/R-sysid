@@ -38,9 +38,9 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
     outIndex <- 1:dim(data)[2]; inputs <- NULL
     if(!is.null(ninputs)){
       inputs <- data[,1:ninputs,drop=F]
-      outIndex <- seq(ninputs+1,dim(data)[2]
+      outIndex <- seq(ninputs+1,dim(data)[2],by=1)
     }
-    outputs <- data[,outIndex,by=1),drop=F]
+    outputs <- data[,outIndex,drop=F]
     
     out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,tUnit=tUnit)
   }
