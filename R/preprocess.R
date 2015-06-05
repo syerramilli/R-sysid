@@ -114,7 +114,7 @@ misdata <- function(data){
   
   f <- function(var,start,end,Ts){
     var <- ts(data=var,start=start,end=end,frequency=floor(1/Ts))
-    out <- na.approx(var,)
+    out <- na.approx(var,na.rm=F)
     return(as.numeric(out))
   }
   
