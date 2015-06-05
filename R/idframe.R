@@ -171,6 +171,11 @@ idfrd <- function(response,freq,Ts){
   return(out)
 }
 
+#' Plotting idfrd objects
+#' 
+#' Plot method for frequency resopnse data
+#' 
+#' @param object An object of class \code{idframe}
 #' @export
 plot.idfrd <- function(object){
   require(ggplot2);require(reshape2);require(signal)

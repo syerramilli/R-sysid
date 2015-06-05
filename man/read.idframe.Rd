@@ -4,7 +4,7 @@
 \alias{read.idframe}
 \title{Data input into a idframe object}
 \usage{
-read.idframe(data, freqData = FALSE, ninputs = 1, type = c("time",
+read.idframe(data, freqData = FALSE, ninputs = NULL, type = c("time",
   "freq")[1], Ts = 1, tUnit = "sec")
 }
 \arguments{
@@ -14,7 +14,7 @@ read.idframe(data, freqData = FALSE, ninputs = 1, type = c("time",
 frequencies. If \code{TRUE}, they need to be present in the first column.
 (Default: \code{idframe})}
 
-\item{ninputs}{the number of input columns. (Default: 1)}
+\item{ninputs}{the number of input columns. (Default: NULL)}
 
 \item{type}{indicates the domain of the data (Default:\code{"time"})}
 

@@ -4,9 +4,9 @@
 \alias{idframe}
 \title{S3 class for storing input-output data.}
 \usage{
-idframe(output = numeric(0), input = numeric(0), type = c("time",
-  "freq")[1], Ts = 1, t.start = 0, t.end = NA, tUnit = "seconds",
-  frequencies = NA, fUnit = "Hz")
+idframe(output = NULL, input = NULL, type = c("time", "freq")[1],
+  Ts = 1, t.start = 0, t.end = NULL, tUnit = "seconds",
+  frequencies = NULL, fUnit = "Hz")
 }
 \arguments{
 \item{output}{dataframe/matrix/vector containing the outputs}
