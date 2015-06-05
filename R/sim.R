@@ -2,7 +2,7 @@
 sim <- function(x) useMethod("sim")
 
 #' @export
-sim.arx <- function(model,input){
+sim.arx <- function(model,input,sigma=0){
   na <- length(model$A) - 1; nk <- model$ioDelay; 
   nb <- length(model$B) - nk
   n <- max(na,nb+nk)
@@ -14,7 +14,7 @@ sim.arx <- function(model,input){
   
   for(i in n+1:length(input)){
     reg <- cbind(-y[i-1:na,],u[i-nk:nb1,])
-    y[i] <- reg%*%coef
+    y[i] <- reg%*%coef + rnorm(1,sd = sigma)
   }
   return(y[n+1:length(input),,drop=F])
 }
