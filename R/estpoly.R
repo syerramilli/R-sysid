@@ -25,7 +25,7 @@ estARX <- function(data,order=c(0,1,0)){
   est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call())
-  class(est) <- "estARX"
+  class(est) <- c("estARX","estPoly")
   est
 }
 
