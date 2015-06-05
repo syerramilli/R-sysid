@@ -19,7 +19,6 @@ estARX <- function(data,order=c(0,1,0)){
   sigma2 <- sum((Y-X%*%coef)^2)/df
   
   vcov <- sigma2 * chol2inv(qx$qr)
-  colnames(vcov) <- rownames(vcov) <- colnames(X)
   
   model <- arx(A = c(1,coef[1:na]),B = coef[na+1:nb1],ioDelay = nk)
   
@@ -28,4 +27,21 @@ estARX <- function(data,order=c(0,1,0)){
               residuals=(Y-X%*%coef)[1:N,],call=match.call())
   class(est) <- "estARX"
   est
+}
+
+#' @export
+summary.estARX <- function(object)
+{
+  coefs <- c(coef(object)$A[-1],coef(object$B))
+  se <- sqrt(diag(object$vcov))
+  tval <- coefs / se
+  TAB <- cbind(Estimate = coef(object),
+               StdErr = se,
+               t.value = tval,
+               p.value = 2*pt(-abs(tval), df=object$df))
+  TAB <- 
+  
+  res <- list(call=object$call,coefficients=TAB)
+  class(res) <- "summary.estARX"
+  res
 }
