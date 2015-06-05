@@ -23,19 +23,19 @@
 #' data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
 #' 
 #' @export
-idframe <- function(output=numeric(0),input=numeric(0),
+idframe <- function(output=NULL,input=NULL,
                      type=c("time","freq")[1],Ts = 1,
-                     t.start=0,t.end=NA, tUnit = "seconds", 
-                     frequencies = NA, fUnit= "Hz"){
+                     t.start=0,t.end=NULL, tUnit = "seconds", 
+                     frequencies = NULL, fUnit= "Hz"){
   
   ## Input Validation
   if(!(type %in% c("time","freq"))) # type validation
     stop("Unknown domain type")
   
-  if(length(output)!=0 && length(input)!=0){
-    if(dim(output)[1]!=dim(input)[1]) # observation validation
-      stop("Dimensions don't match")
-  }
+  #if(length(output)!=0 && length(input)!=0){
+  #   if(dim(output)[1]!=dim(input)[1]) # observation validation
+  #   stop("Dimensions don't match")
+  #}
   
   # Object Constructor
   dat <- list(output=data.frame(output),input=data.frame(input),type=type,Ts=Ts)
@@ -44,7 +44,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
   
   if(type=="freq"){
 
-    if(is.na(frequencies)){
+    if(is.null(frequencies)){
       frequncies <- seq(0,2*pi,length=n)
     }
     
@@ -53,7 +53,7 @@ idframe <- function(output=numeric(0),input=numeric(0),
     
   } else {
     
-    if(is.na(t.end)) {
+    if(is.null(t.end)) {
       t.end <- t.start + Ts*(n-1)
     } else {
       dat$Ts <- (t.end-t.start)/(n-1)
