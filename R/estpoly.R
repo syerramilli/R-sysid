@@ -32,18 +32,17 @@ estARX <- function(data,order=c(0,1,0)){
 #' @export
 summary.estARX <- function(object)
 {
-  coefs <- c(coef(object)$A[-1],coef(object$B))
+  coefs <- c(coef(object)$A[-1],coef(object)$B)
   se <- sqrt(diag(object$vcov))
   tval <- coefs / se
-  TAB <- cbind(Estimate = coef(object),
+  TAB <- cbind(Estimate = coefs,
                StdErr = se,
                t.value = tval,
                p.value = 2*pt(-abs(tval), df=object$df))
   na <- length(object$A) - 1; nk <- object$ioDelay; 
   nb <- length(object$B) - nk
   
-  
-  res <- list(call=object$call,coefficients=TAB,order=c(na,nb,nk))
+  res <- list(call=object$call,coefficients=TAB,model=coef(object))
   class(res) <- "summary.estARX"
   res
 }
