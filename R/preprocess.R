@@ -108,6 +108,21 @@ detrend.predict <- function(object,data){
 
 #' Replace Missing Data by Interpolation
 #' 
+#' Function for replacing missing values with interpolated ones. This is an
+#' extension of the \code{na.approx} function from the \code{zoo} package.
+#' The missing data is indicated using the value \emph{NA}.
+#' 
+#' @param data an object of class \code{idframe}
+#' @return 
+#' data (an idframe object) with missing data replaced.
+#' 
+#' @seealso \code{\link[zoo]{na.approx}}
+#' 
+#' @examples
+#' data(cstr_mis)
+#' summary(cstr_mis) # finding out the number of NAs
+#' cstr <- misdata(cstr_mis)
+#' 
 #' @export
 misdata <- function(data){
   require(zoo)
