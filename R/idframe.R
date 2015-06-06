@@ -130,16 +130,6 @@ index <- function(object){
   }
 }
 
-#' idframe-object summaries
-#' 
-#' Generates a summary of objects inherting from class \code{idframe}
-#' 
-#' @param object an object of class \code{idframe}
-#' 
-#' @examples
-#' data(cstr)
-#' summary(cstr)
-#' 
 #' @export
 summary.idframe <- function(object){
   out_sum <- summary(object$output)
