@@ -12,10 +12,30 @@ spa(data, npad = 255)
 \item{npad}{an integer representing the total length of each time series
 to analyze after padding with zeros. This argument allows the user to
 control the spectral resolution of the SDF estimates: the normalized
-frequency interval is deltaf=1/npad. (Default:)}
+frequency interval is deltaf=1/npad. (Default: 255)}
+}
+\value{
+an \code{idfrd} object containing the estimated frequency response
 }
 \description{
 Estimates Frequency Response with fixed frequency resolution using
 spectral analysis
+}
+\details{
+The function calls the \code{SDF} function in the \code{sapa} package to
+compute the cross-spectral densities. The method used is \strong{Welch's
+Overlapped Segment Averaging} with a normalized \strong{Hanning} window.
+The overlap used is 50%.
+}
+\examples{
+data(frf)
+frf <- spa(data)
+}
+\references{
+Arun K. Tangirala (2015), \emph{Principles of System Identification:
+Theory and Practice}, CRC Press, Boca Raton. Sections 16.5 and 20.4
+}
+\seealso{
+\code{\link[sapa]{SDF}}
 }
 
