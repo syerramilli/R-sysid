@@ -92,6 +92,12 @@ step <- function(model){
 #' Estimates Frequency Response with fixed frequency resolution using 
 #' spectral analysis
 #' 
+#' @param data an \code{idframe} object
+#' @param npad an integer representing the total length of each time series 
+#' to analyze after padding with zeros. This argument allows the user to 
+#' control the spectral resolution of the SDF estimates: the normalized 
+#' frequency interval is deltaf=1/npad. (Default:)
+#' 
 #' @export
 spa <- function(data,npad=255){
   require(sapa)

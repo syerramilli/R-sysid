@@ -6,6 +6,14 @@
 \usage{
 spa(data, npad = 255)
 }
+\arguments{
+\item{data}{an \code{idframe} object}
+
+\item{npad}{an integer representing the total length of each time series
+to analyze after padding with zeros. This argument allows the user to
+control the spectral resolution of the SDF estimates: the normalized
+frequency interval is deltaf=1/npad. (Default:)}
+}
 \description{
 Estimates Frequency Response with fixed frequency resolution using
 spectral analysis
