@@ -1,3 +1,13 @@
+#' @export
+plot.estPoly <- function(model,newdata=NULL,...){
+  if(is.null(newdata)){
+    
+  } else{
+    
+    if(class(newdata)!="idframe") stop("Only idframe objects allowed")
+  }
+}
+
 #' Estimate ARX Models
 #' 
 #' @export
