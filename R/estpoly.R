@@ -29,7 +29,17 @@ plot.estPoly <- function(model,newdata=NULL){
 #' the input-output delay
 #' 
 #' @details
-#' ARX models are of the form \\
+#' SISO ARX models are of the form 
+#' \deqn{
+#'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
+#'    \ldots + b_{nk+nb} u[k-nk-nb] + e[k] 
+#' }
+#' The function estimates the coefficients using linear least squares (with
+#' no regularization). Future versions may include regularization 
+#' parameters as well
+#' \\
+#' The data is expected to have no offsets or trends. They can be removed 
+#' using the \code{\link{detrend}} function. 
 #' 
 #' @return
 #' An object with classes \code{estARX} and \code{estPoly}, containing 
@@ -40,8 +50,8 @@ plot.estPoly <- function(model,newdata=NULL){
 #'    fitted coefficients \cr
 #'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
 #'    \code{sigma} \tab the standard deviation of the innovations\cr
-#'    \code{df} the residual degrees of freedom\tab \cr
-#'    \code{fitted.values} \tab the predicted response
+#'    \code{df} \tab the residual degrees of freedom \cr
+#'    \code{fitted.values} \tab the predicted response \cr
 #'    \code{residuals} \tab the residuals  \cr
 #'    \code{call} \tab the matched call \cr
 #'    \code{time} \tab the time of the data used \cr
@@ -49,10 +59,10 @@ plot.estPoly <- function(model,newdata=NULL){
 #' 
 #' 
 #' @references
-#' Arun K. Tangirala (2015), Principles of System Identification: Theory and 
-#' Practice, CRC Press, Boca Raton. Section 21.6.1
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Section 21.6.1
 #' 
-#' Lennart Ljung (1999) System Identification: Theory for the User, 
+#' Lennart Ljung (1999), \emph{System Identification: Theory for the User}, 
 #' 2nd Edition, Prentice Hall, New York. Section 10.1
 #' 
 #' @examples
@@ -66,7 +76,7 @@ estARX <- function(data,order=c(0,1,0)){
   y <- as.matrix(data$output)
   u <- as.matrix(data$input); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
-  nb1 <- nb+nk; n <- max(na,nb1); df <- N - na - nb -nk
+  nb1 <- nb+nk. ; n <- max(na,nb1); df <- N - na - nb -nk
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
