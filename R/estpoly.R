@@ -1,11 +1,22 @@
 #' @export
-plot.estPoly <- function(model,newdata=NULL,...){
+plot.estPoly <- function(model,newdata=NULL){
+  require(ggplot2)
+  require(reshape2)
+  
   if(is.null(newdata)){
-    
-  } else{
-    
+    ypred <- fitted(model)
+    yact <- fitted(model) + resid(model)
+    time <- model$time
+  } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
+    ypred <- sim(coef(model),newdata$input[,1,drop=F])
+    yact <- newdata$output[,1,drop=F]
+    time <- seq(from=newdata$t.start,to=newdata$t.end,by=newdata$Ts)
   }
+  df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
+  meltdf <- melt(df,id="Time")
+  ggplot(df, aes(x = Time,y=value,colour=variable,group=variable)) + 
+    theme_bw()
 }
 
 #' Estimate ARX Models
@@ -31,10 +42,12 @@ estARX <- function(data,order=c(0,1,0)){
   vcov <- sigma2 * chol2inv(qx$qr)
   
   model <- arx(A = c(1,coef[1:na]),B = coef[na+1:nb1],ioDelay = nk)
+  time <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
   
   est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
-              residuals=(Y-X%*%coef)[1:N,],call=match.call())
+              residuals=(Y-X%*%coef)[1:N,],call=match.call(),
+              time=time)
   class(est) <- c("estARX","estPoly")
   est
 }
