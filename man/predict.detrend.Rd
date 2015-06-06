@@ -2,7 +2,7 @@
 % Please edit documentation in R/preprocess.R
 \name{predict.detrend}
 \alias{predict.detrend}
-\title{Predict method for trend fits on idframe objects}
+\title{Detrend data based on linear trend fits}
 \usage{
 \method{predict}{detrend}(object, newdata = NULL, ...)
 }
