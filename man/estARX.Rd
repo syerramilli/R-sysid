@@ -14,8 +14,20 @@ estARX(data, order = c(0, 1, 0))
 the input-output delay}
 }
 \value{
-An object having classes \code{estARX} and \code{estPoly} containing
+An object with classes \code{estARX} and \code{estPoly}, containing
 the following elements:
+
+\tabular{ll}{
+   \code{coefficients} \tab an \code{idpoly} object containing the
+   fitted coefficients \cr
+   \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+   \code{sigma} \tab the standard deviation of the innovations\cr
+   \code{df} the residual degrees of freedom\tab \cr
+   \code{fitted.values} \tab the predicted response
+   \code{residuals} \tab the residuals  \cr
+   \code{call} \tab the matched call \cr
+   \code{time} \tab the time of the data used \cr
+ }
 }
 \description{
 Fit an ARX model of the specified order given the input-output data
