@@ -80,29 +80,42 @@ idframe <- function(output=NULL,input=NULL,
 #' 
 #' @export
 plot.idframe <- function(object,...){
-  
-  p <- dim(object$output)[2];m <- dim(object$input)[2]
-  
-  if(p!=1 || m!=1){
-    oask <- devAskNewPage(TRUE)
-    on.exit(devAskNewPage(oask))
+  if(object$type=="frequency"){
+    p <- dim(object$output)[2];m <- dim(object$input)[2]
     
-    for(i in seq(m)){
-      for(j in seq(p)){
-        par(mfrow=c(2,1),mar=c(3,4,2,2))
-        plot(index(object),object$output[,j],xlab=object$type,
-             ylab=colnames(object$output)[j],type="l",...)
-        plot(index(object),object$input[,i],xlab=object$type,
-             ylab=colnames(object$input)[i],type="l",...)
+    if(p!=1 || m!=1){
+      oask <- devAskNewPage(TRUE)
+      on.exit(devAskNewPage(oask))
+      
+      for(i in seq(m)){
+        for(j in seq(p)){
+          par(mfrow=c(2,1),mar=c(3,4,2,2))
+          plot(index(object),object$output[,j],xlab=object$type,
+               ylab=colnames(object$output)[j],type="l",...)
+          plot(index(object),object$input[,i],xlab=object$type,
+               ylab=colnames(object$input)[i],type="l",...)
+        }
       }
+    } else {
+      par(mfrow=c(2,1),mar=c(3,4,3,2))
+      plot(index(object),object$output[,1],xlab=object$type,
+           ylab=colnames(object$output),type="l",...)
+      plot(index(object),object$input[,1],xlab=object$type,
+           ylab=colnames(object$input),type="l",...)
+    }  
+  } else{
+    require(tfplot)
+    if(is.null(object$output)){
+      data <- object$input
+    } else if(is.null(object$input)){
+      data <- object$output
+    } else{
+      data <- cbind(object$output,object$input)
     }
-  } else {
-    par(mfrow=c(2,1),mar=c(3,4,3,2))
-    plot(index(object),object$output[,1],xlab=object$type,
-         ylab=colnames(object$output),type="l",...)
-    plot(index(object),object$input[,1],xlab=object$type,
-         ylab=colnames(object$input),type="l",...)
-  }  
+    datats <- ts(data,start=object$t.start,end=object$t.end,
+                 frequency=floor(1/object$Ts))
+    tfplot(datats,...)
+  }
 }
 
 index <- function(object){
