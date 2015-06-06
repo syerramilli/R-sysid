@@ -12,7 +12,8 @@
 \item{sig}{Significance Limits (Default: \code{0.975})}
 }
 \description{
-Plots the estimated IR Coefficients
+Plots the estimated IR coefficients along with the significance limits
+at each lag.
 }
 \seealso{
 \code{\link{impulseest}},\code{\link{step}}

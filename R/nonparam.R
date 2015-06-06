@@ -1,7 +1,7 @@
-#' Estimate Impulse Response Models
+#' Estimate Impulse Response Coefficients
 #' 
-#' \code{impulseest} is used to estimate impulse response models in the
-#' given data
+#' \code{impulseest} is used to estimate impulse response coefficients from 
+#' the data
 #' 
 #' @param data an object of class \code{idframe}
 #' @param M Order of the FIR Model (Default:\code{30})
@@ -11,6 +11,15 @@
 #' used. (Default:\code{FALSE})
 #' @param lambda The value of the regularization parameter. Valid only if
 #' \code{regul=TRUE}. (Default:\code{1})
+#' 
+#' @details
+#' The IR Coefficients are estimated using linear least squares. Future 
+#' Versions will provide support for multivariate data and regularized 
+#' regression
+#' 
+#' @references
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Sections 17.4.11 and 20.2
 #' 
 #' @seealso \code{\link{step}}
 #' 
@@ -51,7 +60,8 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
 
 #' Impulse Response Plots
 #' 
-#' Plots the estimated IR Coefficients
+#' Plots the estimated IR coefficients along with the significance limits
+#' at each lag. 
 #' 
 #' @param model an object of class \code{impulseest}
 #' @param sig Significance Limits (Default: \code{0.975})
@@ -78,6 +88,14 @@ plot.impulseest <- function(model,sig=0.975){
 #' @param model an object of class \code{impulseest}
 #' 
 #' @seealso \code{\link{impulseest}}
+#' 
+#' @examples
+#' uk <- rnorm(1000,1)
+#' yk <- filter (uk,c(0.9,-0.4),method="recursive") + rnorm(1000,1)
+#' data <- idframe(output=data.frame(yk),input=data.frame(uk))
+#' fit <- impulseest(data)
+#' step(fit) 
+#' 
 #' @export 
 step <- function(model){
   title <- paste("Step Response \n From",model$x,"to",model$y)
