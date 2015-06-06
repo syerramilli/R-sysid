@@ -2,7 +2,7 @@
 % Please edit documentation in R/preprocess.R
 \name{detrend}
 \alias{detrend}
-\title{Remove linear trends}
+\title{Remove offsets and linear trends}
 \usage{
 detrend(data, type = c("constant", "linear")[2])
 }
@@ -23,14 +23,14 @@ A list containing the following elements
  }
 }
 \description{
-Removes the mean value or linear trends in each of the input and output matrices.
+Removes the offsets or linear trends in each of the input and output matrices.
 }
 \examples{
 data(cstr)
 fit <- detrend(cstr) # remove linear trends
 Zdetrend <- predict(fit) # get the detrended data
 
-demean <- detrend(cstr,type="constant") # remove mean values
+demean <- detrend(cstr,type="constant") # remove offsets
 Zcent <- predict(demean) # get the centered data
 }
 \seealso{
