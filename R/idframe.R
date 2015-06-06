@@ -79,7 +79,8 @@ idframe <- function(output=NULL,input=NULL,
 #' plot(distill,col="blue")
 #' 
 #' @export
-plot.idframe <- function(object,...){
+plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
+                         col="steelblue",...){
   if(object$type=="frequency"){
     p <- dim(object$output)[2];m <- dim(object$input)[2]
     
@@ -114,8 +115,7 @@ plot.idframe <- function(object,...){
     }
     datats <- ts(data,start=object$t.start,end=object$t.end,
                  frequency=floor(1/object$Ts))
-    par(mar=c(3,4,3,2))
-    tfplot(datats,...)
+    tfplot(datats,par=par,col=col,...)
   }
 }
 
