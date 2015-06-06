@@ -94,17 +94,17 @@ plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
       for(i in seq(m)){
         for(j in seq(p)){
           par(mfrow=c(2,1),mar=c(3,4,2,2))
-          plot(index(object),object$output[,j],xlab=object$type,
+          plot(object$frequencies,object$output[,j],xlab=object$type,
                ylab=colnames(object$output)[j],type="l",...)
-          plot(index(object),object$input[,i],xlab=object$type,
+          plot(object$frequencies,object$input[,i],xlab=object$type,
                ylab=colnames(object$input)[i],type="l",...)
         }
       }
     } else {
       par(mfrow=c(2,1),mar=c(3,4,3,2))
-      plot(index(object),object$output[,1],xlab=object$type,
+      plot(object$frequencies,object$output[,1],xlab=object$type,
            ylab=colnames(object$output),type="l",...)
-      plot(index(object),object$input[,1],xlab=object$type,
+      plot(object$frequencies,object$input[,1],xlab=object$type,
            ylab=colnames(object$input),type="l",...)
     }  
   } else{
@@ -119,14 +119,6 @@ plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
     datats <- ts(data,start=object$t.start,end=object$t.end,
                  frequency=floor(1/object$Ts))
     tfplot(datats,par=par,col=col,...)
-  }
-}
-
-index <- function(object){
-  if(object$type=="time"){
-    return(seq(from=object$t.start,to=object$t.end,by=object$Ts)) 
-  } else {
-    return(object$frequencies) 
   }
 }
 
