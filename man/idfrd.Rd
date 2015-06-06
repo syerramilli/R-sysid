@@ -6,7 +6,25 @@
 \usage{
 idfrd(response, freq, Ts)
 }
+\arguments{
+\item{response}{complex vector/matrix containing the response}
+
+\item{freq}{the frequencies at which the response is observed/estimated}
+
+\item{Ts}{sampling time of data}
+}
+\value{
+an idfrd object
+}
 \description{
 S3 class for storing frequency response data
+}
+\note{
+The class can currently store only SISO Responses. Future versions will
+have support for multivariate data
+}
+\seealso{
+\code{\link{plot.idfrd}} for generating bode plots; \code{\link{spa}} and
+\code{\link{etfe}} for estimating the frequency response given input/output data
 }
 

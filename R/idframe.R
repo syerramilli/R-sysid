@@ -170,7 +170,21 @@ print.summary.idframe <- function(object,...){
 }
 
 #' S3 class for storing frequency response data
-#'
+#' 
+#' @param response complex vector/matrix containing the response
+#' @param freq the frequencies at which the response is observed/estimated
+#' @param Ts sampling time of data
+#' 
+#' @return an idfrd object
+#' 
+#' @note
+#' The class can currently store only SISO Responses. Future versions will 
+#' have support for multivariate data
+#' 
+#' @seealso
+#' \code{\link{plot.idfrd}} for generating bode plots; \code{\link{spa}} and
+#' \code{\link{etfe}} for estimating the frequency response given input/output data
+#' 
 #' @export
 idfrd <- function(response,freq,Ts){
   out <- list(response=response,freq=freq,Ts=Ts)
