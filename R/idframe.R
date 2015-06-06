@@ -72,11 +72,14 @@ idframe <- function(output=NULL,input=NULL,
 #' Plotting method for objects inherting from class \code{idframe}
 #' 
 #' @param object an object of class \code{idframe}
+#' @param par a list of arguments passed to par() before plotting.
+#' @param col line color, to be passed to plot.(Default=\code{"steelblue"})
 #' @param ... additional arguments to be passed to the \code{tfplot} function
 #' 
+#' @seealso \code{\link[tfplot]{tfplot}}
 #' @examples
-#' data(distill)
-#' plot(distill,col="blue")
+#' data(cstr)
+#' plot(cstr,col="blue")
 #' 
 #' @export
 plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),

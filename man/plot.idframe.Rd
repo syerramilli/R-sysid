@@ -10,13 +10,20 @@
 \arguments{
 \item{object}{an object of class \code{idframe}}
 
+\item{par}{a list of arguments passed to par() before plotting.}
+
+\item{col}{line color, to be passed to plot.(Default=\code{"steelblue"})}
+
 \item{...}{additional arguments to be passed to the \code{tfplot} function}
 }
 \description{
 Plotting method for objects inherting from class \code{idframe}
 }
 \examples{
-data(distill)
-plot(distill,col="blue")
+data(cstr)
+plot(cstr,col="blue")
+}
+\seealso{
+\code{\link[tfplot]{tfplot}}
 }
 
