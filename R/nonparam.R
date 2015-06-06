@@ -150,7 +150,23 @@ spa <- function(data,npad=255){
 
 #' Estimate empirical transfer function
 #' 
-#' Estimates the emperical transfer function
+#' Estimates the emperical transfer function from the data by taking the 
+#' ratio of the fourier transforms of the output and the input variables
+#' 
+#' @param data an object of class \code{idframe}
+#' 
+#' @return
+#' an \code{idfrd} object containing the estimated frequency response
+#' 
+#' @references
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Sections 5.3 and 20.4.2
+#' 
+#' @seealso \code{\link[stats]{fft}}
+#' 
+#' @examples
+#' data(frf)
+#' frf <- etfe(data)
 #' 
 #' @export
 etfe <- function(data){

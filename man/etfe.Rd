@@ -6,7 +6,25 @@
 \usage{
 etfe(data)
 }
+\arguments{
+\item{data}{an object of class \code{idframe}}
+}
+\value{
+an \code{idfrd} object containing the estimated frequency response
+}
 \description{
-Estimates the emperical transfer function
+Estimates the emperical transfer function from the data by taking the
+ratio of the fourier transforms of the output and the input variables
+}
+\examples{
+data(frf)
+frf <- etfe(data)
+}
+\references{
+Arun K. Tangirala (2015), \emph{Principles of System Identification:
+Theory and Practice}, CRC Press, Boca Raton. Sections 5.3 and 20.4.2
+}
+\seealso{
+\code{\link[stats]{fft}}
 }
 
