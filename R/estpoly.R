@@ -15,8 +15,8 @@ plot.estPoly <- function(model,newdata=NULL){
   }
   df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
   meltdf <- melt(df,id="Time")
-  ggplot(df, aes(x = Time,y=value,colour=variable,group=variable)) + 
-    theme_bw()
+  ggplot(meltdf, aes(x = Time,y=value,colour=variable,group=variable)) +
+    geom_line() + theme_bw()
 }
 
 #' Estimate ARX Models
