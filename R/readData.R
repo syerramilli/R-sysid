@@ -1,12 +1,12 @@
 #' Data input into a idframe object
 #' 
-#' Read the contents of a \code{data.frame} object into a \code{idframe} object.
+#' Read the contents of a data.frame/matrix into a \code{idframe} object.
 #' 
 #' @param data a \code{data.frame} object
 #' @param freqData a logical value indicating whether the file contains the list of
 #' frequencies. If \code{TRUE}, they need to be present in the first column. 
 #' (Default: \code{idframe})
-#' @param ninputs the number of input columns. (Default: NULL)
+#' @param ninputs the number of input columns. (Default: \code{NULL})
 #' @param type indicates the domain of the data (Default:\code{"time"})
 #' @param Ts sampling interval (Default: 1)
 #' @param tUnit Time Unit (Default: "seconds")
@@ -48,7 +48,7 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
   return(out)
 }
 
-#' Data input into a idframe object
+#' Read the contents of a table-formatted file
 #' 
 #' Read the contents of an file in table format into a \code{idframe} object.
 #' 
@@ -58,7 +58,7 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
 #' @param header a logical value indicating whether the first row corresponding to 
 #' the first element of the rowIndex vector contains the names of the variables. 
 #' (Default: \code{TRUE})
-#' @param ninputs the number of input columns. (Default: 1)
+#' @param ninputs the number of input columns. (Default: \code{NULL})
 #' @param type indicates the domain of the data (Default:\code{"time"})
 #' @param Ts sampling interval (Default: 1)
 #' @param freqData a logical value indicating whether the file contains the list of
@@ -69,8 +69,8 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
 #' 
 #' @details
 #' 
-#' The \code{readxlsx.idframe} function uses the \code{\link[utils]{read.table}} function, 
-#' provided by the \pkg{xlsx} package, to read data from an excel file and then calls the 
+#' The \code{read.table.idframe} function uses the \code{\link[utils]{read.table}} function, 
+#' provided by the \pkg{utils} package, to read data from a table-formatted file and then calls the 
 #' \code{\link{read.idframe}} function to read the data into a idframe object
 #' 
 #' 
@@ -87,7 +87,7 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
 #' 
 #' @seealso  \code{\link[utils]{read.table}}
 #' @export 
-read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
+read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=NULL,
              type=c("time","freq")[1],Ts = 1,freqData=FALSE,
              tUnit="sec",...){
   
@@ -109,7 +109,7 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' @param header a logical value indicating whether the first row corresponding to 
 #' the first element of the rowIndex vector contains the names of the variables. 
 #' (Default: \code{TRUE})
-#' @param ninputs the number of input columns. (Default: 1)
+#' @param ninputs the number of input columns. (Default: \code{NULL})
 #' @param type indicates the domain of the data (Default:\code{"time"})
 #' @param Ts sampling interval (Default: 1)
 #' @param freqData a logical value indicating whether the file contains the list of
@@ -143,7 +143,7 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=1,
 #' 
 #' @seealso  \code{\link[xlsx]{read.xlsx2}}
 #' @export
-read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=1,
+read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=NULL,
                 type=c("time","freq")[1],Ts = 1,freqData=FALSE,tUnit="time",
                 ...){
   

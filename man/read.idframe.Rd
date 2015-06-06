@@ -14,7 +14,7 @@ read.idframe(data, freqData = FALSE, ninputs = NULL, type = c("time",
 frequencies. If \code{TRUE}, they need to be present in the first column.
 (Default: \code{idframe})}
 
-\item{ninputs}{the number of input columns. (Default: NULL)}
+\item{ninputs}{the number of input columns. (Default: \code{NULL})}
 
 \item{type}{indicates the domain of the data (Default:\code{"time"})}
 
@@ -26,7 +26,7 @@ frequencies. If \code{TRUE}, they need to be present in the first column.
 an idframe object
 }
 \description{
-Read the contents of a \code{data.frame} object into a \code{idframe} object.
+Read the contents of a data.frame/matrix into a \code{idframe} object.
 }
 \details{
 If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file

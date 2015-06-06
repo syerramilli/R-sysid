@@ -2,9 +2,9 @@
 % Please edit documentation in R/readData.R
 \name{read.table.idframe}
 \alias{read.table.idframe}
-\title{Data input into a idframe object}
+\title{Read the contents of a table-formatted file}
 \usage{
-read.table.idframe(file, header = TRUE, sep = ",", ninputs = 1,
+read.table.idframe(file, header = TRUE, sep = ",", ninputs = NULL,
   type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "sec",
   ...)
 }
@@ -18,7 +18,7 @@ the first element of the rowIndex vector contains the names of the variables.
 \item{sep}{the field separator character. Values on each line of the file are
 separated by this character. (Default: \code{","})}
 
-\item{ninputs}{the number of input columns. (Default: 1)}
+\item{ninputs}{the number of input columns. (Default: \code{NULL})}
 
 \item{type}{indicates the domain of the data (Default:\code{"time"})}
 
@@ -39,8 +39,8 @@ an idframe object
 Read the contents of an file in table format into a \code{idframe} object.
 }
 \details{
-The \code{readxlsx.idframe} function uses the \code{\link[utils]{read.table}} function,
-provided by the \pkg{xlsx} package, to read data from an excel file and then calls the
+The \code{read.table.idframe} function uses the \code{\link[utils]{read.table}} function,
+provided by the \pkg{utils} package, to read data from a table-formatted file and then calls the
 \code{\link{read.idframe}} function to read the data into a idframe object
 
 

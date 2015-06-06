@@ -4,7 +4,7 @@
 \alias{read.xls.idframe}
 \title{Read the contents of a worksheet into a idframe object}
 \usage{
-read.xls.idframe(file, sheetName, header = TRUE, ninputs = 1,
+read.xls.idframe(file, sheetName, header = TRUE, ninputs = NULL,
   type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "time",
   ...)
 }
@@ -17,7 +17,7 @@ read.xls.idframe(file, sheetName, header = TRUE, ninputs = 1,
 the first element of the rowIndex vector contains the names of the variables.
 (Default: \code{TRUE})}
 
-\item{ninputs}{the number of input columns. (Default: 1)}
+\item{ninputs}{the number of input columns. (Default: \code{NULL})}
 
 \item{type}{indicates the domain of the data (Default:\code{"time"})}
 
