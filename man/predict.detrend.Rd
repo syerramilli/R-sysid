@@ -16,7 +16,7 @@ which to predict. If ommited, the original detrended idframe object is used}
 an \code{idframe} object
 }
 \description{
-Detrended \code{idframe} object based on linear trend fit
+Returns detrended \code{idframe} object based on linear trend fit
 }
 \examples{
 data(cstr)

@@ -65,7 +65,7 @@ detrend <- function(data,type=c("constant","linear")[2]){
 
 #' Predict method for trend fits on idframe objects
 #' 
-#' Detrended \code{idframe} object based on linear trend fit
+#' Returns detrended \code{idframe} object based on linear trend fit
 #' 
 #' @param object an object of class \code{idframe}
 #' @param newdata An optional idframe object in which to look for variables with 
