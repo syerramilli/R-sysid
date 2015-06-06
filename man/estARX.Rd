@@ -6,7 +6,34 @@
 \usage{
 estARX(data, order = c(0, 1, 0))
 }
+\arguments{
+\item{data}{an object of class \code{idframe}}
+
+\item{order:}{Specification of the orders: the three integer components
+(na,nb,nk) are the order of polynolnomial A, order of polynomial B and
+the input-output delay}
+}
+\value{
+An object having classes \code{estARX} and \code{estPoly} containing
+the following elements:
+}
 \description{
-Estimate ARX Models
+Fit an ARX model of the specified order given the input-output data
+}
+\details{
+ARX models are of the form \\
+}
+\examples{
+data(arxsim)
+model <- estARX(data,c(2,1,1))
+summary(model) # obtain estimates and their covariances
+plot(model) # plot the predicted and actual responses
+}
+\references{
+Arun K. Tangirala (2015), Principles of System Identification: Theory and
+Practice, CRC Press, Boca Raton. Section 21.6.1
+
+Lennart Ljung (1999) System Identification: Theory for the User,
+2nd Edition, Prentice Hall, New York. Section 10.1
 }
 
