@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{an object of class \code{idframe}}
 
-\item{...}{additional arguments to be passed to the \code{plot} function}
+\item{...}{additional arguments to be passed to the \code{tfplot} function}
 }
 \description{
 Plotting method for objects inherting from class \code{idframe}

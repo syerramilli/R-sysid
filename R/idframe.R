@@ -72,7 +72,7 @@ idframe <- function(output=NULL,input=NULL,
 #' Plotting method for objects inherting from class \code{idframe}
 #' 
 #' @param object an object of class \code{idframe}
-#' @param ... additional arguments to be passed to the \code{plot} function
+#' @param ... additional arguments to be passed to the \code{tfplot} function
 #' 
 #' @examples
 #' data(distill)
@@ -114,6 +114,7 @@ plot.idframe <- function(object,...){
     }
     datats <- ts(data,start=object$t.start,end=object$t.end,
                  frequency=floor(1/object$Ts))
+    par(mar=c(3,4,3,2))
     tfplot(datats,...)
   }
 }
