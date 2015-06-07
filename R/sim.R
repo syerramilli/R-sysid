@@ -3,7 +3,7 @@ sim <- function(model,input) UseMethod("sim")
 
 #' @export
 sim.default <- function(model,input){
-  return(NULL)
+  print("The sim method is not developed for the current class of the object")
 }
 
 #' @export
