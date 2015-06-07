@@ -55,16 +55,15 @@ sim.idpoly <- function(model,input,sigma=1){
   
   n <- length(input)[1]
   ek <- rnorm(n,sd=sigma)
-  filt1 <- signal::Arma(b=model$C,a=model$D)
-  vk <- filter(filt1,ek)
+  filt1 <- Arma(b=model$C,a=model$D)
+  vk <- signal::filter(filt1,ek)
   
   B <- c(rep(0,model$ioDelay),model$B)
-  filt2 <- signal::Arma(b=model$B,a=model$F1)
-  ufk <- filter(filt2,input)
+  filt2 <- Arma(b=model$B,a=model$F1)
+  ufk <- signal::filter(filt2,input)
   
-  ypfk <- ufk + vk;
-  filt3 <- signal::Arma(b=1,a=model$A)
-  yk <- filter(filt3,ypfk)
+  ypfk <- as.numeric(ufk) + as.numeric(vk);
+  yk <- stats::filter(ypfk,filter=-model$A[-1],method="recursive")
   
   return(as.numeric(yk))
 }
