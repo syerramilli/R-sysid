@@ -1,13 +1,13 @@
 #' @export
-idpoly <- function(A,B,C,D,E,F1,ioDelay=0){
-  out <- list(A= A,B=B,C=C,D=D,E=E,F1=F1,ioDelay = ioDelay)
+idpoly <- function(A,B,C,D,F1,ioDelay=0){
+  out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay)
   class(out) <- "idpoly"
   return(out)
 }
 
 #' @export
 arx <- function(A,B,ioDelay=0){
-  out <- idpoly(A=A,B=B,C=1,D=1,E=1,F1=1,ioDelay = ioDelay)
+  out <- idpoly(A=A,B=B,C=1,D=1,F1=1,ioDelay = ioDelay)
   class(out) <- c("arx","idpoly")
   return(out)
 }
