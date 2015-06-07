@@ -42,7 +42,8 @@ sim.arx <- function(model,input,sigma=0){
   # u <- apply(input,2,padLeftZeros)
   
   for(i in n+1:length(input)){
-    reg <- matrix(c(-(y[i-1:na]),u[i-nk:nb1]),ncol=na+nb1)
+    if(nk==0) v <- u[i-0:(nb-1)] else v <- u[i-nk:nb1]
+    reg <- matrix(c(-(y[i-1:na]),v),ncol=na+nb1)
     y[i] <- reg%*%coef + rnorm(1,sd = sigma)
   }
   return(y[n+1:length(input)])
