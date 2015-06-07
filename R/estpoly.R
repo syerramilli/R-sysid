@@ -99,7 +99,10 @@ estARX <- function(data,order=c(0,1,0)){
   yout <- apply(y,2,padZeros,n=n);
   uout <- apply(u,2,padZeros,n=n);
   
-  reg <- function(i) cbind(-yout[i-1:na,],uout[i-nk:nb1])
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    cbind(-yout[i-1:na,],uout[v])
+  }
   X <- t(sapply(n+1:(N+n),reg))
   Y <- yout[n+1:(N+n),,drop=F]
   
