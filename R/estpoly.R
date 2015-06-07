@@ -55,6 +55,7 @@ plot.estPoly <- function(model,newdata=NULL){
 #'    \code{residuals} \tab the residuals  \cr
 #'    \code{call} \tab the matched call \cr
 #'    \code{time} \tab the time of the data used \cr
+#'    \code{input} \tab the input data used
 #'  }
 #' 
 #' 
@@ -97,7 +98,7 @@ estARX <- function(data,order=c(0,1,0)){
   est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),
-              time=time)
+              time=time,input=u)
   class(est) <- c("estARX","estPoly")
   est
 }

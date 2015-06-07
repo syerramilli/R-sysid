@@ -27,6 +27,7 @@ the following elements:
    \code{residuals} \tab the residuals  \cr
    \code{call} \tab the matched call \cr
    \code{time} \tab the time of the data used \cr
+   \code{input} \tab the input data used
  }
 }
 \description{
