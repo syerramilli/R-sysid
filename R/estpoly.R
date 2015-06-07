@@ -19,6 +19,17 @@ plot.estPoly <- function(model,newdata=NULL){
     geom_line() + theme_bw()
 }
 
+#' @export
+residplot <- function(model,newdata=NULL){
+  if(is.null(newdata)){
+    e <- resid(model); u <- model$input
+  } else{
+    if(class(newdata)!="idframe") stop("Only idframe objects allowed")
+    e <- newdata$output - predict(model,newdata)
+  }
+  
+}
+
 #' Estimate ARX Models
 #' 
 #' Fit an ARX model of the specified order given the input-output data 
@@ -108,7 +119,7 @@ predict.estARX <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
-    return(sim(coef(model),newdata))
+    return(sim(coef(model),as.numeric(newdata$input)))
   }
 }
 
