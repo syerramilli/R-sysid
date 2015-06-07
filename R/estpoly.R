@@ -26,8 +26,13 @@ residplot <- function(model,newdata=NULL){
   } else{
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
     e <- newdata$output - predict(model,newdata)
+    u <- newdata$input
   }
   
+  acorr <- acf(e,plot = F); ccorr <- ccf(as.numeric(u),e,plot = F)
+  par(mfrow=c(2,1),mar=c(3,4,4,2))
+  plot(acorr,main="ACF of residuals")
+  plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
 }
 
 #' Estimate ARX Models
