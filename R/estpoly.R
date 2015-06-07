@@ -76,7 +76,7 @@ estARX <- function(data,order=c(0,1,0)){
   y <- as.matrix(data$output)
   u <- as.matrix(data$input); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
-  nb1 <- nb+nk. ; n <- max(na,nb1); df <- N - na - nb -nk
+  nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb -nk
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
