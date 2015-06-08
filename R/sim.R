@@ -1,8 +1,8 @@
 #' @export
-sim <- function(model,input,sigma=0) UseMethod("sim")
+sim <- function(model,input,sigma=0,seed=NULL) UseMethod("sim")
 
 #' @export
-sim.default <- function(model,input,sigma=0){
+sim.default <- function(model,input,sigma=0,seed=NULL){
   print("The sim method is not developed for the current class of the object")
 }
 
@@ -30,14 +30,17 @@ sim.default <- function(model,input,sigma=0){
 #' y <- sim(model,u,sigma=0.1)
 #'  
 #' @export
-sim.arx <- function(model,input,sigma=0){
+sim.arx <- function(model,input,sigma=0,seed=NULL){
   na <- length(model$A) - 1; nk <- model$ioDelay; 
   nb <- length(model$B) - nk; nb1 <- nb+nk
   n <- max(na,nb1)
   coef <- matrix(c(model$A[-1],model$B),nrow=na+nb1) 
   
   y <- rep(0,length(input)+n)
-  u <- c(rep(0,n),input)
+  u <- c(rep(0,n),input$input[,1])
+  
+  if(!is.null(seed)) set.seed(seed)
+  
   ek <- rnorm(length(input),sd=sigma)
   # padLeftZeros <- function(x) c(rep(0,n),x)
   # u <- apply(input,2,padLeftZeros)
@@ -75,10 +78,11 @@ sim.arx <- function(model,input,sigma=0){
 #' y <- sim(model,u,sigma=0.1)
 #'  
 #' @export
-sim.idpoly <- function(model,input,sigma=1){
+sim.idpoly <- function(model,input,sigma=0,seed=NULL){
   require(signal);require(polynom)
   
   n <- length(input)[1]
+  if(!is.null(seed)) set.seed(seed)
   ek <- rnorm(n,sd=sigma)
   den1 <- as.numeric(polynomial(model$A)*polynomial(model$D))
   filt1 <- Arma(b=model$C,a=den1)
