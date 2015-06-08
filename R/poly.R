@@ -49,7 +49,7 @@ print.arx <- function(obj){
 
 #' @export
 armax <- function(A,B,C,ioDelay=0){
-  out <- idpoly(A=A,B=B,C=C,D=1,E=1,F1=1,ioDelay = ioDelay)
+  out <- idpoly(A=A,B=B,C=C,D=1,F1=1,ioDelay = ioDelay)
   class(out) <- c("armax","idpoly")
   return(out)
 }
