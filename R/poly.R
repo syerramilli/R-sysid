@@ -1,13 +1,13 @@
 #' @export
-idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0){
-  out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay)
+idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1){
+  out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts)
   class(out) <- "idpoly"
   return(out)
 }
 
 #' @export
-arx <- function(A,B,ioDelay=0){
-  out <- idpoly(A=A,B=B,ioDelay = ioDelay)
+arx <- function(A,B,ioDelay=0,Ts=1){
+  out <- idpoly(A=A,B=B,ioDelay = ioDelay,Ts=1)
   class(out) <- c("arx","idpoly")
   return(out)
 }
@@ -48,12 +48,30 @@ print.arx <- function(obj){
 }
 
 #' @export
-armax <- function(A,B,C,ioDelay=0){
-  out <- idpoly(A=A,B=B,C=C,ioDelay = ioDelay)
+armax <- function(A,B,C,ioDelay=0,Ts=1){
+  out <- idpoly(A=A,B=B,C=C,ioDelay = ioDelay,Ts=Ts)
   class(out) <- c("armax","idpoly")
   return(out)
 }
 
-oe <- function(B,C,ioDelay=0){
-  out <- idpoly(B)
+#' @export
+oe <- function(B,C,ioDelay=0,Ts=1){
+  out <- idpoly(B=B,C=C,ioDelay=ioDelay,Ts=Ts)
+  class(out) <- c("oe","idpoly")
+  return(out)
 }
+
+#' @export
+oe <- function(B,C,ioDelay=0,Ts=1){
+  out <- idpoly(B=B,C=C,ioDelay=ioDelay,Ts=Ts)
+  class(out) <- c("oe","idpoly")
+  return(out)
+}
+
+#' @export
+bj <- function(B,C,D,F1,ioDelay=0,Ts=1){
+  out <- idpoly(B=B,C=C,D=D,F1=F1,ioDelay=ioDelay,Ts=Ts)
+  class(out) <- c("oe","idpoly")
+  return(out)
+}
+
