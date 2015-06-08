@@ -27,7 +27,7 @@ sim.default <- function(model,input,sigma=0){
 #' @examples
 #' u <- rnorm(100,1)
 #' model <- arx(A=c(1,-1.5,0.7),B=c(0.8,-0.25))
-#' y <- sim(model,u,sigma=3)
+#' y <- sim(model,u,sigma=0.1)
 #'  
 #' @export
 sim.arx <- function(model,input,sigma=0){
@@ -38,32 +38,34 @@ sim.arx <- function(model,input,sigma=0){
   
   y <- rep(0,length(input)+n)
   u <- c(rep(0,n),input)
+  ek <- rnorm(length(input),sd=sigma)
   # padLeftZeros <- function(x) c(rep(0,n),x)
   # u <- apply(input,2,padLeftZeros)
   
   for(i in n+1:length(input)){
     if(nk==0) v <- u[i-0:(nb-1)] else v <- u[i-nk:nb1]
     reg <- matrix(c(-(y[i-1:na]),v),ncol=na+nb1)
-    y[i] <- reg%*%coef + rnorm(1,sd = sigma)
+    y[i] <- reg%*%coef + ek[i-n]
   }
   return(y[n+1:length(input)])
 }
 
 #' @export
 sim.idpoly <- function(model,input,sigma=1){
-  require(signal)
+  require(signal);require(polynom)
   
   n <- length(input)[1]
   ek <- rnorm(n,sd=sigma)
-  filt1 <- Arma(b=model$C,a=model$D)
+  den1 <- as.numeric(polynomial(model$A)*polynomial(model$D))
+  filt1 <- Arma(b=model$C,a=den1)
   vk <- signal::filter(filt1,ek)
   
   B <- c(rep(0,model$ioDelay),model$B)
-  filt2 <- Arma(b=model$B,a=model$F1)
+  den2 <- as.numeric(polynomial(model$A)*polynomial(model$F1))
+  filt2 <- Arma(b=B,a=den2)
   ufk <- signal::filter(filt2,input)
   
-  ypfk <- as.numeric(ufk) + as.numeric(vk);
-  yk <- stats::filter(ypfk,filter=-model$A[-1],method="recursive")
+  yk <- as.numeric(ufk) + as.numeric(vk)
   
   return(as.numeric(yk))
 }
