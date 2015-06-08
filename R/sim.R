@@ -25,8 +25,8 @@ sim.default <- function(model,input,sigma=0){
 #' \code{\link{arx}} for defining ARX models
 #' 
 #' @examples
-#' u <- rnorm(100,1)
-#' model <- arx(A=c(1,-1.5,0.7),B=c(0.8,-0.25))
+#' u <- rnorm(200,sd=1)
+#' model <- arx(A=c(1,-1.5,0.7),B=c(0.8,-0.25),ioDelay=1)
 #' y <- sim(model,u,sigma=0.1)
 #'  
 #' @export
@@ -50,6 +50,30 @@ sim.arx <- function(model,input,sigma=0){
   return(y[n+1:length(input)])
 }
 
+#' Simulate from a Polynomial Model
+#' 
+#' Simulate the response of a system system governed by a polynomial model
+#' , given the input
+#' 
+#' @param model an object of class \code{idpoly} containing the coefficients
+#' @param input a vector/matrix containing the input
+#' @param sigma standard deviation of the innovations (Default= \code{0})
+#' 
+#' @return
+#' a vector containing the output
+#' 
+#' @details
+#' The routine is currently built only for SISO systems. Future Versions will
+#' include support for MIMO systems
+#' 
+#' @seealso 
+#' \code{\link{idpoly}} for defining polynomial models
+#' 
+#' @examples
+#' u <- rnorm(200,sd=1)
+#' model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),C=1,D=1,F1=1,ioDelay=1)
+#' y <- sim(model,u,sigma=0.1)
+#'  
 #' @export
 sim.idpoly <- function(model,input,sigma=1){
   require(signal);require(polynom)
