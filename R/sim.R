@@ -13,6 +13,7 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
 #' @param model an object of class \code{arx} containing the coefficients
 #' @param input a vector/matrix containing the input
 #' @param sigma standard deviation of the innovations (Default= \code{0})
+#' @param seed integer indicating the seed value of the random number generator
 #' 
 #' @return
 #' a vector containing the output
@@ -61,6 +62,7 @@ sim.arx <- function(model,input,sigma=0,seed=NULL){
 #' @param model an object of class \code{idpoly} containing the coefficients
 #' @param input a vector/matrix containing the input
 #' @param sigma standard deviation of the innovations (Default= \code{0})
+#' @param seed integer indicating the seed value of the random number generator
 #' 
 #' @return
 #' a vector containing the output

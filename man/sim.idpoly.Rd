@@ -4,7 +4,7 @@
 \alias{sim.idpoly}
 \title{Simulate from a Polynomial Model}
 \usage{
-\method{sim}{idpoly}(model, input, sigma = 1)
+\method{sim}{idpoly}(model, input, sigma = 0, seed = NULL)
 }
 \arguments{
 \item{model}{an object of class \code{idpoly} containing the coefficients}
@@ -12,6 +12,8 @@
 \item{input}{a vector/matrix containing the input}
 
 \item{sigma}{standard deviation of the innovations (Default= \code{0})}
+
+\item{seed}{integer indicating the seed value of the random number generator}
 }
 \value{
 a vector containing the output
