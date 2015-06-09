@@ -35,12 +35,12 @@ sim.arx <- function(model,input,sigma=0,seed=NULL){
   na <- length(model$A) - 1; nk <- model$ioDelay; 
   nb <- length(model$B) - 1; nb1 <- nb+nk
   n <- max(na,nb1)
-  coef <- matrix(c(model$A[-1],model$B),nrow=na+nb1)
+  coef <- matrix(c(model$A[-1],model$B),nrow=na+(nb+1))
   
   if(class(input)=="idframe"){
-    uk <- input$input[,1]
+    uk <- input$input[,1,drop=T]
   } else if(class(input) %in% c("matrix","data.frame")){
-    uk <- input[,1]
+    uk <- input[,1,drop=T]
   } else if(is.numeric(input)){
     uk <- input
   }
@@ -50,16 +50,16 @@ sim.arx <- function(model,input,sigma=0,seed=NULL){
   
   if(!is.null(seed)) set.seed(seed)
   
-  ek <- rnorm(length(input),sd=sigma)
+  ek <- rnorm(length(uk),sd=sigma)
   # padLeftZeros <- function(x) c(rep(0,n),x)
   # u <- apply(input,2,padLeftZeros)
   
-  for(i in n+1:length(input)){
-    if(nk==0) v <- u[i-0:(nb-1)] else v <- u[i-nk:nb1]
-    reg <- matrix(c(-(y[i-1:na]),v),ncol=na+nb1)
+  for(i in n+1:length(uk)){
+    if(nk==0) v <- u[i-0:nb] else v <- u[i-nk:nb1]
+    reg <- matrix(c(-(y[i-1:na]),v),ncol=na+(nb+1))
     y[i] <- reg%*%coef + ek[i-n]
   }
-  return(y[n+1:length(input)])
+  return(y[n+1:length(uk)])
 }
 
 #' Simulate from a Polynomial Model
