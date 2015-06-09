@@ -25,7 +25,7 @@ residplot <- function(model,newdata=NULL){
     e <- resid(model); u <- model$input
   } else{
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
-    e <- newdata$output - predict(model,newdata)
+    e <- newdata$output - predict(model,newdata$input)
     u <- newdata$input
   }
   
