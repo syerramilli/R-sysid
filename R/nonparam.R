@@ -48,8 +48,8 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   } else{
     inner <- t(Z)%*%Z + lambda*diag(dim(Z)[2])
     pinv <- solve(inner)%*% t(Z)
-    coefficients <- pinv*Y
-    residuals <- Y - Z*coefficients
+    coefficients <- pinv%*%Y
+    residuals <- Y - Z%*%coefficients
   }
   df <- nrow(Z)-ncol(Z);sigma2 <- sum(residuals^2)/df
   vcov <- sigma2 * solve(t(Z)%*%Z)
