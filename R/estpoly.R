@@ -10,7 +10,7 @@ plot.estPoly <- function(model,newdata=NULL){
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
     ypred <- sim(coef(model),newdata$input[,1,drop=F])
-    yact <- newdata$output[,1,drop=F]
+    yact <- newdata$output[,1]
     time <- seq(from=newdata$t.start,to=newdata$t.end,by=newdata$Ts)
     titstr <- "Predictions of Model on Test Set"
   }
@@ -93,7 +93,7 @@ estARX <- function(data,order=c(0,1,0)){
   y <- as.matrix(data$output)
   u <- as.matrix(data$input); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
-  nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb -nk
+  nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb - 1
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
@@ -111,7 +111,7 @@ estARX <- function(data,order=c(0,1,0)){
   
   vcov <- sigma2 * chol2inv(qx$qr)
   
-  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:nb1],ioDelay = nk)
+  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],ioDelay = nk)
   time <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
   
   est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
