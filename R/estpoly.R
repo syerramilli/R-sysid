@@ -1,22 +1,22 @@
 #' @export
 plot.estPoly <- function(model,newdata=NULL){
   require(ggplot2)
-  require(reshape2)
   
   if(is.null(newdata)){
     ypred <- fitted(model)
     yact <- fitted(model) + resid(model)
     time <- model$time
+    titstr <- "Predictions of Model on Training Set"
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
     ypred <- sim(coef(model),newdata$input[,1,drop=F])
     yact <- newdata$output[,1,drop=F]
     time <- seq(from=newdata$t.start,to=newdata$t.end,by=newdata$Ts)
+    titstr <- "Predictions of Model on Test Set"
   }
   df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
-  meltdf <- melt(df,id="Time")
-  ggplot(meltdf, aes(x = Time,y=value,colour=variable,group=variable)) +
-    geom_line() + theme_bw()
+  ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
+    geom_abline(intercept=0,slope=1,colour="red4") +  geom_point()
 }
 
 #' @export
@@ -30,7 +30,7 @@ residplot <- function(model,newdata=NULL){
   }
   
   acorr <- acf(e,plot = F); ccorr <- ccf(as.numeric(u),e,plot = F)
-  par(mfrow=c(2,1),mar=c(3,4,4,2))
+  par(mfrow=c(2,1),mar=c(3,4,3,2))
   plot(acorr,main="ACF of residuals")
   plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
 }
