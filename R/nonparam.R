@@ -14,8 +14,7 @@
 #' 
 #' @details
 #' The IR Coefficients are estimated using linear least squares. Future 
-#' Versions will provide support for multivariate data and regularized 
-#' regression
+#' Versions will provide support for multivariate data.
 #' 
 #' @references
 #' Arun K. Tangirala (2015), \emph{Principles of System Identification: 

@@ -26,8 +26,7 @@ the data
 }
 \details{
 The IR Coefficients are estimated using linear least squares. Future
-Versions will provide support for multivariate data and regularized
-regression
+Versions will provide support for multivariate data.
 }
 \examples{
 uk <- rnorm(1000,1)
