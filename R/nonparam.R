@@ -76,7 +76,7 @@ plot.impulseest <- function(model,sig=0.975){
   ylim <- c(min(coef(model)),max(coef(model)))
   
   title <- paste("Impulse Response \n From",model$x,"to",model$y)
-  plot(model$lags,coef(model),type="h",xlab="Lag",ylab= model$y,
+  plot(model$lags,coef(model),type="h",xlab="Lag",ylab= "IR Coefficient",
        main = title)
   abline(h=0);points(x=model$lags,y=lim,col="blue",lty=2,type="l")
   points(x=model$lags,y=-lim,col="blue",lty=2,type="l")
