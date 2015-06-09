@@ -82,7 +82,7 @@ idframe <- function(output=NULL,input=NULL,
 #' plot(cstr,col="blue")
 #' 
 #' @export
-plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
+plot.idframe <- function(object,par=list(mar=c(3,4,2,2)),
                          col="steelblue",...){
   if(object$type=="frequency"){
     p <- dim(object$output)[2];m <- dim(object$input)[2]
@@ -101,7 +101,7 @@ plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
         }
       }
     } else {
-      par(mfrow=c(2,1),mar=c(3,4,3,2))
+      par(mfrow=c(2,1),mar=c(3,4,2,2))
       plot(object$frequencies,object$output[,1],xlab=object$type,
            ylab=colnames(object$output),type="l",...)
       plot(object$frequencies,object$input[,1],xlab=object$type,
@@ -118,7 +118,7 @@ plot.idframe <- function(object,par=list(mar=c(3,4,3,2)),
     }
     datats <- ts(data,start=object$t.start,end=object$t.end,
                  frequency=floor(1/object$Ts))
-    tfplot(datats,par=par,col=col,...)
+    tfplot(datats,Xaxis=NULL,par=par,col=col,...)
   }
 }
 
