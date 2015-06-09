@@ -1,9 +1,9 @@
 idin.rgs <- function(n,band,var){
-  # Function to generate a random binary 
-  # signal of given frequency band and levels
+  # Function to generate a random Gaussian 
+  # signal of given frequency band and variance
   require(signal)
   uk1 <- rnorm(n,mean = 0,sd = 1)
-  uk <- rep(0,n)
+ 
   for(i in 1:n){
     #Checking for zeros
     
@@ -15,7 +15,7 @@ idin.rgs <- function(n,band,var){
   bfilt <- butter(8,c(band[1],band[2]),type = "pass",plane = "z")
  
   # Filtering the signal
-  ukf <- filter(bfilt,uk)
+  ukf <- filter(bfilt,uk1)
   
   # Adjusting for required variance
   uk <- sqrt(var)*ukf
