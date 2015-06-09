@@ -127,7 +127,7 @@ predict.estARX <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
-    return(sim(coef(model),as.numeric(newdata$input)))
+    return(sim(coef(model),newdata$input))
   }
 }
 
