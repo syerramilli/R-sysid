@@ -11,7 +11,7 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
 #' Simulate the response of an ARX system, given the input
 #' 
 #' @param model an object of class \code{arx} containing the coefficients
-#' @param input a vector/matrix containing the input
+#' @param input a vector/matrix/idframe containing the input
 #' @param sigma standard deviation of the innovations (Default= \code{0})
 #' @param seed integer indicating the seed value of the random number generator
 #' 
@@ -33,12 +33,20 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
 #' @export
 sim.arx <- function(model,input,sigma=0,seed=NULL){
   na <- length(model$A) - 1; nk <- model$ioDelay; 
-  nb <- length(model$B) - nk; nb1 <- nb+nk
+  nb <- length(model$B) - 1; nb1 <- nb+nk
   n <- max(na,nb1)
-  coef <- matrix(c(model$A[-1],model$B),nrow=na+nb1) 
+  coef <- matrix(c(model$A[-1],model$B),nrow=na+nb1)
+  
+  if(class(input)=="idframe"){
+    uk <- input$input[,1]
+  } else if(class(input) %in% c("matrix","data.frame")){
+    uk <- input[,1]
+  } else if(is.numeric(input)){
+    uk <- input
+  }
   
   y <- rep(0,length(input)+n)
-  u <- c(rep(0,n),input$input[,1])
+  u <- c(rep(0,n),uk)
   
   if(!is.null(seed)) set.seed(seed)
   

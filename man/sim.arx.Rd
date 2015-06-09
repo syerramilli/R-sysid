@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{an object of class \code{arx} containing the coefficients}
 
-\item{input}{a vector/matrix containing the input}
+\item{input}{a vector/matrix/idframe containing the input}
 
 \item{sigma}{standard deviation of the innovations (Default= \code{0})}
 

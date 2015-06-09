@@ -4,7 +4,7 @@
 \alias{plot.idframe}
 \title{Plotting idframe objects}
 \usage{
-\method{plot}{idframe}(object, par = list(mar = c(3, 4, 3, 2)),
+\method{plot}{idframe}(object, par = list(mar = c(3, 4, 2, 2)),
   col = "steelblue", ...)
 }
 \arguments{
