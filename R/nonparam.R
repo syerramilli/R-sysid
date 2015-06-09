@@ -42,17 +42,20 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   
   # Dealing with Regularization
   if(regul==F){
-    lambda = 0
+    # Fit Linear Model and find standard errors
+    fit <- lm(Y~Z-1)
+    coefficients <- coef(fit); residuals <- resid(fit)
+  } else{
+    inner <- t(Z)%*%Z + lambda*diag(dim(Z)[2])
+    pinv <- solve(inner)%*% t(Z)
+    coefficients <- pinv*Y
+    residuals <- Y - Z*coefficients
   }
-  
-  # Fit Linear Model and find standard errors
-  fit <- lm(Y~Z-1)
-  df <- nrow(Z)-ncol(Z);sigma2 <- sum(resid(fit)^2)/df
+  df <- nrow(Z)-ncol(Z);sigma2 <- sum(residuals^2)/df
   vcov <- sigma2 * solve(t(Z)%*%Z)
   se <- sqrt(diag(vcov))
   
-  
-  out <- list(coefficients=coef(fit),residuals=resid(fit),lags=K:(M+K),
+  out <- list(coefficients=coefficients,residuals=residuals,lags=K:(M+K),
               x=colnames(data$input),y=colnames(data$output),se = se)
   class(out) <- "impulseest"
   return(out)
@@ -174,8 +177,17 @@ etfe <- function(data){
   tempfft <- mvfft(temp)/dim(temp)[1]
   freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
               by=1)/ceiling(dim(tempfft)[1]/2)*pi/data$Ts
-  resp <- as.complex(tempfft[,1]/tempfft[,2])
+  resp <- comdiv(tempfft[,1],tempfft[,2])
   out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
                Ts=data$Ts)
   return(out)
+}
+
+comdiv <- function(z1,z2){
+  require(signal)
+  
+  mag1 <- Mod(z1);mag2 <- Mod(z2)
+  phi1 <- unwrap(Arg(z1)); phi2 <- unwrap(Arg(z2))
+  
+  complex(modulus=mag1/mag2,argument=phi1-phi2)
 }
