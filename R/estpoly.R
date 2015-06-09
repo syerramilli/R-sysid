@@ -16,7 +16,7 @@ plot.estPoly <- function(model,newdata=NULL){
   }
   df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
   ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
-    geom_abline(intercept=0,slope=1,colour="red4") +  geom_point()
+    geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point()
 }
 
 #' @export
