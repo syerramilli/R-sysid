@@ -39,8 +39,8 @@ idframe <- function(output=NULL,input=NULL,
   
   # Object Constructor
   dat <- list(output=data.frame(output),input=data.frame(input),type=type,Ts=Ts)
-  n <- dim(output)[1]
-  p <- dim(output)[2];m <- dim(input)[2]
+  n <- dim(data$output)[1]
+  p <- dim(data$output)[2];m <- dim(dat$input)[2]
   
   if(type=="freq"){
 
