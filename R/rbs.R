@@ -1,3 +1,4 @@
+#' @export
 idin.rbs <- function(n,band,levels){
   # Function to generate a random binary 
   # signal of given frequency band and levels

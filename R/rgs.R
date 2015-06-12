@@ -1,3 +1,4 @@
+#' @export
 idin.rgs <- function(n,band,var){
   # Function to generate a random Gaussian 
   # signal of given frequency band and variance
