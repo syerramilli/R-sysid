@@ -77,13 +77,8 @@ summary.idframe <- function(object){
   out_sum <- summary(object$output)
   in_sum <- summary(object$input)
   
-  out <- list(outputs=out_sum,inputs=in_sum,Ts=object$Ts,type=object$type,
-              tUnit=object$tUnit,no_of_samples = dim(object$output)[1])
-  if(object$type=="time"){
-    out$t.start <- object$t.start;out$t.end <- object$t.end
-  } else{
-    out$frequencies <- summary(object$frequencies);out$fUnit <- object$fUnit
-  }
+  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=object$Ts,
+              unit=object$unit,nsample = dim(object$output)[1])
   
   class(out) <- "summary.idframe"
   return(out)
@@ -91,24 +86,17 @@ summary.idframe <- function(object){
 
 #' @export
 print.summary.idframe <- function(object,...){
-  cat("Domain: ");cat(object$type)
-  cat("\t\t Number of samples:");cat(object$no_of_samples)
+  cat("\t\t Number of samples:");cat(object$nsample)
   cat("\nSampling time: ")
-  cat(object$Ts);cat(" ");cat(object$tUnit)
-  
-  if(object$type=="frequency"){
-    cat("\t Frequency Unit: ");print(object$fUnit)
-    cat("\n\n Frequeny Summary:")
-    print(object$frequencies)
-  }
+  cat(object$Ts);cat(" ");cat(object$unit)
   
   cat("\n\n")
   cat("Outputs \n")
-  print(object$outputs)
+  print(object$out_sum)
   cat("\n")
   
   cat("Inputs \n")
-  print(object$inputs)
+  print(object$in_sum)
 }
 
 #' S3 class for storing frequency response data
