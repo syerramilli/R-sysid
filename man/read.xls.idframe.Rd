@@ -4,30 +4,19 @@
 \alias{read.xls.idframe}
 \title{Read the contents of a worksheet into a idframe object}
 \usage{
-read.xls.idframe(file, sheetName, header = TRUE, ninputs = NULL,
-  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "time",
-  ...)
+read.xls.idframe(file, sheetName, header = TRUE, ninputs = 0, Ts = 1,
+  unit = c("seconds", "minutes", "hours", "days", "hours")[1], ...)
 }
 \arguments{
 \item{file}{the path to the file to read}
 
 \item{sheetName}{a character string with the sheet name}
 
-\item{header}{a logical value indicating whether the first row corresponding to
-the first element of the rowIndex vector contains the names of the variables.
-(Default: \code{TRUE})}
-
-\item{ninputs}{the number of input columns. (Default: \code{NULL})}
-
-\item{type}{indicates the domain of the data (Default:\code{"time"})}
+\item{ninputs}{the number of input columns. (Default: 0)}
 
 \item{Ts}{sampling interval (Default: 1)}
 
-\item{freqData}{a logical value indicating whether the file contains the list of
-frequencies. If \code{TRUE}, they need to be present in the first column.
-(Default: \code{idframe})}
-
-\item{tUnit}{Time Unit (Default: "seconds")}
+\item{unit}{Time Unit (Default: "seconds")}
 
 \item{...}{additional arguments to be passed to the \code{\link[xlsx]{read.xlsx2}} function}
 }
@@ -42,11 +31,6 @@ The \code{read.xlsx.idframe} function uses the \code{\link[xlsx]{read.xlsx2}} fu
 provided by the \pkg{xlsx} package, to read data from an excel file and then calls the
 \code{\link{read.idframe}} function to read the data into a idframe object
 
-
-If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file
-should contain the frequencies.
-
-
 The function requires the java runtime to be installed on the system (Requirement of
 the \pkg{xlsx} package).
 }
@@ -56,7 +40,7 @@ dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
 write.xlsx2(dataMatrix,file="test.xlsx",row.names=FALSE)
 
-data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,tUnit="min")
+data <- read.xls.idframe("test.xlsx","Sheet1",ninputs=2,unit="minutes")
 }
 \seealso{
 \code{\link[xlsx]{read.xlsx2}}

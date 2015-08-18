@@ -4,23 +4,17 @@
 \alias{read.idframe}
 \title{Data input into a idframe object}
 \usage{
-read.idframe(data, freqData = FALSE, ninputs = NULL, type = c("time",
-  "freq")[1], Ts = 1, tUnit = "sec")
+read.idframe(data, ninputs = NULL, Ts = 1, unit = c("seconds", "minutes",
+  "hours", "days", "hours")[1])
 }
 \arguments{
 \item{data}{a \code{data.frame} object}
 
-\item{freqData}{a logical value indicating whether the file contains the list of
-frequencies. If \code{TRUE}, they need to be present in the first column.
-(Default: \code{idframe})}
-
-\item{ninputs}{the number of input columns. (Default: \code{NULL})}
-
-\item{type}{indicates the domain of the data (Default:\code{"time"})}
+\item{ninputs}{the number of input columns. (Default: 0)}
 
 \item{Ts}{sampling interval (Default: 1)}
 
-\item{tUnit}{Time Unit (Default: "seconds")}
+\item{unit}{Time Unit (Default: "seconds")}
 }
 \value{
 an idframe object
@@ -28,12 +22,8 @@ an idframe object
 \description{
 Read the contents of a data.frame/matrix into a \code{idframe} object.
 }
-\details{
-If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file
-should contain the frequencies.
-}
 \examples{
 data(cstr)
-data <- read.idframe(cstrData,ninputs=1,type="time",Ts= 1,tUnit="min")
+data <- read.idframe(cstrData,ninputs=1,Ts= 1,unit="minutes")
 }
 

@@ -4,9 +4,8 @@
 \alias{read.table.idframe}
 \title{Read the contents of a table-formatted file}
 \usage{
-read.table.idframe(file, header = TRUE, sep = ",", ninputs = NULL,
-  type = c("time", "freq")[1], Ts = 1, freqData = FALSE, tUnit = "sec",
-  ...)
+read.table.idframe(file, header = TRUE, sep = ",", ninputs = 0, Ts = 1,
+  unit = c("seconds", "minutes", "hours", "days", "hours")[1], ...)
 }
 \arguments{
 \item{file}{the path to the file to read}
@@ -18,17 +17,11 @@ the first element of the rowIndex vector contains the names of the variables.
 \item{sep}{the field separator character. Values on each line of the file are
 separated by this character. (Default: \code{","})}
 
-\item{ninputs}{the number of input columns. (Default: \code{NULL})}
-
-\item{type}{indicates the domain of the data (Default:\code{"time"})}
+\item{ninputs}{the number of input columns. (Default: 0)}
 
 \item{Ts}{sampling interval (Default: 1)}
 
-\item{freqData}{a logical value indicating whether the file contains the list of
-frequencies. If \code{TRUE}, they need to be present in the first column.
-(Default: \code{idframe})}
-
-\item{tUnit}{Time Unit (Default: "seconds")}
+\item{unit}{Time Unit (Default: "seconds")}
 
 \item{...}{additional arguments to be passed to the \code{\link[utils]{read.table}} function}
 }
@@ -42,17 +35,13 @@ Read the contents of an file in table format into a \code{idframe} object.
 The \code{read.table.idframe} function uses the \code{\link[utils]{read.table}} function,
 provided by the \pkg{utils} package, to read data from a table-formatted file and then calls the
 \code{\link{read.idframe}} function to read the data into a idframe object
-
-
-If \code{type="freq"} and \code{freqData = TRUE}, then the first column in the file
-should contain the frequencies.
 }
 \examples{
 dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
 write.csv(dataMatrix,file="test.csv",row.names=FALSE)
 
-data <- read.table.idframe("test.csv",ninputs=2,tUnit="min")
+data <- read.table.idframe("test.csv",ninputs=2,unit="minutes")
 }
 \seealso{
 \code{\link[utils]{read.table}}
