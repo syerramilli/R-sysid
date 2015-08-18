@@ -60,41 +60,15 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' @export
 plot.idframe <- function(object,par=list(mar=c(3,4,2,2)),
                          col="steelblue",...){
-  if(object$type=="frequency"){
-    p <- dim(object$output)[2];m <- dim(object$input)[2]
-    
-    if(p!=1 || m!=1){
-      oask <- devAskNewPage(TRUE)
-      on.exit(devAskNewPage(oask))
-      
-      for(i in seq(m)){
-        for(j in seq(p)){
-          par(mfrow=c(2,1),mar=c(3,4,2,2))
-          plot(object$frequencies,object$output[,j],xlab=object$type,
-               ylab=colnames(object$output)[j],type="l",...)
-          plot(object$frequencies,object$input[,i],xlab=object$type,
-               ylab=colnames(object$input)[i],type="l",...)
-        }
-      }
-    } else {
-      par(mfrow=c(2,1),mar=c(3,4,2,2))
-      plot(object$frequencies,object$output[,1],xlab=object$type,
-           ylab=colnames(object$output),type="l",...)
-      plot(object$frequencies,object$input[,1],xlab=object$type,
-           ylab=colnames(object$input),type="l",...)
-    }  
-  } else{
     require(tfplot)
-    if(is.null(object$output)){
+    if(nrow(object$output)==0){
       data <- object$input
-    } else if(is.null(object$input)){
+    } else if(nrow(object$input)==0){
       data <- object$output
     } else{
       data <- cbind(object$output,object$input)
     }
-    datats <- ts(data,start=object$t.start,end=object$t.end,
-                 frequency=floor(1/object$Ts))
-    tfplot(datats,Xaxis=NULL,par=par,col=col,...)
+    tfplot(data,Xaxis=NULL,par=par,col=col,...)
   }
 }
 
