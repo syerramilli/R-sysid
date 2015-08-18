@@ -23,46 +23,22 @@
 #' data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
 #' 
 #' @export
-idframe <- function(output=NULL,input=NULL,
-                     type=c("time","freq")[1],Ts = 1,
-                     t.start=0,t.end=NULL, tUnit = "seconds", 
-                     frequencies = NULL, fUnit= "Hz"){
+idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL, 
+                    unit = c("seconds","minutes","hours",
+                             "days","hours")[1]){
   
-  ## Input Validation
-  if(!(type %in% c("time","freq"))) # type validation
-    stop("Unknown domain type")
+  l <- list(output,input)
+  l2 <- lapply(l,data.frame)
+  n <- dim(l2[[1]])
   
-  #if(length(output)!=0 && length(input)!=0){
-  #   if(dim(output)[1]!=dim(input)[1]) # observation validation
-  #   stop("Dimensions don't match")
-  #}
+  if(!is.null(end)){
+    start <- end - Ts*(n-1)
+  } 
+  
+  l3 <- lapply(l,ts,start=start,deltat=1/Ts)
   
   # Object Constructor
-  dat <- list(output=data.frame(output),input=data.frame(input),type=type,Ts=Ts)
-  n <- dim(dat$output)[1]
-  p <- dim(dat$output)[2];m <- dim(dat$input)[2]
-  
-  if(type=="freq"){
-
-    if(is.null(frequencies)){
-      frequncies <- seq(0,2*pi,length=n)
-    }
-    
-    dat$frequencies <- frequencies
-    dat$fUnit <- fUnit
-    
-  } else {
-    
-    if(is.null(t.end)) {
-      t.end <- t.start + Ts*(n-1)
-    } else {
-      dat$Ts <- (t.end-t.start)/(n-1)
-    }
-    
-    dat$t.start <- t.start; dat$t.end <- t.end
-    dat$tUnit <- tUnit
-  }
-      
+  dat <- list(output=l3[[1]],input=l3[[1]],Ts=Ts,unit=unit)
   class(dat) <- "idframe"
   return(dat)
 }
