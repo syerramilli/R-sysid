@@ -4,14 +4,11 @@
 #'
 #' @param output dataframe/matrix/vector containing the outputs
 #' @param input dataframe/matrix/vector containing the inputs
-#' @param type indicates the domain of the data (Default:"time")
 #' @param Ts sampling interval (Default: 1)
-#' @param t.start Starting time (Valid only if type="time")
-#' @param t.end End time. Optional Argument (Valid only if type="time")
-#' @param tUnit Time Unit (Default: "seconds")
-#' @param frequencies Vector containing the list of frequencies at which the data was 
-#' recorded (Valid only if type="frequency")
-#' @param fUnit Frequency Unit (Valid only if type="frequency")
+#' @param start Time of the first observation
+#' @param t.end Time of the last observation Optional Argument
+#' @param unit Time Unit (Default: "seconds")
+#'
 #' @return an idframe object
 #' 
 #' @seealso  \code{\link{plot.idframe}}, the plot method for idframe objects, 
@@ -69,7 +66,6 @@ plot.idframe <- function(object,par=list(mar=c(3,4,2,2)),
       data <- cbind(object$output,object$input)
     }
     tfplot(data,Xaxis=NULL,par=par,col=col,...)
-  }
 }
 
 #' @export

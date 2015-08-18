@@ -4,29 +4,21 @@
 \alias{idframe}
 \title{S3 class for storing input-output data.}
 \usage{
-idframe(output = NULL, input = NULL, type = c("time", "freq")[1],
-  Ts = 1, t.start = 0, t.end = NULL, tUnit = "seconds",
-  frequencies = NULL, fUnit = "Hz")
+idframe(output = NULL, input = NULL, Ts = 1, start = 0, end = NULL,
+  unit = c("seconds", "minutes", "hours", "days", "hours")[1])
 }
 \arguments{
 \item{output}{dataframe/matrix/vector containing the outputs}
 
 \item{input}{dataframe/matrix/vector containing the inputs}
 
-\item{type}{indicates the domain of the data (Default:"time")}
-
 \item{Ts}{sampling interval (Default: 1)}
 
-\item{t.start}{Starting time (Valid only if type="time")}
+\item{start}{Time of the first observation}
 
-\item{t.end}{End time. Optional Argument (Valid only if type="time")}
+\item{unit}{Time Unit (Default: "seconds")}
 
-\item{tUnit}{Time Unit (Default: "seconds")}
-
-\item{frequencies}{Vector containing the list of frequencies at which the data was
-recorded (Valid only if type="frequency")}
-
-\item{fUnit}{Frequency Unit (Valid only if type="frequency")}
+\item{t.end}{Time of the last observation Optional Argument}
 }
 \value{
 an idframe object
