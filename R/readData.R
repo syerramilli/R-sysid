@@ -22,19 +22,9 @@
 #' data <- read.idframe(cstrData,ninputs=1,type="time",Ts= 1,tUnit="min")
 #' 
 #' @export 
-read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
-                    type=c("time","freq")[1],Ts = 1,tUnit="sec"){
-  
-  if((type=="freq") && (freqData)){
-    
-    frequencies <- data[,1] # the first column must contain frequencies
-    inputs <- data[,seq(2,length.out=ninputs,by=1),drop=F]
-    outputs <- data[,seq((ninputs+2),dim(data)[2],by=1),drop=F]
-    
-    out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,
-                   frequencies=frequencies,tUnit=tUnit)
-    
-  } else{
+read.idframe <- function(data,ninputs=NULL,Ts = 1,
+                         unit=c("seconds","minutes","hours",
+                                "days","hours")[1]){
     outIndex <- 1:dim(data)[2]; inputs <- NULL
     if(!is.null(ninputs)){
       inputs <- data[,1:ninputs,drop=F]
@@ -42,8 +32,7 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
     }
     outputs <- data[,outIndex,drop=F]
     
-    out <- idframe(output=outputs,input=inputs,type=type,Ts=Ts,tUnit=tUnit)
-  }
+    out <- idframe(output=outputs,input=inputs,Ts=Ts,unit=unit)
   
   return(out)
 }
@@ -88,15 +77,14 @@ read.idframe <- function(data,freqData=FALSE,ninputs=NULL,
 #' @seealso  \code{\link[utils]{read.table}}
 #' @export 
 read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=NULL,
-             type=c("time","freq")[1],Ts = 1,freqData=FALSE,
-             tUnit="sec",...){
+             Ts = 1,unit=c("seconds","minutes","hours",
+                           "days","hours")[1],...){
   
   # Read from file (default: csv file)
   dat <- read.table(file=file,header=header,sep=sep,...)
   
   # read from dataframe and return idframe object
-  out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,
-                      freqData=freqData,tUnit=tUnit)
+  out <- read.idframe(dat,ninputs=ninputs,Ts = Ts,unit=unit)
   return(out)
 }
 
@@ -144,8 +132,8 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=NULL,
 #' @seealso  \code{\link[xlsx]{read.xlsx2}}
 #' @export
 read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=NULL,
-                type=c("time","freq")[1],Ts = 1,freqData=FALSE,tUnit="time",
-                ...){
+                Ts = 1,unit=c("seconds","minutes","hours",
+                              "days","hours")[1],...){
   
   require(xlsx)
   
@@ -155,7 +143,6 @@ read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=NULL,
   dat <- as.data.frame(sapply(l,as.numeric))
   
   # read from dataframe and return idframe object
-  out <- read.idframe(dat,ninputs=ninputs,type=type,Ts = Ts,
-                      freqData=freqData,tUnit=tUnit)
+  out <- read.idframe(dat,ninputs=ninputs,Ts = Ts,unit=unit)
   return(out)
 }
