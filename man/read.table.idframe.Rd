@@ -5,7 +5,7 @@
 \title{Read the contents of a table-formatted file}
 \usage{
 read.table.idframe(file, header = TRUE, sep = ",", ninputs = 0, Ts = 1,
-  unit = c("seconds", "minutes", "hours", "days", "hours")[1], ...)
+  unit = c("seconds", "minutes", "hours", "days")[1], ...)
 }
 \arguments{
 \item{file}{the path to the file to read}

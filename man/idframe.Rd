@@ -5,7 +5,7 @@
 \title{S3 class for storing input-output data.}
 \usage{
 idframe(output = NULL, input = NULL, Ts = 1, start = 0, end = NULL,
-  unit = c("seconds", "minutes", "hours", "days", "hours")[1])
+  unit = c("seconds", "minutes", "hours", "days")[1])
 }
 \arguments{
 \item{output}{dataframe/matrix/vector containing the outputs}
@@ -16,9 +16,9 @@ idframe(output = NULL, input = NULL, Ts = 1, start = 0, end = NULL,
 
 \item{start}{Time of the first observation}
 
-\item{unit}{Time Unit (Default: "seconds")}
+\item{end}{Time of the last observation Optional Argument}
 
-\item{t.end}{Time of the last observation Optional Argument}
+\item{unit}{Time Unit (Default: "seconds")}
 }
 \value{
 an idframe object

@@ -6,7 +6,7 @@
 #' @param input dataframe/matrix/vector containing the inputs
 #' @param Ts sampling interval (Default: 1)
 #' @param start Time of the first observation
-#' @param t.end Time of the last observation Optional Argument
+#' @param end Time of the last observation Optional Argument
 #' @param unit Time Unit (Default: "seconds")
 #'
 #' @return an idframe object

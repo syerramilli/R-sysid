@@ -5,7 +5,7 @@
 \title{Data input into a idframe object}
 \usage{
 read.idframe(data, ninputs = NULL, Ts = 1, unit = c("seconds", "minutes",
-  "hours", "days", "hours")[1])
+  "hours", "days")[1])
 }
 \arguments{
 \item{data}{a \code{data.frame} object}

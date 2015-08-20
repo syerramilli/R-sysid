@@ -5,7 +5,7 @@
 \title{Read the contents of a worksheet into a idframe object}
 \usage{
 read.xls.idframe(file, sheetName, header = TRUE, ninputs = 0, Ts = 1,
-  unit = c("seconds", "minutes", "hours", "days", "hours")[1], ...)
+  unit = c("seconds", "minutes", "hours", "days")[1], ...)
 }
 \arguments{
 \item{file}{the path to the file to read}
