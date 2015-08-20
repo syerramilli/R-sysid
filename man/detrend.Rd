@@ -4,12 +4,12 @@
 \alias{detrend}
 \title{Remove offsets and linear trends}
 \usage{
-detrend(data, type = c("constant", "linear")[2])
+detrend(data, type = c("constant", "linear")[1])
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}
 
-\item{type}{trend type - "constant" or "linear". (Default: \code{"linear"})}
+\item{type}{trend type - "constant" or "linear". (Default: \code{"constant"})}
 }
 \value{
 A list containing the following elements
@@ -27,10 +27,10 @@ Removes the offsets or linear trends in each of the input and output matrices.
 }
 \examples{
 data(cstr)
-fit <- detrend(cstr) # remove linear trends
+fit <- detrend(cstr,type="linear") # remove linear trends
 Zdetrend <- predict(fit) # get the detrended data
 
-demean <- detrend(cstr,type="constant") # remove offsets
+demean <- detrend(cstr) # remove offsets
 Zcent <- predict(demean) # get the centered data
 }
 \seealso{

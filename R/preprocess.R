@@ -3,7 +3,7 @@
 #' Removes the offsets or linear trends in each of the input and output matrices. 
 #' 
 #' @param data an object of class \code{idframe}
-#' @param type trend type - "constant" or "linear". (Default: \code{"linear"})
+#' @param type trend type - "constant" or "linear". (Default: \code{"constant"})
 #' 
 #' @return 
 #' A list containing the following elements
@@ -18,15 +18,15 @@
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend(cstr) # remove linear trends 
+#' fit <- detrend(cstr,type="linear") # remove linear trends 
 #' Zdetrend <- predict(fit) # get the detrended data
 #' 
-#' demean <- detrend(cstr,type="constant") # remove offsets
+#' demean <- detrend(cstr) # remove offsets
 #' Zcent <- predict(demean) # get the centered data
 #' 
 #' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
-detrend <- function(data,type=c("constant","linear")[2]){ 
+detrend <- function(data,type=c("constant","linear")[1]){ 
   
   if(!(type %in% c("constant","linear"))){
     stop("Error: Invalid trend type")
