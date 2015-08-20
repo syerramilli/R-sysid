@@ -95,6 +95,10 @@ print.summary.idframe <- function(object,...){
   print(object$in_sum)
 }
 
+time.idframe <- function(data){
+  time(data$output)
+}
+
 #' S3 class for storing frequency response data
 #' 
 #' @param response complex vector/matrix containing the response
