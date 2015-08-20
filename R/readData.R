@@ -16,7 +16,7 @@
 #' @export 
 read.idframe <- function(data,ninputs=NULL,Ts = 1,
                          unit=c("seconds","minutes","hours",
-                                "days","hours")[1]){
+                                "days")[1]){
     outIndex <- 1:dim(data)[2]; inputs <- NULL
     if(ninputs==0){
       inputs <- data[,1:ninputs,drop=F]
@@ -62,7 +62,7 @@ read.idframe <- function(data,ninputs=NULL,Ts = 1,
 #' @export 
 read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=0,
              Ts = 1,unit=c("seconds","minutes","hours",
-                           "days","hours")[1],...){
+                           "days")[1],...){
   
   # Read from file (default: csv file)
   dat <- read.table(file=file,header=header,sep=sep,...)
@@ -105,7 +105,7 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=0,
 #' @export
 read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=0,
                 Ts = 1,unit=c("seconds","minutes","hours",
-                              "days","hours")[1],...){
+                              "days")[1],...){
   
   require(xlsx)
   
