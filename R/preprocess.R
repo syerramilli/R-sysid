@@ -41,20 +41,20 @@ detrend <- function(data,type=c("constant","linear")[1]){
   }
   
   data_detrend <- data
-  out <- data$output;output_trend <- list()
+  out <- outputData(data);output_trend <- list()
   for(i in 1:ncol(out)){
     output_trend[[i]] <- lm(formula,data=data.frame(X=out[,i],reg=reg))
     out[,i] <- fitted(output_trend[[i]])
   }
   
-  input <- data$input;input_trend <- list()
+  input <- inputData(data);input_trend <- list()
   
   for(i in 1:ncol(input)){
     input_trend[[i]] <- lm(formula,data=data.frame(X=input[,i],reg=reg))
     input[,i] <- fitted(input_trend[[i]])
   }
   
-  data_detrend$output <- data$output - out;data_detrend$input <- data$input - input
+  data_detrend$output <- outputData(data) - out;data_detrend$input <- inputData(data) - input
     
   est <- list(fitted.values=data_detrend,output.trend = output_trend,
               input.trend = input_trend)
@@ -88,10 +88,10 @@ predict.detrend <- function(object,newdata=NULL,...){
     data <- fitted(object)
   } else{
      data <- newdata
-     out <- detrend.predict(object$output.trend,data$output)
-     input <- detrend.predict(object$input.trend,data$input)
-     data$output <- data$output - out
-     data$input <- data$input - input
+     out <- detrend.predict(object$output.trend,outputData(data))
+     input <- detrend.predict(object$input.trend,inputData(data))
+     outputData(data) <- outputData(data) - out
+     inputData(data) <- inputData(data) - input
   }
   return(data)
 }
@@ -130,8 +130,8 @@ misdata <- function(data){
   f <- function(var,start,end,Ts){
     time_range <- range(time(var))
     start <- time_range[1];end <- time_range[2]
-    Ts <- diff(time(var))[1]
-    var <- ts(data=var,start=start,end=end,deltat=1/Ts)
+    Ts <- deltat(var)
+    var <- ts(data=var,start=start,end=end,deltat=Ts)
     out <- na.approx(var,na.rm=F)
     return(as.numeric(out))
   }
@@ -142,6 +142,7 @@ misdata <- function(data){
   Z
 }
 
+
 #' Subset or Resample idframe data
 #' 
 #' \code{dataSlice} is a subsetting method for objects of class \code{idframe}. It 
@@ -150,13 +151,14 @@ misdata <- function(data){
 #' new frequency.
 #' 
 #' @param data an object of class \code{idframe}
-#' @param start the start index
-#' @param end the end index
-#' @param freq the new sampling frequency
+#' @param start the start time of the period of interest
+#' @param end the end time of the period of interes
+#' @param freq fraction of the original frequency at which the series
+#' to be sampled.
 #' 
 #' @details
-#' The dataSlice function extends the \code{\link[stats]{window}} function for idframe
-#' objects
+#' The dataSlice function extends the \code{\link[stats]{window}} 
+#' function for idframe objects
 #' 
 #' @return an idframe object
 #' 
@@ -165,7 +167,7 @@ misdata <- function(data){
 #' cstrsub <- dataSlice(cstr,start=200,end=400) # extract between indices 200 and 400
 #' cstrTrain <- dataSlice(cstr,end=4500) # extract upto index 4500
 #' cstrTest <- dataSlice(cstr,start=6501) # extract from index 6501 till the end
-#' cstr_new <- dataSlice(cstr,freq=3) # resample data at thrice the frequency  
+#' cstr_new <- dataSlice(cstr,freq=0.5) # resample data at half the original frequency  
 #' 
 #' @seealso \code{\link[stats]{window}}
 #' @export
@@ -174,28 +176,13 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
   if(class(data)!='idframe')
     stop("Not an idframe data")
   
-  nin <- dim(data$input)[2]; nout <- dim(data$output)[2]
-  dataMatrix <- cbind(data$input,data$output)
-  if(data$type=="freq"){
-    dataMatrix <- cbind(dataMatrix,data$frequencies)
-  } else {
-    timeSeq <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
-    dataMatrix <- cbind(dataMatrix,timeSeq)
-  }
+  if(nOutputSeries(data)!=0)
+    outputData(data) <- window(outputData(data),start=start,end=end,
+                                frequency=freq*frequency(data))
   
-  l <- as.list(dataMatrix)
-  trimData <- as.data.frame(sapply(l,window,start=start,end=end,deltat=freq))
+  if(nInputSeries(data)!=0)
+    inputData(data) <- window(inputData(data),start=start,end=end,
+                               frequency=freq*frequency(data))
   
-  trim <- idframe(output=trimData[,(nin+1):(nin+nout),drop=F],
-                  input=trimData[,1:nin,drop=F],type=data$type,Ts=data$Ts,
-                  tUnit=data$tUnit)
-  
-  if(trim$type=="freq"){
-    trim$frequncies <- trimData[,ncol(trimData)]
-  } else {
-    trim$t.start <- trimData[1,ncol(trimData)]
-    trim$t.end <- trimData[nrow(trimData),ncol(trimData)]
-  }
-  
-  return(trim)
+  return(data)
 }

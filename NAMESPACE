@@ -2,6 +2,8 @@
 
 S3method("inputNames<-",idframe)
 S3method("outputNames<-",idframe)
+S3method(deltat,idframe)
+S3method(frequency,idframe)
 S3method(inputData,default)
 S3method(inputData,idframe)
 S3method(inputNames,default)

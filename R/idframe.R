@@ -100,6 +100,16 @@ time.idframe <- function(data){
   time(data$output)
 }
 
+#' @export
+frequency.idframe <- function(data){
+  frequency(data$output)
+}
+
+#' @export
+deltat.idframe <- function(data){
+  deltat(data$output)
+}
+
 #' S3 class for storing frequency response data
 #' 
 #' @param response complex vector/matrix containing the response
