@@ -75,8 +75,8 @@ detrend <- function(data,type=c("constant","linear")[1]){
 #' 
 #' @examples
 #' data(cstr)
-#' train <- dataSlice(cstr,end=5000) # subset the first 5000 indices
-#' test <- dataSlice(cstr,start=6001) # subset from index 6001 till the end
+#' train <- dataSlice(cstr,end=5000)
+#' test <- dataSlice(cstr,start=6001)
 #' fit <- detrend(train)
 #' Ztrain <- predict(fit)
 #' Ztest <- predict(fit,test)
@@ -177,12 +177,14 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
     stop("Not an idframe data")
   
   if(nOutputSeries(data)!=0)
+    if(!is.null(freq)) freq*frequency(data)
     outputData(data) <- window(outputData(data),start=start,end=end,
-                                frequency=freq*frequency(data))
+                                frequency=freq)
   
   if(nInputSeries(data)!=0)
+    if(!is.null(freq)) freq*frequency(data)
     inputData(data) <- window(inputData(data),start=start,end=end,
-                               frequency=freq*frequency(data))
+                               frequency=freq)
   
   return(data)
 }
