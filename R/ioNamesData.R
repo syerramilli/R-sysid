@@ -22,6 +22,15 @@ inputData.idframe <- function(x,series=seq(nInputSeries(x))){
 }
 
 #' @export
+"inputData<-" <- function(x,value) UseMethod("inputData<-")
+
+#' @export
+"inputData<-.idframe" <- function(x,value){
+  x$input <- value
+  x
+}
+
+#' @export
 inputNames <- function(x) UseMethod("inputNames")
 
 #' @export
@@ -32,6 +41,15 @@ inputNames.default <- function(x){
 #' @export
 inputNames.idframe <- function(x){
   seriesNames(inputData(x))
+}
+
+#' @export
+"inputNames<-" <- function(x,value) UseMethod("inputNames<-")
+
+#' @export
+"inputNames<-.idframe" <- function(x,value){
+  seriesNames(inputData(x)) <- value
+  x
 }
 
 #' @export
@@ -50,6 +68,15 @@ outputData.idframe <- function(x,series=seq(nOutputSeries(x))){
 }
 
 #' @export
+"outputData<-" <- function(x,value) UseMethod("outputData<-")
+
+#' @export
+"outputData<-.idframe" <- function(x,value){
+  x$output <- value
+  x
+}
+
+#' @export
 outputNames <- function(x) UseMethod("outputNames")
 
 #' @export
@@ -60,4 +87,13 @@ outputNames.default <- function(x){
 #' @export
 outputNames.idframe <- function(x){
   seriesNames(outputData(x))
+}
+
+#' @export
+"outputNames<-" <- function(x,value) UseMethod("outputNames<-")
+
+#' @export
+"outputNames<-.idframe" <- function(x,value){
+  seriesNames(outputData(x)) <- value
+  x
 }
