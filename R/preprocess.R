@@ -32,7 +32,7 @@ detrend <- function(data,type=c("constant","linear")[1]){
     stop("Error: Invalid trend type")
   }
   
-  reg <- time(data$output[,1])
+  reg <- time(data)
   
   if(type=="linear"){
     formula <- X ~ reg
@@ -99,7 +99,7 @@ predict.detrend <- function(object,newdata=NULL,...){
 detrend.predict <- function(object,data){
   pred_list <- list()
   for(i in 1:ncol(data)){
-    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(reg = time(data[,i])))
+    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(reg = time(data)))
   }
   pred <- data.frame(matrix(unlist(pred_list),ncol=ncol(data),byrow=T))
   colnames(pred) <- colnames(data)
@@ -128,18 +128,17 @@ misdata <- function(data){
   require(zoo)
   
   f <- function(var,start,end,Ts){
-    var <- ts(data=var,start=start,end=end,frequency=floor(1/Ts))
+    var <- ts(data=var,start=start,end=end,frequency=1/Ts)
     out <- na.approx(var,na.rm=F)
     return(as.numeric(out))
   }
   
-  dataout <- data
-  dataout$output <- data.frame(apply(data$output,2,f,start=data$t.start,
-                     end=data$t.end,Ts= data$Ts))
-  dataout$input <- data.frame(apply(data$input,2,f,start=data$t.start,
-                     end=data$t.end,Ts= data$Ts))
-  
-  return(dataout)
+  Z <- data
+  outputData(Z) <- apply(outputData(data),2,f,start=time(data)[1],
+                     end=tail(time(data),n=1),Ts= data$Ts))
+  inputData(Z) <- apply(inputData(data),2,f,start=time(data)[1],
+                       end=tail(time(data),n=1),Ts= data$Ts))
+  Z
 }
 
 #' Subset or Resample idframe data
