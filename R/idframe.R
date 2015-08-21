@@ -95,6 +95,7 @@ print.summary.idframe <- function(object,...){
   print(object$in_sum)
 }
 
+#' @export
 time.idframe <- function(data){
   time(data$output)
 }
