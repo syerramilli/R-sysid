@@ -128,16 +128,17 @@ misdata <- function(data){
   require(zoo)
   
   f <- function(var,start,end,Ts){
-    var <- ts(data=var,start=start,end=end,frequency=1/Ts)
+    time_range <- range(time(var))
+    start <- time_range[1];end <- time_range[2]
+    Ts <- diff(time(var))[1]
+    var <- ts(data=var,start=start,end=end,deltat=1/Ts)
     out <- na.approx(var,na.rm=F)
     return(as.numeric(out))
   }
   
   Z <- data
-  outputData(Z) <- apply(outputData(data),2,f,start=time(data)[1],
-                     end=tail(time(data),n=1),Ts= data$Ts))
-  inputData(Z) <- apply(inputData(data),2,f,start=time(data)[1],
-                       end=tail(time(data),n=1),Ts= data$Ts))
+  outputData(Z) <- apply(outputData(data),2,f)
+  inputData(Z) <- apply(inputData(data),2,f)
   Z
 }
 

@@ -4,10 +4,10 @@
 \alias{plot.idfrd}
 \title{Plotting idfrd objects}
 \usage{
-\method{plot}{idfrd}(object)
+\method{plot}{idfrd}(x)
 }
 \arguments{
-\item{object}{An object of class \code{idframe}}
+\item{x}{An object of class \code{idframe}}
 }
 \description{
 Generates the bode plot of the given frequency response data. It uses the

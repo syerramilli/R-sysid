@@ -35,7 +35,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
   l3 <- lapply(l,ts,start=start,deltat=1/Ts)
   
   # Object Constructor
-  dat <- list(output=l3[[1]],input=l3[[1]],Ts=Ts,unit=unit)
+  dat <- list(output=l3[[1]],input=l3[[1]],unit=unit)
   class(dat) <- "idframe"
   return(dat)
 }
@@ -44,7 +44,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' 
 #' Plotting method for objects inherting from class \code{idframe}
 #' 
-#' @param object an object of class \code{idframe}
+#' @param x an object of class \code{idframe}
 #' @param par a list of arguments passed to par() before plotting.
 #' @param col line color, to be passed to plot.(Default=\code{"steelblue"})
 #' @param ... additional arguments to be passed to the \code{tfplot} function
@@ -55,33 +55,33 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' plot(cstr,col="blue")
 #' 
 #' @export
-plot.idframe <- function(object,par=list(mar=c(3,4,2,2)),
+plot.idframe <- function(x,par=list(mar=c(3,4,2,2)),
                          col="steelblue",...){
     require(tfplot)
-    if(nrow(object$output)==0){
-      data <- object$input
-    } else if(nrow(object$input)==0){
-      data <- object$output
+    if(nOutputSeries(x)==0){
+      data <- outputData(x)
+    } else if(nOutputSeries(x)==0){
+      data <- outputData(x)
     } else{
-      data <- cbind(object$output,object$input)
+      data <- cbind(outputData(x),inputData(x))
     }
     tfplot(data,Xaxis=NULL,par=par,col=col,...)
 }
 
 #' @export
-summary.idframe <- function(object){
-  out_sum <- summary(object$output)
-  in_sum <- summary(object$input)
+summary.idframe <- function(x){
+  out_sum <- summary(outputData(x))
+  in_sum <- summary(inputData(x))
   
-  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=object$Ts,
-              unit=object$unit,nsample = dim(object$output)[1])
+  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=diff(time(x)[1]),
+              unit=x$unit,nsample = dim(outputData(x))[1])
   
   class(out) <- "summary.idframe"
   return(out)
 }
 
 #' @export
-print.summary.idframe <- function(object,...){
+print.summary.idframe <- function(x,...){
   cat("\t\t Number of samples:");cat(object$nsample)
   cat("\nSampling time: ")
   cat(object$Ts);cat(" ");cat(object$unit)
@@ -128,7 +128,7 @@ idfrd <- function(response,freq,Ts){
 #' Generates the bode plot of the given frequency response data. It uses the
 #' ggplot2 plotting engine
 #' 
-#' @param object An object of class \code{idframe}
+#' @param x An object of class \code{idframe}
 #' 
 #' @seealso \code{\link[ggplot2]{ggplot}}
 #' 
@@ -138,7 +138,7 @@ idfrd <- function(response,freq,Ts){
 #' plot(frf)
 #' 
 #' @export
-plot.idfrd <- function(object){
+plot.idfrd <- function(x){
   require(ggplot2);require(reshape2);require(signal)
 
   mag <- 20*log10(Mod(object$resp))

@@ -4,11 +4,11 @@
 \alias{plot.idframe}
 \title{Plotting idframe objects}
 \usage{
-\method{plot}{idframe}(object, par = list(mar = c(3, 4, 2, 2)),
+\method{plot}{idframe}(x, par = list(mar = c(3, 4, 2, 2)),
   col = "steelblue", ...)
 }
 \arguments{
-\item{object}{an object of class \code{idframe}}
+\item{x}{an object of class \code{idframe}}
 
 \item{par}{a list of arguments passed to par() before plotting.}
 
