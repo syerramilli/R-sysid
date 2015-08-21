@@ -1,5 +1,3 @@
-require(tframe)
-
 #' @export
 nInputSeries <- function(data) ncol(data$input)
 
@@ -14,6 +12,7 @@ inputData.default <- function(x,series=NULL){
   print("Not defined for this datatype")
 }
 
+#' @import tframe
 #' @export
 inputData.idframe <- function(x,series=seq(nInputSeries(x))){
   if (is.null(x$input))
@@ -36,6 +35,7 @@ inputNames.default <- function(x){
   print("Not defined for this datatype")
 }
 
+#' @import tframe
 #' @export
 inputNames.idframe <- function(x){
   seriesNames(inputData(x))
@@ -44,6 +44,7 @@ inputNames.idframe <- function(x){
 #' @export
 "inputNames<-" <- function(x,value) UseMethod("inputNames<-")
 
+#' @import tframe
 #' @export
 "inputNames<-.idframe" <- function(x,value){
   seriesNames(inputData(x)) <- value
@@ -58,6 +59,7 @@ outputData.default <- function(x,series=NULL){
   print("Not defined for this datatype")
 }
 
+#' @import tframe
 #' @export
 outputData.idframe <- function(x,series=seq(nOutputSeries(x))){
   if (is.null(x$output))
@@ -80,6 +82,7 @@ outputNames.default <- function(x){
   print("Not defined for this datatype")
 }
 
+#' @import tframe
 #' @export
 outputNames.idframe <- function(x){
   seriesNames(outputData(x))
@@ -88,6 +91,7 @@ outputNames.idframe <- function(x){
 #' @export 
 "outputNames<-" <- function(x,value) UseMethod("outputNames<-")
 
+#' @import tframe
 #' @export
 "outputNames<-.idframe" <- function(x,value){
   seriesNames(outputData(x)) <- value
