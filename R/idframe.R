@@ -73,7 +73,7 @@ summary.idframe <- function(x){
   out_sum <- summary(outputData(x))
   in_sum <- summary(inputData(x))
   
-  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=diff(time(x)[1]),
+  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=deltat(x)),
               unit=x$unit,nsample = dim(outputData(x))[1])
   
   class(out) <- "summary.idframe"
