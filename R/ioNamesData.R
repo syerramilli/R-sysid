@@ -67,10 +67,8 @@ outputData.idframe <- function(x,series=seq(nOutputSeries(x))){
   else selectSeries(x$output,series=series)
 }
 
-#' @export
 "outputData<-" <- function(x,value) UseMethod("outputData<-")
 
-#' @export
 "outputData<-.idframe" <- function(x,value){
   x$output <- value
   x
@@ -89,10 +87,8 @@ outputNames.idframe <- function(x){
   seriesNames(outputData(x))
 }
 
-#' @export
 "outputNames<-" <- function(x,value) UseMethod("outputNames<-")
 
-#' @export
 "outputNames<-.idframe" <- function(x,value){
   seriesNames(outputData(x)) <- value
   x
