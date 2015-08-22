@@ -58,12 +58,13 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 plot.idframe <- function(x,par=list(mar=c(3,4,2,2)),
                          col="steelblue",...){
     require(tfplot)
-    if(nOutputSeries(x)==0){
+    if(nInputSeries(x)==0){
       data <- outputData(x)
     } else if(nOutputSeries(x)==0){
-      data <- outputData(x)
+      data <- inputData(x)
     } else{
       data <- cbind(outputData(x),inputData(x))
+      colnames(data) <- c(outputNames(x),inputNames(x))
     }
     tfplot(data,Xaxis=NULL,par=par,col=col,...)
 }
