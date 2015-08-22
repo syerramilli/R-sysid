@@ -4,10 +4,10 @@
 \alias{detrend}
 \title{Remove offsets and linear trends}
 \usage{
-detrend(data, type = c("constant", "linear")[1])
+detrend(x, type = c("constant", "linear")[1])
 }
 \arguments{
-\item{data}{an object of class \code{idframe}}
+\item{x}{an object of class \code{idframe}}
 
 \item{type}{trend type - "constant" or "linear". (Default: \code{"constant"})}
 }
@@ -16,9 +16,9 @@ A list containing the following elements
 
 \tabular{ll}{
    \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
-   \code{output.trend} \tab \code{list} containing trend fits for each output
+   \code{output_trend} \tab \code{list} containing trend fits for each output
    variable \cr
-   \code{input.trend} \tab \code{list} containing trend fits for each input
+   \code{input_trend} \tab \code{list} containing trend fits for each input
    variable
  }
 }

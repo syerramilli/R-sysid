@@ -2,7 +2,7 @@
 #' 
 #' Removes the offsets or linear trends in each of the input and output matrices. 
 #' 
-#' @param data an object of class \code{idframe}
+#' @param x an object of class \code{idframe}
 #' @param type trend type - "constant" or "linear". (Default: \code{"constant"})
 #' 
 #' @return 
@@ -10,9 +10,9 @@
 #' 
 #' \tabular{ll}{
 #'    \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
-#'    \code{output.trend} \tab \code{list} containing trend fits for each output 
+#'    \code{output_trend} \tab \code{list} containing trend fits for each output 
 #'    variable \cr
-#'    \code{input.trend} \tab \code{list} containing trend fits for each input 
+#'    \code{input_trend} \tab \code{list} containing trend fits for each input 
 #'    variable
 #'  }
 #' 
@@ -26,13 +26,13 @@
 #' 
 #' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
-detrend <- function(data,type=c("constant","linear")[1]){ 
+detrend <- function(x,type=c("constant","linear")[1]){ 
   
   if(!(type %in% c("constant","linear"))){
     stop("Error: Invalid trend type")
   }
   
-  reg <- time(data)
+  reg <- time(x)
   
   if(type=="linear"){
     formula <- X ~ reg
@@ -40,24 +40,32 @@ detrend <- function(data,type=c("constant","linear")[1]){
     formula <- X ~ 1 + offset(0*reg)  
   }
   
-  data_detrend <- data
-  out <- outputData(data);output_trend <- list()
-  for(i in 1:ncol(out)){
-    output_trend[[i]] <- lm(formula,data=data.frame(X=out[,i],reg=reg))
-    out[,i] <- fitted(output_trend[[i]])
+  # Return Variables
+  Z <- data # Detrended object
+  output_trend <- NULL # object containing the output trend fits/offsets
+  input_trend <- NULL # object containing the input trend fits/offsets
+  
+  # Function which performs linear regression across every column
+  multilm <- function(x,formula,reg){
+    l <- lapply(as.list(x),function(x) data.frame(X=x,reg=reg))
+    trend <- lapply(l,function(x) lm(formula,data=x))
+    trend
   }
   
-  input <- inputData(data);input_trend <- list()
-  
-  for(i in 1:ncol(input)){
-    input_trend[[i]] <- lm(formula,data=data.frame(X=input[,i],reg=reg))
-    input[,i] <- fitted(input_trend[[i]])
+  if(nOutputSeries(x)!=0){
+    output_trend <- multilm(outputData(x),formula,reg)
+    outputData(Z) <- ts(sapply(output_trend,resid),start=reg[1],
+                        end=tail(reg,n=1),deltat=deltat(x))
   }
   
-  data_detrend$output <- outputData(data) - out;data_detrend$input <- inputData(data) - input
-    
-  est <- list(fitted.values=data_detrend,output.trend = output_trend,
-              input.trend = input_trend)
+  if(nInputSeries(x)!=0){
+    input_trend <- multilm(inputData(x),formula,reg)
+    inputData(Z) <- ts(sapply(input_trend,resid),start=reg[1],
+                        end=tail(reg,n=1),deltat=deltat(x))
+  }
+  
+  est <- list(fitted.values=data_detrend,output_trend = output_trend,
+              input_trend = input_trend)
   
   class(est) <- "detrend"
   return(est)
