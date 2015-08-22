@@ -82,9 +82,9 @@ summary.idframe <- function(x){
 
 #' @export
 print.summary.idframe <- function(x,...){
-  cat("\t\t Number of samples:");cat(object$nsample)
+  cat("\t\t Number of samples:");cat(x$nsample)
   cat("\nSampling time: ")
-  cat(object$Ts);cat(" ");cat(object$unit)
+  cat(x$Ts);cat(" ");cat(x$unit)
   
   cat("\n\n")
   cat("Outputs \n")
