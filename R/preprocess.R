@@ -41,7 +41,7 @@ detrend <- function(x,type=c("constant","linear")[1]){
   }
   
   # Return Variables
-  Z <- data # Detrended object
+  Z <- x # Detrended object
   output_trend <- NULL # object containing the output trend fits/offsets
   input_trend <- NULL # object containing the input trend fits/offsets
   
