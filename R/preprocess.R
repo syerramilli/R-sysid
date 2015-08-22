@@ -90,28 +90,27 @@ detrend <- function(x,type=c("constant","linear")[1]){
 #' Ztest <- predict(fit,test)
 #' 
 #' @export
-predict.detrend <- function(object,newdata=NULL,...){
+predict.detrend <- function(model,newdata=NULL,...){
   
   if(is.null(newdata)){
-    data <- fitted(object)
+    x <- fitted(model)
   } else{
-     data <- newdata
-     out <- detrend.predict(object$output.trend,outputData(data))
-     input <- detrend.predict(object$input.trend,inputData(data))
-     outputData(data) <- outputData(data) - out
-     inputData(data) <- inputData(data) - input
+    x <- newdata; reg <- time(x)
+    
+    # checking if the original data has outputs
+    if(!is.null(model$output_trend)){
+      y <- ts(sapply(output_trend,predict,newdata=data.frame(reg=reg)),
+              start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
+      outputData(x) <- outputData(x) - y
+    }
+    
+    if(!is.null(model$input_trend)){
+      y <- ts(sapply(in_trend,predict,newdata=data.frame(reg=reg)),
+              start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
+      inputData(x) <- inputData(x) - y
+    }
   }
-  return(data)
-}
-
-detrend.predict <- function(object,data){
-  pred_list <- list()
-  for(i in 1:ncol(data)){
-    pred_list[[i]] <- predict(object[[i]],newdata=data.frame(reg = time(data)))
-  }
-  pred <- data.frame(matrix(unlist(pred_list),ncol=ncol(data),byrow=T))
-  colnames(pred) <- colnames(data)
-  return(pred)
+  return(x)
 }
 
 #' Replace Missing Data by Interpolation
