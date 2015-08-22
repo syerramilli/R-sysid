@@ -9,9 +9,9 @@ dataSlice(data, start = NULL, end = NULL, freq = NULL)
 \arguments{
 \item{data}{an object of class \code{idframe}}
 
-\item{start}{the start time of the period of interest}
+\item{start}{the start index}
 
-\item{end}{the end time of the period of interes}
+\item{end}{the end index}
 
 \item{freq}{fraction of the original frequency at which the series
 to be sampled.}

@@ -32,7 +32,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
     start <- end - Ts*(n-1)
   } 
   
-  l3 <- lapply(l,ts,start=start,deltat=1/Ts)
+  l3 <- lapply(l,ts,start=start,deltat=Ts)
   
   # Object Constructor
   dat <- list(output=l3[[1]],input=l3[[1]],unit=unit)
@@ -73,7 +73,7 @@ summary.idframe <- function(x){
   out_sum <- summary(outputData(x))
   in_sum <- summary(inputData(x))
   
-  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=deltat(x)),
+  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=deltat(x),
               unit=x$unit,nsample = dim(outputData(x))[1])
   
   class(out) <- "summary.idframe"
