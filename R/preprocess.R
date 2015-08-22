@@ -64,7 +64,7 @@ detrend <- function(x,type=c("constant","linear")[1]){
                         end=tail(reg,n=1),deltat=deltat(x))
   }
   
-  est <- list(fitted.values=data_detrend,output_trend = output_trend,
+  est <- list(fitted.values=Z,output_trend = output_trend,
               input_trend = input_trend)
   
   class(est) <- "detrend"
@@ -75,7 +75,7 @@ detrend <- function(x,type=c("constant","linear")[1]){
 #' 
 #' Returns detrended \code{idframe} object based on linear trend fit
 #' 
-#' @param object an object of class \code{idframe}
+#' @param model an object of class \code{detrend}
 #' @param newdata An optional idframe object in which to look for variables with 
 #' which to predict. If ommited, the original detrended idframe object is used
 #' 
@@ -99,15 +99,19 @@ predict.detrend <- function(model,newdata=NULL,...){
     
     # checking if the original data has outputs
     if(!is.null(model$output_trend)){
-      y <- ts(sapply(output_trend,predict,newdata=data.frame(reg=reg)),
+      y <- ts(sapply(model$output_trend,predict,
+                     newdata=data.frame(reg=reg)),
               start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
       outputData(x) <- outputData(x) - y
+      outputNames(x) <- outputNames(newdata)
     }
     
     if(!is.null(model$input_trend)){
-      y <- ts(sapply(in_trend,predict,newdata=data.frame(reg=reg)),
+      y <- ts(sapply(model$input_trend,predict,
+                     newdata=data.frame(reg=reg)),
               start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
       inputData(x) <- inputData(x) - y
+      inputNames(x) <- inputNames(newdata)
     }
   }
   return(x)

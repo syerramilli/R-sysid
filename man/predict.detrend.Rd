@@ -4,10 +4,10 @@
 \alias{predict.detrend}
 \title{Detrend data based on linear trend fits}
 \usage{
-\method{predict}{detrend}(object, newdata = NULL, ...)
+\method{predict}{detrend}(model, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{an object of class \code{idframe}}
+\item{model}{an object of class \code{detrend}}
 
 \item{newdata}{An optional idframe object in which to look for variables with
 which to predict. If ommited, the original detrended idframe object is used}
