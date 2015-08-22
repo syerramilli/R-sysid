@@ -88,11 +88,11 @@ print.summary.idframe <- function(x,...){
   
   cat("\n\n")
   cat("Outputs \n")
-  print(object$out_sum)
+  print(x$out_sum)
   cat("\n")
   
   cat("Inputs \n")
-  print(object$in_sum)
+  print(x$in_sum)
 }
 
 #' @export
