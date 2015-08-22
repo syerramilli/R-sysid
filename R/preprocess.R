@@ -123,6 +123,7 @@ detrend.predict <- function(object,data){
 #' summary(cstr_mis) # finding out the number of NAs
 #' cstr <- misdata(cstr_mis)
 #' 
+#' @importFrom zoo na.approx
 #' @export
 misdata <- function(data){
   require(zoo)
@@ -151,8 +152,8 @@ misdata <- function(data){
 #' new frequency.
 #' 
 #' @param data an object of class \code{idframe}
-#' @param start the start time of the period of interest
-#' @param end the end time of the period of interes
+#' @param start the start index
+#' @param end the end index
 #' @param freq fraction of the original frequency at which the series
 #' to be sampled.
 #' 
@@ -176,15 +177,17 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
   if(class(data)!='idframe')
     stop("Not an idframe data")
   
+  indexWindow <- function(y,start,end,freq){
+    Y <- as.matrix(y); z <- as.vector(time(y))
+    Y <- window(Y,start=start,end=end,frequency=freq)
+    zw <- window(z,start=start,end=end,frequency=freq)
+    y <- ts(Y,start=zw[1],end=tail(zw,n=1),deltat=diff(zw)[1])
+  }
   if(nOutputSeries(data)!=0)
-    if(!is.null(freq)) freq*frequency(data)
-    outputData(data) <- window(outputData(data),start=start,end=end,
-                                frequency=freq)
+    outputData(data) <- indexWindow(outputData(data),start,end,freq)
   
   if(nInputSeries(data)!=0)
-    if(!is.null(freq)) freq*frequency(data)
-    inputData(data) <- window(inputData(data),start=start,end=end,
-                               frequency=freq)
+    inputData(data) <- indexWindow(inputData(data),start,end,freq)
   
   return(data)
 }
