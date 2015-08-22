@@ -55,7 +55,7 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   se <- sqrt(diag(vcov))
   
   out <- list(coefficients=coefficients,residuals=residuals,lags=K:(M+K),
-              x=colnames(data$input),y=colnames(data$output),se = se)
+              x=inputNames(data),y=outputNames(data),se = se)
   class(out) <- "impulseest"
   return(out)
 }
