@@ -3,10 +3,10 @@
 #' \code{impulseest} is used to estimate impulse response coefficients from 
 #' the data
 #' 
-#' @param data an object of class \code{idframe}
+#' @param x an object of class \code{idframe}
 #' @param M Order of the FIR Model (Default:\code{30})
 #' @param K Transport delay in the estimated impulse response 
-#' (Default:\code{0})
+#' (Default:NULL)
 #' @param regul Parameter indicating whether regularization should be 
 #' used. (Default:\code{FALSE})
 #' @param lambda The value of the regularization parameter. Valid only if
@@ -30,14 +30,31 @@
 #' plot(fit)
 #' 
 #' @export
-impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
+impulseest <- function(x,M=30,K=NULL,regul=F,lambda=1){
   
-  N <- dim(data$output)[1]
-  ind <- (M+K+1):N
+  N <- dim(x$output)[1]
+  if(is.null(K))
+    K <- rep(0,nInputSeries(x)*nOutputSeries(x))
   
-  z_reg <- function(i) data$input[(i-K):(i-M-K),]
+  out <- rep(list(0),length(K))
+  
+  for(i in seq(nOutputSeries(x))){
+    for(j in seq(nInputSeries(x))){
+      index <- (i-1)*nInputSeries(x)+j 
+      out[[index]] <- impulsechannel(outputData(x)[,i,drop=F],
+                                     inputData(x)[,j,drop=F],N,K(index),
+                                     regul,lambda)
+    }
+  }
+  class(out) <- "impulseest"
+  return(out)
+}
+
+impulsechannel <- function(y,u,N,K=0,regul=F,lambda=1){
+  ind <- (M+K+1):N 
+  z_reg <- function(i) u[(i-K):(i-M-K),]
   Z <- t(sapply(ind,z_reg))
-  Y <- data$output[ind,]
+  Y <- y[ind,]
   
   # Dealing with Regularization
   if(regul==F){
@@ -55,9 +72,8 @@ impulseest <- function(data,M=30,K=0,regul=F,lambda=1){
   se <- sqrt(diag(vcov))
   
   out <- list(coefficients=coefficients,residuals=residuals,lags=K:(M+K),
-              x=inputNames(data),y=outputNames(data),se = se)
-  class(out) <- "impulseest"
-  return(out)
+              x=colnames(u),y=colnames(y),se = se)
+  out
 }
 
 #' Impulse Response Plots

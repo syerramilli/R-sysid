@@ -4,15 +4,15 @@
 \alias{impulseest}
 \title{Estimate Impulse Response Coefficients}
 \usage{
-impulseest(data, M = 30, K = 0, regul = F, lambda = 1)
+impulseest(x, M = 30, K = NULL, regul = F, lambda = 1)
 }
 \arguments{
-\item{data}{an object of class \code{idframe}}
+\item{x}{an object of class \code{idframe}}
 
 \item{M}{Order of the FIR Model (Default:\code{30})}
 
 \item{K}{Transport delay in the estimated impulse response
-(Default:\code{0})}
+(Default:NULL)}
 
 \item{regul}{Parameter indicating whether regularization should be
 used. (Default:\code{FALSE})}
