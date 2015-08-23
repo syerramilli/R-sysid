@@ -125,11 +125,17 @@ plot.impulseest <- function(model,sig=0.975){
 #' 
 #' @export 
 step <- function(model){
-  title <- paste("Step Response \n From",model$x,"to",model$y)
-  stepResp <- cumsum(coef(model))
-  plot(model$lags,stepResp,type="s",xlab="Lag",ylab= model$y,
-       main = title)
-  abline(h=0)
+  par(mfrow=c(model$noutputs,model$ninputs))
+  
+  stepplot <- function(model){
+    title <- paste("Step Response \n From",model$x,"to",model$y)
+    stepResp <- cumsum(coef(model))
+    plot(model$lags,stepResp,type="s",xlab="Lag",ylab= model$y,
+         main = title)
+    abline(h=0)
+  }
+  l <- model[seq(model$noutputs*model$ninputs)]
+  p <- lapply(l,stepplot)
 }
 
 #' Estimate frequency response 
