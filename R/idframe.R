@@ -35,7 +35,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
   l3 <- lapply(l,ts,start=start,deltat=Ts)
   
   # Object Constructor
-  dat <- list(output=l3[[1]],input=l3[[1]],unit=unit)
+  dat <- list(output=l3[[1]],input=l3[[2]],unit=unit)
   class(dat) <- "idframe"
   return(dat)
 }

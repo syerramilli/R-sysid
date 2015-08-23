@@ -42,15 +42,15 @@ impulseest <- function(x,M=30,K=NULL,regul=F,lambda=1){
     for(j in seq(nInputSeries(x))){
       index <- (i-1)*nInputSeries(x)+j 
       out[[index]] <- impulsechannel(outputData(x)[,i,drop=F],
-                                     inputData(x)[,j,drop=F],N,K(index),
-                                     regul,lambda)
+                                     inputData(x)[,j,drop=F],N,M,
+                                     K[index],regul,lambda)
     }
   }
   class(out) <- "impulseest"
   return(out)
 }
 
-impulsechannel <- function(y,u,N,K=0,regul=F,lambda=1){
+impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
   ind <- (M+K+1):N 
   z_reg <- function(i) u[(i-K):(i-M-K),]
   Z <- t(sapply(ind,z_reg))
