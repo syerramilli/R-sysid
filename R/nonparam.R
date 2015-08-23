@@ -46,6 +46,8 @@ impulseest <- function(x,M=30,K=NULL,regul=F,lambda=1){
                                      K[index],regul,lambda)
     }
   }
+  out$ninputs <- nInputSeries(x)
+  out$noutputs <- nOutputSeries(x)
   class(out) <- "impulseest"
   return(out)
 }
@@ -87,15 +89,22 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' @seealso \code{\link{impulseest}},\code{\link{step}}
 #' @export
 plot.impulseest <- function(model,sig=0.975){
-  lim <- model$se*qnorm(0.975)
+  par(mfrow=c(model$noutputs,model$ninputs))
   
-  ylim <- c(min(coef(model)),max(coef(model)))
+  impulseplot <- function(model,sig){
+    lim <- model$se*qnorm(sig)
+    
+    ylim <- c(min(coef(model)),max(coef(model)))
+    
+    title <- paste("Impulse Response \n From",model$x,"to",model$y)
+    plot(model$lags,coef(model),type="h",xlab="Lag",ylab= "IR Coefficient",
+         main = title)
+    abline(h=0);points(x=model$lags,y=lim,col="blue",lty=2,type="l")
+    points(x=model$lags,y=-lim,col="blue",lty=2,type="l")
+  }
   
-  title <- paste("Impulse Response \n From",model$x,"to",model$y)
-  plot(model$lags,coef(model),type="h",xlab="Lag",ylab= "IR Coefficient",
-       main = title)
-  abline(h=0);points(x=model$lags,y=lim,col="blue",lty=2,type="l")
-  points(x=model$lags,y=-lim,col="blue",lty=2,type="l")
+  l <- model[seq(model$noutputs*model$ninputs)]
+  p <- lapply(l,impulseplot,sig=sig)
 }
 
 
