@@ -78,6 +78,8 @@ read.table.idframe <- function(file,header=TRUE,sep=",",ninputs=0,
 #' 
 #' @param file the path to the file to read
 #' @param sheetName a character string with the sheet name
+#' @param header a logical value indicating whether the first row corresponding to 
+#' the first element of the rowIndex vector contains the names of the variables.
 #' @param ninputs the number of input columns. (Default: 0)
 #' @param Ts sampling interval (Default: 1)
 #' @param unit Time Unit (Default: "seconds")
@@ -111,6 +113,46 @@ read.xls.idframe <- function(file,sheetName,header=TRUE,ninputs=0,
   
   # Read from file into an R data.frame
   dat <- read.xlsx2(file=file,sheetName=sheetName,header=header,...)
+  l <- as.list(dat)
+  dat <- as.data.frame(sapply(l,as.numeric))
+  
+  # read from dataframe and return idframe object
+  out <- read.idframe(dat,ninputs=ninputs,Ts = Ts,unit=unit)
+  return(out)
+}
+
+#' Reading from .odf documents
+#' 
+#' Read the contents of an a .odf document into a \code{idframe} object.
+#' 
+#' @param file the path to the file to read
+#' @param sheetName a character string with the sheet name
+#' @param header a logical value indicating whether the first row corresponding to 
+#' the first element of the rowIndex vector contains the names of the variables.
+#' @param ninputs the number of input columns. (Default: 0)
+#' @param Ts sampling interval (Default: 1)
+#' @param unit Time Unit (Default: "seconds")
+#' @param ... additional arguments to be passed to the \code{\link[xlsx]{read.xlsx2}} function
+#' 
+#' @details
+#' 
+#' The \code{read.odf.idframe} function uses the \code{\link[gnumeric]{read.gnumeric.sheet}} function, 
+#' provided by the \pkg{xlsx} package, to read data from a .odf file and then calls the 
+#' \code{\link{read.idframe}} function to read the data into a idframe object
+#' 
+#' @return an idframe object
+#' 
+#' @seealso  \code{\link[xlsx]{read.xlsx2}}
+#' @export
+read.odf.idframe <- function(file,sheetName,header=TRUE,ninputs=0,
+                             Ts = 1,unit=c("seconds","minutes","hours",
+                                           "days")[1],...){
+  
+  require(gnumeric)
+  
+  # Read from file into an R data.frame
+  dat <- read.gnumeric.sheet(file=file,sheet.name=sheetName,
+                             head=header,...)
   l <- as.list(dat)
   dat <- as.data.frame(sapply(l,as.numeric))
   
