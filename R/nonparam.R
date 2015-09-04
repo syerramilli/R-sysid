@@ -205,10 +205,10 @@ spa <- function(data,npad=255){
 #' 
 #' @export
 etfe <- function(data){
-  temp <- cbind(as.ts(data$output),as.ts(data$input))
+  temp <- cbind(data$output,data$input)
   tempfft <- mvfft(temp)/dim(temp)[1]
   freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
-              by=1)/ceiling(dim(tempfft)[1]/2)*pi/data$Ts
+              by=1)/ceiling(dim(tempfft)[1]/2)*pi/deltat(data)
   resp <- comdiv(tempfft[,1],tempfft[,2])
   out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
                Ts=data$Ts)
@@ -216,10 +216,8 @@ etfe <- function(data){
 }
 
 comdiv <- function(z1,z2){
-  require(signal)
-  
   mag1 <- Mod(z1);mag2 <- Mod(z2)
-  phi1 <- unwrap(Arg(z1)); phi2 <- unwrap(Arg(z2))
+  phi1 <- Arg(z1); phi2 <- Arg(z2)
   
-  complex(modulus=mag1/mag2,argument=phi1-phi2)
+  complex(modulus=mag1/mag2,argument=unwrap(phi1-phi2))
 }
