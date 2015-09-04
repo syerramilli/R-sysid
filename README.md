@@ -10,4 +10,4 @@ You can install `sysid` from github using the `devtools` package.
 require(devtools)
 install_github("surajy123/R-sysid/")
 ```
-> Note: Windows users need to install the `Rtools` package.
+> Note: Windows users need to install the `Rtools` executable from https://cran.r-project.org/bin/windows/Rtools/
