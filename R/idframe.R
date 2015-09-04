@@ -153,7 +153,7 @@ plot.idfrd <- function(x){
   require(ggplot2);require(reshape2);require(signal)
 
   mag <- 20*log10(Mod(x$resp))
-  phase <- -360/2/pi*unwrap(Arg(x$resp))
+  phase <- unwrap(Arg(x$resp))
   sys_df <- data.frame(Frequency = x$freq,Gain = mag,Phase = phase)
   melted_sys_df <- melt(sys_df, id.var = c("Frequency"))
   
