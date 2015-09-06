@@ -1,7 +1,7 @@
 #' @export
 idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1){
   out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts)
-  out$type <- typecheck(x)
+  out$type <- typecheck(out)
   class(out) <- "idpoly"
   return(out)
 }
