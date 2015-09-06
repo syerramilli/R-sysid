@@ -163,11 +163,10 @@ arx <- function(x,order=c(0,1,0)){
   
   vcov <- sigma2 * chol2inv(qx$qr)
   
-  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],
+  model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],
                ioDelay = nk,Ts=deltat(x))
   
-  est <- estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
-  est
 }
