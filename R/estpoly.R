@@ -1,9 +1,9 @@
 #' @export
 estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
-                    residuals,call,time,input){
+                    residuals,call,input){
   out <- list(coefficients= coefficients,vcpv= vcov,sigma = sigma,
               df= df,fitted.values=fitted.values, 
-              residuals= residuals,call= call,time=time,input=input)
+              residuals= residuals,call= call,input=input)
   class(out) <- "estPoly"
   out
 }
@@ -28,7 +28,7 @@ summary.estPoly <- function(object)
   }
   res <- list(call=object$call,coefficients=TAB,sigma=object$sigma,
               df=object$df)
-  class(res) <- "summary.estARX"
+  class(res) <- "summary.estPoly"
   res
 }
 
@@ -58,13 +58,13 @@ plot.estPoly <- function(model,newdata=NULL){
   if(is.null(newdata)){
     ypred <- fitted(model)
     yact <- fitted(model) + resid(model)
-    time <- model$time
+    time <- time(model$input)
     titstr <- "Predictions of Model on Training Set"
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
-    ypred <- sim(coef(model),newdata$input[,1,drop=F])
-    yact <- newdata$output[,1]
-    time <- seq(from=newdata$t.start,to=newdata$t.end,by=newdata$Ts)
+    ypred <- sim(coef(model),inputData(newdata))
+    yact <- outputData(newdata)
+    time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
   }
   df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
@@ -92,7 +92,7 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' Fit an ARX model of the specified order given the input-output data 
 #' 
-#' @param data an object of class \code{idframe}
+#' @param x an object of class \code{idframe}
 #' @param order: Specification of the orders: the three integer components 
 #' (na,nb,nk) are the order of polynolnomial A, order of polynomial B and 
 #' the input-output delay
@@ -142,9 +142,8 @@ residplot <- function(model,newdata=NULL){
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
-arx <- function(data,order=c(0,1,0)){
-  y <- as.matrix(data$output)
-  u <- as.matrix(data$input); N <- dim(y)[1]
+arx <- function(x,order=c(0,1,0)){
+  y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
   nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb - 1
   
@@ -164,12 +163,11 @@ arx <- function(data,order=c(0,1,0)){
   
   vcov <- sigma2 * chol2inv(qx$qr)
   
-  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],ioDelay = nk)
-  time <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
+  model <- arx(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],
+               ioDelay = nk,Ts=deltat(x))
   
   est <- estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
-              residuals=(Y-X%*%coef)[1:N,],call=match.call(),
-              time=time,input=u)
+              residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
   est
 }

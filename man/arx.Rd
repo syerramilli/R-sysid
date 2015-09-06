@@ -4,10 +4,10 @@
 \alias{arx}
 \title{Estimate ARX Models}
 \usage{
-arx(data, order = c(0, 1, 0))
+arx(x, order = c(0, 1, 0))
 }
 \arguments{
-\item{data}{an object of class \code{idframe}}
+\item{x}{an object of class \code{idframe}}
 
 \item{order:}{Specification of the orders: the three integer components
 (na,nb,nk) are the order of polynolnomial A, order of polynomial B and
