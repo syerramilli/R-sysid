@@ -1,19 +1,36 @@
 #' @export
 idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1){
   out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts)
+  out$type <- typecheck(x)
   class(out) <- "idpoly"
   return(out)
 }
 
-#' @export
-arx <- function(A,B,ioDelay=0,Ts=1){
-  out <- idpoly(A=A,B=B,ioDelay = ioDelay,Ts=1)
-  class(out) <- c("arx","idpoly")
-  return(out)
+typecheck <- function(x){
+  y <- lapply(x[1:5],checkUnity)
+  if(y$A){
+    out <- if(y$C||y$F1) "oe" else "bj" 
+  } else{
+    if(y$D && y$F1){
+      out <- if(y$C) "arx" else "armax"
+    } else{
+      out <- "idpoly"
+    }
+  }
+}
+
+checkUnity <- function(x){
+  out <- if(length(x)==1 && x==1) TRUE else FALSE
 }
 
 #' @export
-print.arx <- function(obj){
+print.idpoly <- function(x){
+  if(x$type=="arx"){
+    print_arx(x)
+  }
+}
+
+print_arx <- function(obj){
   cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n\n")
   cat("A(q^{-1}) = ")
   for(i in seq_along(obj$A)){
@@ -45,33 +62,5 @@ print.arx <- function(obj){
     }
     cat("\t")
   }
-}
-
-#' @export
-armax <- function(A,B,C,ioDelay=0,Ts=1){
-  out <- idpoly(A=A,B=B,C=C,ioDelay = ioDelay,Ts=Ts)
-  class(out) <- c("armax","idpoly")
-  return(out)
-}
-
-#' @export
-oe <- function(B,C,ioDelay=0,Ts=1){
-  out <- idpoly(B=B,C=C,ioDelay=ioDelay,Ts=Ts)
-  class(out) <- c("oe","idpoly")
-  return(out)
-}
-
-#' @export
-oe <- function(B,C,ioDelay=0,Ts=1){
-  out <- idpoly(B=B,C=C,ioDelay=ioDelay,Ts=Ts)
-  class(out) <- c("oe","idpoly")
-  return(out)
-}
-
-#' @export
-bj <- function(B,C,D,F1,ioDelay=0,Ts=1){
-  out <- idpoly(B=B,C=C,D=D,F1=F1,ioDelay=ioDelay,Ts=Ts)
-  class(out) <- c("oe","idpoly")
-  return(out)
 }
 
