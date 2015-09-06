@@ -27,8 +27,9 @@ The routine is currently built only for SISO systems. Future Versions will
 include support for MIMO systems
 }
 \examples{
+# ARX Model
 u <- rnorm(200,sd=1)
-model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),C=1,D=1,F1=1,ioDelay=1)
+model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),ioDelay=1)
 y <- sim(model,u,sigma=0.1)
 }
 \seealso{
