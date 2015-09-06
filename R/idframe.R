@@ -32,7 +32,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
     start <- end - Ts*(n-1)
   } 
   
-  l3 <- lapply(l,ts,start=start,deltat=Ts)
+  l3 <- lapply(l2,ts,start=start,deltat=Ts)
   
   # Object Constructor
   dat <- list(output=l3[[1]],input=l3[[2]],unit=unit)
