@@ -4,6 +4,8 @@ estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
   out <- list(coefficients= coefficients,vcpv= vcov,sigma = sigma,
               df= df,fitted.values=fitted.values, 
               residuals= residuals,call= call,time=time,input=input)
+  class(out) <- "estPoly"
+  out
 }
 
 #' @export
