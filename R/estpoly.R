@@ -1,4 +1,55 @@
 #' @export
+estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
+                    residuals,call,time,input){
+  out <- list(coefficients= coefficients,vcpv= vcov,sigma = sigma,
+              df= df,fitted.values=fitted.values, 
+              residuals= residuals,call= call,time=time,input=input)
+}
+
+#' @export
+summary.estPoly <- function(object)
+{
+  coefs <- c(coef(object)$A[-1],coef(object)$B)
+  se <- sqrt(diag(object$vcov))
+  tval <- coefs / se
+  TAB <- cbind(Estimate = coefs,
+               StdErr = se,
+               t.value = tval,
+               p.value = 2*pt(-abs(tval), df=object$df))
+  na <- length(coef(object)$A) - 1; nk <- coef(object)$ioDelay; 
+  nb <- length(coef(object)$B) - nk
+  
+  rownames(TAB) <- rep("a",nrow(TAB))
+  for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
+  for(j in (na+1):nrow(TAB)) {
+    rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
+  }
+  res <- list(call=object$call,coefficients=TAB,sigma=object$sigma,
+              df=object$df)
+  class(res) <- "summary.estARX"
+  res
+}
+
+#' @export
+print.summary.estPoly <- function(object){
+  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n")
+  cat("Call: ");print(object$call);cat("\n\n")
+  
+  print(coef(object))
+  cat(paste("\nsigma:",format(object$sigma,digits=4)))
+  cat(paste("\nDoF:",object$df))
+}
+
+#' @export
+predict.estPoly <- function(model,newData=NULL){
+  if(is.null(newdata)){
+    return(fitted(model))
+  } else{
+    return(sim(coef(model),newdata$input))
+  }
+}
+
+#' @export
 plot.estPoly <- function(model,newdata=NULL){
   require(ggplot2)
   
@@ -84,12 +135,12 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' @examples
 #' data(arxsim)
-#' model <- estARX(data,c(2,1,1))
+#' model <- arx(data,c(2,1,1))
 #' summary(model) # obtain estimates and their covariances
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
-estARX <- function(data,order=c(0,1,0)){
+arx <- function(data,order=c(0,1,0)){
   y <- as.matrix(data$output)
   u <- as.matrix(data$input); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
@@ -114,53 +165,9 @@ estARX <- function(data,order=c(0,1,0)){
   model <- arx(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],ioDelay = nk)
   time <- seq(from=data$t.start,to=data$t.end,by=data$Ts)
   
-  est <- list(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+  est <- estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),
               time=time,input=u)
-  class(est) <- c("estARX","estPoly")
   est
-}
-
-#' @export
-predict.estARX <- function(model,newdata=NULL){
-  if(is.null(newdata)){
-    return(fitted(model))
-  } else{
-    return(sim(coef(model),newdata$input))
-  }
-}
-
-#' @export
-summary.estARX <- function(object)
-{
-  coefs <- c(coef(object)$A[-1],coef(object)$B)
-  se <- sqrt(diag(object$vcov))
-  tval <- coefs / se
-  TAB <- cbind(Estimate = coefs,
-               StdErr = se,
-               t.value = tval,
-               p.value = 2*pt(-abs(tval), df=object$df))
-  na <- length(coef(object)$A) - 1; nk <- coef(object)$ioDelay; 
-  nb <- length(coef(object)$B) - nk
-  
-  rownames(TAB) <- rep("a",nrow(TAB))
-  for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
-  for(j in (na+1):nrow(TAB)) {
-    rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
-  }
-  res <- list(call=object$call,coefficients=TAB,sigma=object$sigma,
-              df=object$df)
-  class(res) <- "summary.estARX"
-  res
-}
-
-#' @export
-print.summary.estARX <- function(object){
-  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n")
-  cat("Call: ");print(object$call);cat("\n\n")
-  
-  print(coef(object))
-  cat(paste("\nsigma:",format(object$sigma,digits=4)))
-  cat(paste("\nDoF:",object$df))
 }
