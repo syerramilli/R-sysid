@@ -189,10 +189,11 @@ dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
     stop("Not an idframe data")
   
   indexWindow <- function(y,start,end,freq){
-    Y <- as.matrix(y); z <- as.vector(time(y))
+    Y <- matrix(y,ncol=ncol(y)); z <- as.vector(time(y))
     Y <- window(Y,start=start,end=end,frequency=freq)
     zw <- window(z,start=start,end=end,frequency=freq)
     y <- ts(Y,start=zw[1],end=tail(zw,n=1),deltat=diff(zw)[1])
+    y
   }
   if(nOutputSeries(data)!=0)
     outputData(data) <- indexWindow(outputData(data),start,end,freq)
