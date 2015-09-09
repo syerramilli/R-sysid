@@ -18,7 +18,7 @@ read.idframe <- function(data,ninputs=NULL,Ts = 1,
                          unit=c("seconds","minutes","hours",
                                 "days")[1]){
     outIndex <- 1:dim(data)[2]; inputs <- NULL
-    if(ninputs==0){
+    if(ninputs!=0){
       inputs <- data[,1:ninputs,drop=F]
       outIndex <- seq(ninputs+1,dim(data)[2],by=1)
     }
