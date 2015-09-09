@@ -63,7 +63,7 @@ plot.estPoly <- function(model,newdata=NULL){
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
     ypred <- sim(coef(model),inputData(newdata))
-    yact <- outputData(newdata)
+    yact <- outputData(newdata)[,1]
     time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
   }
@@ -78,7 +78,7 @@ residplot <- function(model,newdata=NULL){
     e <- resid(model); u <- model$input
   } else{
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
-    e <- newdata$output - predict(model,newdata$input)
+    e <- newdata$output[,1] - predict(model,newdata$input)
     u <- newdata$input
   }
   
