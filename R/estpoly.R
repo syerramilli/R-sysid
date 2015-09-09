@@ -26,8 +26,13 @@ summary.estPoly <- function(object)
   for(j in (na+1):nrow(TAB)) {
     rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
   }
-  res <- list(call=object$call,coefficients=TAB,sigma=object$sigma,
-              df=object$df)
+  ek <- as.matrix(resid(model))
+  N <- nrow(ek); np <- nrow(TAB)
+  mse <- t(ek)%*%ek/N
+  fpe <- det(mse)*(1+np/N)/(1-np/N)
+  
+  res <- list(call=object$call,coefficients=TAB,mse = mse,
+              fpe=fpe,df=object$df)
   class(res) <- "summary.estPoly"
   res
 }
@@ -38,7 +43,8 @@ print.summary.estPoly <- function(object){
   cat("Call: ");print(object$call);cat("\n\n")
   
   print(coef(object))
-  cat(paste("\nsigma:",format(object$sigma,digits=4)))
+  cat(paste("\nMSE:",format(object$mse,digits=4),
+            "\tFPE:",format(object$fpe,digits=4)))
   cat(paste("\nDoF:",object$df))
 }
 
