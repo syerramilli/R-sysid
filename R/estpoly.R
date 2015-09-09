@@ -100,7 +100,7 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' @param x an object of class \code{idframe}
 #' @param order: Specification of the orders: the three integer components 
-#' (na,nb,nk) are the order of polynolnomial A, order of polynomial B and 
+#' (na,nb,nk) are the order of polynolnomial A, (order of polynomial B + 1) and 
 #' the input-output delay
 #' 
 #' @details
@@ -150,7 +150,7 @@ residplot <- function(model,newdata=NULL){
 #' @export
 arx <- function(x,order=c(0,1,0)){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
-  na <- order[1];nb <- order[2]; nk <- order[3]
+  na <- order[1];nb <- order[2]-1; nk <- order[3]
   nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb - 1
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))

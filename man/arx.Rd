@@ -10,7 +10,7 @@ arx(x, order = c(0, 1, 0))
 \item{x}{an object of class \code{idframe}}
 
 \item{order:}{Specification of the orders: the three integer components
-(na,nb,nk) are the order of polynolnomial A, order of polynomial B and
+(na,nb,nk) are the order of polynolnomial A, (order of polynomial B + 1) and
 the input-output delay}
 }
 \value{
