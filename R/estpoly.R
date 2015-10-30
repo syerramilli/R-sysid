@@ -176,3 +176,15 @@ arx <- function(x,order=c(0,1,0)){
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
 }
+
+armax <- function(x,order=c(0,1,1,0)){
+  y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
+  e <- matrix(rep(0,N),ncol=1)
+  na <- order[1];nb <- order[2]-1; nc <- order[3]
+  nb1 <- nb+nk ; n <- max(na,nb1,nc)
+  
+  if(nc<1) 
+    stop("Error: Not an ARMAX model")
+  
+  
+}
