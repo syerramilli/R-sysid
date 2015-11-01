@@ -167,8 +167,8 @@ residplot <- function(model,newdata=NULL){
 #' @export
 arx <- function(x,order=c(0,1,0)){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
-  na <- order[1];nb <- order[2]-1; nk <- order[3]
-  nb1 <- nb+nk ; n <- max(na,nb1); df <- N - na - nb - 1
+  na <- order[1];nb <- order[2]; nk <- order[3]
+  nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
@@ -182,7 +182,7 @@ arx <- function(x,order=c(0,1,0)){
   Y <- yout[n+1:(N+n),,drop=F]
   
   qx <- qr(X); coef <- qr.solve(qx,Y)
-  sigma2 <- sum((Y-X%*%coef)^2)/df
+  sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
   
   vcov <- sigma2 * chol2inv(qx$qr)
   
