@@ -67,7 +67,7 @@ print_arx <- function(obj){
 }
 
 print_armax <- function(obj){
-  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n\n")
+  cat("Discrete-time ARMAX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n\n")
   cat("A(q^{-1}) = ")
   for(i in seq_along(obj$A)){
     if(i-1==0){
