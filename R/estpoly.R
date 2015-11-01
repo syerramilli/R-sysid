@@ -148,8 +148,7 @@ residplot <- function(model,newdata=NULL){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object with classes \code{estARX} and \code{estPoly}, containing 
-#' the following elements:
+#' An object of class \code{estPoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -219,7 +218,7 @@ arx <- function(x,order=c(0,1,0)){
 #' @param x an object of class \code{idframe}
 #' @param order: Specification of the orders: the four integer components 
 #' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
-#' + 1, order of the polynomial,and the input-output delay respectively
+#' + 1, order of the polynomial C,and the input-output delay respectively
 #' 
 #' @details
 #' SISO ARMAX models are of the form 
@@ -235,8 +234,7 @@ arx <- function(x,order=c(0,1,0)){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object with classes \code{estARX} and \code{estPoly}, containing 
-#' the following elements:
+#' An object of class \code{estPoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -330,14 +328,14 @@ armax <- function(x,order=c(0,1,1,0)){
 #' 
 #' @param x an object of class \code{idframe}
 #' @param order: Specification of the orders: the four integer components 
-#' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
-#' + 1, order of the polynomial,and the input-output delay respectively
+#' (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
+#' and the input-output delay respectively
 #' 
 #' @details
-#' SISO ARMAX models are of the form 
+#' SISO OE models are of the form 
 #' \deqn{
-#'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
-#'    \ldots + b_{nk+nb} u[k-nk-nb] + c_{1} e[k-1] + \ldots c_{nc} e[k-nc]
+#'    y[k] + f_1 y[k-1] + \ldots + f_{nf} y[k-nf] = b_{nk} u[k-nk] + 
+#'    \ldots + b_{nk+nb} u[k-nk-nb] + f_{1} e[k-1] + \ldots f_{nf} e[k-nf]
 #'    + e[k] 
 #' }
 #' The function estimates the coefficients using non-linear least squares 
@@ -347,8 +345,7 @@ armax <- function(x,order=c(0,1,1,0)){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object with classes \code{estARX} and \code{estPoly}, containing 
-#' the following elements:
+#' An object of class \code{estPoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -370,11 +367,11 @@ armax <- function(x,order=c(0,1,1,0)){
 #' 21.6.3
 #' 
 #' @examples
-#' data(armaxsim)
+#' data(oesim)
 #' z <- dataSlice(data,end=1533) # training set
-#' mod_armax <- armax(z,c(1,2,1,2))
-#' summary(mod_armax) # obtain estimates and their covariances
-#' plot(mod_armax) # plot the predicted and actual responses
+#' mod_oe <- oe(z,c(2,1,2))
+#' summary(mod_oe) # obtain estimates and their covariances
+#' plot(mod_oe) # plot the predicted and actual responses
 #' 
 #' @export
 oe <- function(x,order=c(1,0,1)){

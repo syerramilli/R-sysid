@@ -11,11 +11,10 @@ armax(x, order = c(0, 1, 1, 0))
 
 \item{order:}{Specification of the orders: the four integer components
 (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B
-+ 1, order of the polynomial,and the input-output delay respectively}
++ 1, order of the polynomial C,and the input-output delay respectively}
 }
 \value{
-An object with classes \code{estARX} and \code{estPoly}, containing
-the following elements:
+An object of class \code{estPoly} containing the following elements:
 
 \tabular{ll}{
    \code{coefficients} \tab an \code{idpoly} object containing the
