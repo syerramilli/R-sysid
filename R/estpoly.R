@@ -211,7 +211,7 @@ arx <- function(x,order=c(0,1,0)){
 #'    + e[k] 
 #' }
 #' The function estimates the coefficients using non-linear least squares 
-#' (Gauss-Newton Method)
+#' (Levenberg-Marquardt Algorithm)
 #' \\
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
@@ -248,7 +248,6 @@ arx <- function(x,order=c(0,1,0)){
 #' @export
 armax <- function(x,order=c(0,1,1,0)){
   require(signal)
-  require(MASS)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
   nb1 <- nb+nk-1 ; n <- max(na,nb1,nc); df <- N - na - nb - nc
@@ -259,7 +258,7 @@ armax <- function(x,order=c(0,1,1,0)){
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
-  tol <- 10^(-3); sumSqRatio <- 1000
+  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 0.1
   eout <- matrix(rep(0,N+2*n))
   
   reg <- function(i) {
@@ -269,14 +268,13 @@ armax <- function(x,order=c(0,1,1,0)){
   
   # Initialize Algorithm
   i = 0
-  theta <- matrix(rnorm(na+nb+nc))
+  theta <- matrix(runif(na+nb+nc,min=-0.5,max=0.5))
   X <- t(sapply(n+1:(N+n),reg))
   Y <- yout[n+1:(N+n),,drop=F]
   e <- Y-X%*%theta
   
   while (sumSqRatio > tol){
     sumsq0 <- sum(e^2)
-    
     # Compute gradient
     eout <- matrix(c(rep(0,n),e[,]))
     X <- t(sapply(n+1:(N+n),reg))
@@ -284,13 +282,15 @@ armax <- function(x,order=c(0,1,1,0)){
     grad <- apply(X,2,filter,filt=filt1)
     
     # Update Parameters
-    theta <- theta + ginv(grad)%*%e
+    H <- 1/N*(t(grad)%*%grad) + lambda*diag(na+nb+nc)
+    theta <- theta + 1/N*solve(H)%*%t(grad)%*%e
     
     # Update residuals
     e <- Y-X%*%theta
     sumsq <- sum(e^2)
     
     sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
+#     print(sumsq);print(sumSqRatio)
     i=i+1
   }
   # print(sumSqRatio)

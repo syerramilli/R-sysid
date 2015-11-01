@@ -41,7 +41,7 @@ SISO ARMAX models are of the form
    + e[k]
 }
 The function estimates the coefficients using non-linear least squares
-(Gauss-Newton Method)
+(Levenberg-Marquardt Algorithm)
 \\
 The data is expected to have no offsets or trends. They can be removed
 using the \code{\link{detrend}} function.
