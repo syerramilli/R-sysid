@@ -66,7 +66,7 @@ print.summary.estPoly <- function(object){
 }
 
 #' @export
-predict.estPoly <- function(model,newData=NULL){
+predict.estPoly <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
@@ -176,15 +176,19 @@ arx <- function(x,order=c(0,1,0)){
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    cbind(-yout[i-1:na,],uout[v])
+    c(-yout[i-1:na,,drop=T],uout[v,,drop=T])
   }
   X <- t(sapply(n+1:(N+n),reg))
   Y <- yout[n+1:(N+n),,drop=F]
   
-  qx <- qr(X); coef <- qr.solve(qx,Y)
-  sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
+  lambda <- 0.1
+  inner <- t(X)%*%X + lambda*diag(dim(X)[2])
+  innerinv <- solve(inner)
+  pinv <- innerinv%*% t(X)
+  coef <- pinv%*%Y
   
-  vcov <- sigma2 * chol2inv(qx$qr)
+  sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
+  vcov <- sigma2 * innerinv
   
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x))
