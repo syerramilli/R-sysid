@@ -204,7 +204,7 @@ arx <- function(x,order=c(0,1,0)){
 #' + 1, order of the polynomial,and the input-output delay respectively
 #' 
 #' @details
-#' SISO ARX models are of the form 
+#' SISO ARMAX models are of the form 
 #' \deqn{
 #'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
 #'    \ldots + b_{nk+nb} u[k-nk-nb] + c_{1} e[k-1] + \ldots c_{nc} e[k-nc]
