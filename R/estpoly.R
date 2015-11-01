@@ -305,3 +305,115 @@ armax <- function(x,order=c(0,1,1,0)){
           df = df,fitted.values=y-e, residuals=e,call=match.call(),
           input=u)
 }
+
+#' Estimate Output-Error Models
+#' 
+#' Fit an output-error model of the specified order given the input-output data 
+#' 
+#' @param x an object of class \code{idframe}
+#' @param order: Specification of the orders: the four integer components 
+#' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
+#' + 1, order of the polynomial,and the input-output delay respectively
+#' 
+#' @details
+#' SISO ARMAX models are of the form 
+#' \deqn{
+#'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
+#'    \ldots + b_{nk+nb} u[k-nk-nb] + c_{1} e[k-1] + \ldots c_{nc} e[k-nc]
+#'    + e[k] 
+#' }
+#' The function estimates the coefficients using non-linear least squares 
+#' (Levenberg-Marquardt Algorithm)
+#' \\
+#' The data is expected to have no offsets or trends. They can be removed 
+#' using the \code{\link{detrend}} function. 
+#' 
+#' @return
+#' An object with classes \code{estARX} and \code{estPoly}, containing 
+#' the following elements:
+#' 
+#' \tabular{ll}{
+#'    \code{coefficients} \tab an \code{idpoly} object containing the 
+#'    fitted coefficients \cr
+#'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+#'    \code{sigma} \tab the standard deviation of the innovations\cr
+#'    \code{df} \tab the residual degrees of freedom \cr
+#'    \code{fitted.values} \tab the predicted response \cr
+#'    \code{residuals} \tab the residuals  \cr
+#'    \code{call} \tab the matched call \cr
+#'    \code{time} \tab the time of the data used \cr
+#'    \code{input} \tab the input data used
+#'  }
+#' 
+#' 
+#' @references
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Sections 14.4.1, 17.5.2, 
+#' 21.6.3
+#' 
+#' @examples
+#' data(armaxsim)
+#' z <- dataSlice(data,end=1533) # training set
+#' mod_armax <- armax(z,c(1,2,1,2))
+#' summary(mod_armax) # obtain estimates and their covariances
+#' plot(mod_armax) # plot the predicted and actual responses
+#' 
+#' @export
+oe <- function(x,order=c(1,0,1)){
+  require(signal)
+  y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
+  nb <- order[1];nf <- order[2]; nk <- order[3];
+  nb1 <- nb+nk-1 ; n <- max(nb1,nf); df <- N - nb - nf
+  
+  if(nf<1) 
+    stop("Not an OE model")
+  
+  leftPadZeros <- function(x,n) c(rep(0,n),x)
+
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    matrix(c(uout[v,],-eout[i-1:nf,]))
+  }
+  
+  # Initialize Algorithm
+  i = 0
+  mod_arx <- arx(x,c(nf,nb,nk)) # fitting ARX model
+  iv <- predict(mod_arx)
+  e <- resid(mod_arx)
+  theta <- c(coef(mod_arx)$B,coef(mod_arx)$A[-1])
+  
+  uout <- apply(u,2,leftPadZeros,n=n)
+  
+  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 0.1
+  
+  while (sumSqRatio > tol){
+    sumsq0 <- sum(e^2)
+    # Compute gradient
+    eout <- apply(iv,2,leftPadZeros,n=n)
+    X <- t(sapply(n+1:N,reg))
+    filt1 <- Arma(b=1,a=c(1,theta[nb+1:nf]))
+    grad <- apply(X,2,filter,filt=filt1)
+    
+    # Update Parameters
+    H <- 1/N*(t(grad)%*%grad) + lambda*diag(nb+nf)
+    theta <- theta + 1/N*solve(H)%*%t(grad)%*%e
+    
+    # Update IVs and residuals
+    iv <- X%*%theta; e <- y-iv
+    sumsq <- sum(e^2)
+    
+    sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
+    #     print(sumsq);print(sumSqRatio)
+    i=i+1
+  }
+  # print(sumSqRatio)
+  sigma2 <- sum(e^2)/df
+  qx <- qr(X);vcov <- sigma2 * chol2inv(qx$qr)
+  
+  model <- idpoly(B = theta[1:nb],F = c(1,theta[nb+1:nf]),
+                  ioDelay = nk,Ts=deltat(x))
+  
+  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+          df = df,fitted.values=y-e, residuals=e,call=match.call(),
+          input=u)
+}
