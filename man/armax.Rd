@@ -47,10 +47,11 @@ The data is expected to have no offsets or trends. They can be removed
 using the \code{\link{detrend}} function.
 }
 \examples{
-data(arxsim)
-model <- armax(data,c(1,2,1,2))
-summary(model) # obtain estimates and their covariances
-plot(model) # plot the predicted and actual responses
+data(armaxsim)
+z <- dataSlice(data,end=1533) # training set
+mod_armax <- armax(z,c(1,2,1,2))
+summary(mod_armax) # obtain estimates and their covariances
+plot(mod_armax) # plot the predicted and actual responses
 }
 \references{
 Arun K. Tangirala (2015), \emph{Principles of System Identification:

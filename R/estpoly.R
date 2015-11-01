@@ -239,10 +239,11 @@ arx <- function(x,order=c(0,1,0)){
 #' Theory and Practice}, CRC Press, Boca Raton. Sections 14.4.1, 21.6.2
 #' 
 #' @examples
-#' data(arxsim)
-#' model <- armax(data,c(1,2,1,2))
-#' summary(model) # obtain estimates and their covariances
-#' plot(model) # plot the predicted and actual responses
+#' data(armaxsim)
+#' z <- dataSlice(data,end=1533) # training set
+#' mod_armax <- armax(z,c(1,2,1,2))
+#' summary(mod_armax) # obtain estimates and their covariances
+#' plot(mod_armax) # plot the predicted and actual responses
 #' 
 #' @export
 armax <- function(x,order=c(0,1,1,0)){
