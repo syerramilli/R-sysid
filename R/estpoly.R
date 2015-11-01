@@ -178,13 +178,45 @@ arx <- function(x,order=c(0,1,0)){
 }
 
 armax <- function(x,order=c(0,1,1,0)){
+  library(signal)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
-  e <- matrix(rep(0,N),ncol=1)
-  na <- order[1];nb <- order[2]-1; nc <- order[3]
-  nb1 <- nb+nk ; n <- max(na,nb1,nc)
+  na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
   
   if(nc<1) 
     stop("Error: Not an ARMAX model")
   
+  padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
+  yout <- apply(y,2,padZeros,n=n)
+  uout <- apply(u,2,padZeros,n=n)
+  tol <- 10^(-3); sumsq <- 10^3; i = 0
+  eout <- matrix(rep(0,N+2*n))
+  
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    matrix(c(-yout[i-1:na,],uout[v,],eout[i-1:nc,]))
+  }
+  
+  while (sumsq > tol){
+    if(i==0){
+      theta <- matrix(rnorm(na+nb+nc)) 
+    }
+    
+    # Generate Residuals from previous params
+    X <- t(sapply(n+1:(N+n),reg))
+    Y <- yout[n+1:(N+n),,drop=F]
+    e <- Y-X%*%theta
+    
+    # Compute gradient
+    eout <- matrix(c(rep(0,n),e[,]))
+    X <- t(sapply(n+1:(N+n),reg))
+    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1):length(theta)]))
+    grad <- apply(X,2,filter,filt=filt1)
+    
+    # Update Parameters
+    
+    
+    i=i+1
+  }
   
 }
