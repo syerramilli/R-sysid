@@ -55,14 +55,14 @@ print.summary.estPoly <- function(object){
   if(object$type=="arx"){
     cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n") 
   } else if(object$type=="armax"){
-    cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n")
+    cat("Discrete-time ARMAX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n")
   }
   cat("Call: ");print(object$call);cat("\n\n")
   
   print(coef(object))
   cat(paste("\nMSE:",format(object$mse,digits=4),
             "\tFPE:",format(object$fpe,digits=4)))
-  cat(paste("\nDoF:",object$df))
+  if(object$type=="arx") cat(paste("\nDoF:",object$df))
 }
 
 #' @export
@@ -186,7 +186,7 @@ arx <- function(x,order=c(0,1,0)){
   
   vcov <- sigma2 * chol2inv(qx$qr)
   
-  model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:(nb+1)],
+  model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x))
   
   estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
@@ -269,12 +269,12 @@ armax <- function(x,order=c(0,1,1,0)){
   
   # Initialize Algorithm
   i = 0
-  theta <- matrix(runif(na+nb+nc,min=-0.2,max=0.2))
+  theta <- matrix(rnorm(na+nb+nc))
   X <- t(sapply(n+1:(N+n),reg))
   Y <- yout[n+1:(N+n),,drop=F]
   e <- Y-X%*%theta
   
-  while ((sumSqRatio > tol) && (i<50)){
+  while (sumSqRatio > tol){
     sumsq0 <- sum(e^2)
     
     # Compute gradient
@@ -293,7 +293,7 @@ armax <- function(x,order=c(0,1,1,0)){
     sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
     i=i+1
   }
-  
+  # print(sumSqRatio)
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
   qx <- qr(X[1:N,]);vcov <- sigma2 * chol2inv(qx$qr)
