@@ -90,7 +90,7 @@ plot.estPoly <- function(model,newdata=NULL){
     time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
   }
-  df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
+  df <- data.frame(Predicted=ypred[,1],Actual=yact[,1],Time=time)
   ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
     geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point()
 }
