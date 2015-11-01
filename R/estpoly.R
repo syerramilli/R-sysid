@@ -183,7 +183,7 @@ armax <- function(x,order=c(0,1,1,0)){
   require(MASS)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc); df <- N - na + nb + nc
   
   if(nc<1) 
     stop("Error: Not an ARMAX model")
@@ -225,7 +225,15 @@ armax <- function(x,order=c(0,1,1,0)){
     sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
     i=i+1
   }
+  
+  e <- e[1:N,]
+  sigma2 <- sum(e^2)/df
+  qx <- qr(X[1:N,]);vcov <- sigma2 * chol2inv(qx$qr)
+  
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
-  return(list(model,sumsq,i))
+  
+  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+          df = df,fitted.values=y-e, residuals=e,call=match.call(),
+          input=u)
 }
