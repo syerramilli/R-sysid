@@ -251,7 +251,7 @@ armax <- function(x,order=c(0,1,1,0)){
   require(MASS)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc); df <- N - na + nb + nc
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc); df <- N - na - nb - nc
   
   if(nc<1) 
     stop("Error: Not an ARMAX model")
