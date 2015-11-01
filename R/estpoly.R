@@ -178,7 +178,8 @@ arx <- function(x,order=c(0,1,0)){
 }
 
 armax <- function(x,order=c(0,1,1,0)){
-  library(signal)
+  require(signal)
+  require(MASS)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
   nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
@@ -197,9 +198,9 @@ armax <- function(x,order=c(0,1,1,0)){
     matrix(c(-yout[i-1:na,],uout[v,],eout[i-1:nc,]))
   }
   
-  while (sumsq > tol){
+  while ((sumsq > tol) && (i<20)){
     if(i==0){
-      theta <- matrix(rnorm(na+nb+nc)) 
+      theta <- matrix(runif(na+nb+nc,min=-0.2,max=0.2)) 
     }
     
     # Generate Residuals from previous params
@@ -210,13 +211,16 @@ armax <- function(x,order=c(0,1,1,0)){
     # Compute gradient
     eout <- matrix(c(rep(0,n),e[,]))
     X <- t(sapply(n+1:(N+n),reg))
-    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1):length(theta)]))
+    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
     grad <- apply(X,2,filter,filt=filt1)
     
     # Update Parameters
+    theta <- theta + ginv(grad)%*%e
     
-    
+    sumsq <- sum(e^2)
     i=i+1
   }
-  
+  model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
+                  C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
+  return(list(model,sumsq,i))
 }
