@@ -374,7 +374,7 @@ armax <- function(x,order=c(0,1,1,0)){
 #' plot(mod_oe) # plot the predicted and actual responses
 #' 
 #' @export
-oe <- function(x,order=c(1,0,1)){
+oe <- function(x,order=c(1,1,0)){
   require(signal)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   nb <- order[1];nf <- order[2]; nk <- order[3];
