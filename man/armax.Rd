@@ -40,9 +40,8 @@ SISO ARMAX models are of the form
    \ldots + b_{nk+nb} u[k-nk-nb] + c_{1} e[k-1] + \ldots c_{nc} e[k-nc]
    + e[k]
 }
-The function estimates the coefficients using linear least squares (with
-no regularization). Future versions may include regularization
-parameters as well
+The function estimates the coefficients using non-linear least squares
+(Gauss-Newton Method)
 \\
 The data is expected to have no offsets or trends. They can be removed
 using the \code{\link{detrend}} function.
