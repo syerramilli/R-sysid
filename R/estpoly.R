@@ -119,7 +119,7 @@ residplot <- function(model,newdata=NULL){
     u <- newdata$input
   }
   
-  acorr <- acf(e,plot = F); ccorr <- ccf(u[,1],e,plot = F)
+  acorr <- acf(e,plot = F); ccorr <- ccf(u[,1],e[,],plot = F)
   par(mfrow=c(2,1),mar=c(3,4,3,2))
   plot(acorr,main="ACF of residuals")
   plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
@@ -299,7 +299,8 @@ armax <- function(x,order=c(0,1,1,0)){
     
     # Update Parameters
     H <- 1/N*(t(grad)%*%grad) + lambda*diag(na+nb+nc)
-    theta <- theta + 1/N*solve(H)%*%t(grad)%*%e
+    Hinv <- solve(H)
+    theta <- theta + 1/N*Hinv%*%t(grad)%*%e
     
     # Update residuals
     e <- Y-X%*%theta
@@ -312,7 +313,7 @@ armax <- function(x,order=c(0,1,1,0)){
   # print(sumSqRatio)
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
-  qx <- qr(X[1:N,]);vcov <- sigma2 * chol2inv(qx$qr)
+  vcov <- sigma2 * Hinv
   
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
@@ -411,7 +412,8 @@ oe <- function(x,order=c(1,1,0)){
     
     # Update Parameters
     H <- 1/N*(t(grad)%*%grad) + lambda*diag(nb+nf)
-    theta <- theta + 1/N*solve(H)%*%t(grad)%*%e
+    Hinv <- solve(H)
+    theta <- theta + 1/N*Hinv%*%t(grad)%*%e
     
     # Update IVs and residuals
     iv <- X%*%theta; e <- y-iv
@@ -423,7 +425,7 @@ oe <- function(x,order=c(1,1,0)){
   }
   # print(sumSqRatio)
   sigma2 <- sum(e^2)/df
-  qx <- qr(X);vcov <- sigma2 * chol2inv(qx$qr)
+  vcov <- sigma2 * Hinv
   
   model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
                   ioDelay = nk,Ts=deltat(x))
