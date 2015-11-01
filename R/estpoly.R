@@ -177,6 +177,7 @@ arx <- function(x,order=c(0,1,0)){
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
 }
 
+#' @export
 armax <- function(x,order=c(0,1,1,0)){
   require(signal)
   require(MASS)
@@ -190,7 +191,7 @@ armax <- function(x,order=c(0,1,1,0)){
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
-  tol <- 10^(-3); sumsq <- 10^3; i = 0
+  tol <- 10^(-3); sumSqRatio <- 1000
   eout <- matrix(rep(0,N+2*n))
   
   reg <- function(i) {
@@ -198,15 +199,15 @@ armax <- function(x,order=c(0,1,1,0)){
     matrix(c(-yout[i-1:na,],uout[v,],eout[i-1:nc,]))
   }
   
-  while ((sumsq > tol) && (i<20)){
-    if(i==0){
-      theta <- matrix(runif(na+nb+nc,min=-0.2,max=0.2)) 
-    }
-    
-    # Generate Residuals from previous params
-    X <- t(sapply(n+1:(N+n),reg))
-    Y <- yout[n+1:(N+n),,drop=F]
-    e <- Y-X%*%theta
+  # Initialize Algorithm
+  i = 0
+  theta <- matrix(runif(na+nb+nc,min=-0.2,max=0.2))
+  X <- t(sapply(n+1:(N+n),reg))
+  Y <- yout[n+1:(N+n),,drop=F]
+  e <- Y-X%*%theta
+  
+  while ((sumSqRatio > tol) && (i<50)){
+    sumsq0 <- sum(e^2)
     
     # Compute gradient
     eout <- matrix(c(rep(0,n),e[,]))
@@ -217,7 +218,11 @@ armax <- function(x,order=c(0,1,1,0)){
     # Update Parameters
     theta <- theta + ginv(grad)%*%e
     
+    # Update residuals
+    e <- Y-X%*%theta
     sumsq <- sum(e^2)
+    
+    sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
     i=i+1
   }
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
