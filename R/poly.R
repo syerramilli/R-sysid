@@ -140,7 +140,7 @@ print_oe <- function(obj){
     if(i-1==0){
       cat(obj$F1[i])
     } else{
-      if(obj$A[i]>0) cat(" + ") else cat("- ")
+      if(obj$F1[i]>0) cat(" + ") else cat("- ")
       
       if(!(abs(obj$F1[i])==1)) cat(abs(obj$F1[i]))
       cat("q^{-",i-1,"}",sep="")
