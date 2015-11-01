@@ -11,35 +11,52 @@ estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
 #' @export
 summary.estPoly <- function(object)
 {
-  coefs <- c(coef(object)$A[-1],coef(object)$B)
+  model <- coef(object)
+  if(model$type=="arx"||model$type=="armax"){
+    coefs <- c(model$A[-1],model$B)
+    na <- length(model$A) - 1; nk <- model$ioDelay; 
+    nb <- length(model$B)
+    if(model$type=="armax"){
+      coefs <- c(coefs,model$C[-1])
+      nc <- length(model$C)-1
+    } 
+  }
+  
   se <- sqrt(diag(object$vcov))
   tval <- coefs / se
   TAB <- cbind(Estimate = coefs,
                StdErr = se,
                t.value = tval,
                p.value = 2*pt(-abs(tval), df=object$df))
-  na <- length(coef(object)$A) - 1; nk <- coef(object)$ioDelay; 
-  nb <- length(coef(object)$B) - nk
   
   rownames(TAB) <- rep("a",nrow(TAB))
   for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
-  for(j in (na+1):nrow(TAB)) {
+  for(j in (na+1:nb)) {
     rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
   }
-  ek <- as.matrix(resid(model))
+  if(model$type=="armax"){
+    for(j in (na+nb+1:nc)) {
+      rownames(TAB)[j] <- paste("c",j-na-nb,sep="")
+    }
+  }
+  ek <- as.matrix(resid(object))
   N <- nrow(ek); np <- nrow(TAB)
   mse <- t(ek)%*%ek/N
   fpe <- det(mse)*(1+np/N)/(1-np/N)
   
   res <- list(call=object$call,coefficients=TAB,mse = mse,
-              fpe=fpe,df=object$df)
+              fpe=fpe,df=object$df,type=model$type)
   class(res) <- "summary.estPoly"
   res
 }
 
 #' @export
 print.summary.estPoly <- function(object){
-  cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n")
+  if(object$type=="arx"){
+    cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n") 
+  } else if(object$type=="armax"){
+    cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n")
+  }
   cat("Call: ");print(object$call);cat("\n\n")
   
   print(coef(object))
