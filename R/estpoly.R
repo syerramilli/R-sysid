@@ -20,6 +20,10 @@ summary.estPoly <- function(object)
       coefs <- c(coefs,model$C[-1])
       nc <- length(model$C)-1
     } 
+  } else if(model$type=="oe"){
+    coefs <- c(model$B,model$F1[-1])
+    nf <- length(model$F1) - 1; nk <- model$ioDelay; 
+    nb <- length(model$B)
   }
   
   se <- sqrt(diag(object$vcov))
@@ -30,15 +34,25 @@ summary.estPoly <- function(object)
                p.value = 2*pt(-abs(tval), df=object$df))
   
   rownames(TAB) <- rep("a",nrow(TAB))
-  for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
-  for(j in (na+1:nb)) {
-    rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
-  }
-  if(model$type=="armax"){
-    for(j in (na+nb+1:nc)) {
-      rownames(TAB)[j] <- paste("c",j-na-nb,sep="")
+  
+  if(model$type=="arx"||model$type=="armax"){
+    for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
+    for(j in (na+1:nb)) {
+      rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
+    }
+    if(model$type=="armax"){
+      for(j in (na+nb+1:nc)) {
+        rownames(TAB)[j] <- paste("c",j-na-nb,sep="")
+      }
+    }
+  } else if(model$type=="oe"||model$type=="bj"){
+    
+    for(i in 1:nb) rownames(TAB)[i] <- paste("b",i-1+nk,sep="")
+    for(j in (nb+1:nf)) {
+      rownames(TAB)[j] <- paste("f",j-nb,sep="")
     }
   }
+  
   ek <- as.matrix(resid(object))
   N <- nrow(ek); np <- nrow(TAB)
   mse <- t(ek)%*%ek/N
@@ -382,10 +396,10 @@ oe <- function(x,order=c(1,0,1)){
   # Initialize Algorithm
   i = 0
   mod_arx <- arx(x,c(nf,nb,nk)) # fitting ARX model
-  iv <- predict(mod_arx)
+  iv <- matrix(predict(mod_arx))
   e <- resid(mod_arx)
   theta <- c(coef(mod_arx)$B,coef(mod_arx)$A[-1])
-  
+
   uout <- apply(u,2,leftPadZeros,n=n)
   
   tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 0.1
