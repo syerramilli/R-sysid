@@ -194,6 +194,57 @@ arx <- function(x,order=c(0,1,0)){
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
 }
 
+#' Estimate ARMAX Models
+#' 
+#' Fit an ARMAX model of the specified order given the input-output data 
+#' 
+#' @param x an object of class \code{idframe}
+#' @param order: Specification of the orders: the four integer components 
+#' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
+#' + 1, order of the polynomial,and the input-output delay respectively
+#' 
+#' @details
+#' SISO ARX models are of the form 
+#' \deqn{
+#'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
+#'    \ldots + b_{nk+nb} u[k-nk-nb] + c_{1} e[k-1] + \ldots c_{nc} e[k-nc]
+#'    + e[k] 
+#' }
+#' The function estimates the coefficients using linear least squares (with
+#' no regularization). Future versions may include regularization 
+#' parameters as well
+#' \\
+#' The data is expected to have no offsets or trends. They can be removed 
+#' using the \code{\link{detrend}} function. 
+#' 
+#' @return
+#' An object with classes \code{estARX} and \code{estPoly}, containing 
+#' the following elements:
+#' 
+#' \tabular{ll}{
+#'    \code{coefficients} \tab an \code{idpoly} object containing the 
+#'    fitted coefficients \cr
+#'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+#'    \code{sigma} \tab the standard deviation of the innovations\cr
+#'    \code{df} \tab the residual degrees of freedom \cr
+#'    \code{fitted.values} \tab the predicted response \cr
+#'    \code{residuals} \tab the residuals  \cr
+#'    \code{call} \tab the matched call \cr
+#'    \code{time} \tab the time of the data used \cr
+#'    \code{input} \tab the input data used
+#'  }
+#' 
+#' 
+#' @references
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Sections 14.4.1, 21.6.2
+#' 
+#' @examples
+#' data(arxsim)
+#' model <- armax(data,c(1,2,1,2))
+#' summary(model) # obtain estimates and their covariances
+#' plot(model) # plot the predicted and actual responses
+#' 
 #' @export
 armax <- function(x,order=c(0,1,1,0)){
   require(signal)
