@@ -29,6 +29,8 @@ print.idpoly <- function(x){
     print_arx(x)
   } else if(x$type=="armax"){
     print_armax(x)
+  } else if(x$type=="oe"){
+    print_oe(x)
   }
 }
 
@@ -113,3 +115,36 @@ print_armax <- function(obj){
   }
 }
 
+print_oe <- function(obj){
+  cat("Discrete-time OE model: y[k] = B(q^{-1})/F(q^{-1}) u[k] + e[k] \n\n")
+  cat("B(q^{-1}) = ")
+  for(i in seq_along(obj$B)){
+    if(i+obj$ioDelay-1==0){
+      cat(obj$B[i])
+    } else{
+      
+      if(!((obj$ioDelay!=0) && (i==1))){
+        if(obj$B[i]>0) cat(" + ") else cat("- ")
+      } else{
+        if(obj$B[i]<0) cat("-")
+      }
+      
+      if(!(abs(obj$B[i])==1)) cat(abs(obj$B[i]))
+      cat("q^{-",i+obj$ioDelay-1,"}",sep="")
+    }
+    cat("\t")
+  }
+  cat("\n")
+  cat("F(q^{-1}) = ")
+  for(i in seq_along(obj$F1)){
+    if(i-1==0){
+      cat(obj$F1[i])
+    } else{
+      if(obj$A[i]>0) cat(" + ") else cat("- ")
+      
+      if(!(abs(obj$F1[i])==1)) cat(abs(obj$F1[i]))
+      cat("q^{-",i-1,"}",sep="")
+    }
+    cat("\t")
+  }
+}

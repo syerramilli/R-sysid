@@ -410,7 +410,7 @@ oe <- function(x,order=c(1,0,1)){
   sigma2 <- sum(e^2)/df
   qx <- qr(X);vcov <- sigma2 * chol2inv(qx$qr)
   
-  model <- idpoly(B = theta[1:nb],F = c(1,theta[nb+1:nf]),
+  model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
                   ioDelay = nk,Ts=deltat(x))
   
   estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
