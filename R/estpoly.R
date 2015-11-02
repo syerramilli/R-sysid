@@ -72,7 +72,7 @@ print.summary.estPoly <- function(object){
   print(coef(object))
   cat(paste("\nMSE:",format(object$mse,digits=4),
             "\tFPE:",format(object$fpe,digits=4)))
-  if(object$type=="arx") cat(paste("\nDoF:",object$df))
+  if(object$model$type=="arx") cat(paste("\nDoF:",object$df))
 }
 
 #' @export
