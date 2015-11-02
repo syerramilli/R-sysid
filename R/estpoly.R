@@ -277,7 +277,7 @@ armax <- function(x,order=c(0,1,1,0)){
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
-  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 0.1
+  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 1
   eout <- matrix(rep(0,N+2*n))
   
   reg <- function(i) {
@@ -403,7 +403,7 @@ oe <- function(x,order=c(1,1,0)){
 
   uout <- apply(u,2,leftPadZeros,n=n)
   
-  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 0.1
+  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 1
   
   while (sumSqRatio > tol){
     sumsq0 <- sum(e^2)
