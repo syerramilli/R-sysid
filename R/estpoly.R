@@ -119,7 +119,7 @@ residplot <- function(model,newdata=NULL){
     u <- newdata$input
   }
   
-  acorr <- acf(e,plot = F); ccorr <- ccf(u[,1],e[,],plot = F)
+  acorr <- acf(e,plot = F); ccorr <- ccf(u[,1],e,plot = F)
   par(mfrow=c(2,1),mar=c(3,4,3,2))
   plot(acorr,main="ACF of residuals")
   plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
@@ -431,6 +431,6 @@ oe <- function(x,order=c(1,1,0)){
                   ioDelay = nk,Ts=deltat(x))
   
   estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
-          df = df,fitted.values=y-e, residuals=e,call=match.call(),
+          df = df,fitted.values=y-e, residuals=e[,],call=match.call(),
           input=u)
 }
