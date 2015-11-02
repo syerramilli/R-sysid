@@ -84,7 +84,14 @@ predict.estPoly <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
-    return(sim(coef(model),newdata$input))
+    mod <- coef(model)
+    y <- outputData(newdata); u <- inputData(newdata)
+    if(mod$type=="arx"){
+      f1 <- Ma(c(rep(0,mod$ioDelay),mod$B))
+      f2 <- Ma(c(0,-mod$A[-1]))
+      ypred <- filter(f1,u) + filter(f2,y)
+    }
+    return(ypred)
   }
 }
 
@@ -99,7 +106,7 @@ plot.estPoly <- function(model,newdata=NULL){
     titstr <- "Predictions of Model on Training Set"
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
-    ypred <- sim(coef(model),inputData(newdata))
+    ypred <- predict(model,newdata)
     yact <- outputData(newdata)[,1]
     time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
