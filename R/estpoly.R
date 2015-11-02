@@ -59,18 +59,14 @@ summary.estPoly <- function(object)
   fpe <- det(mse)*(1+np/N)/(1-np/N)
   
   res <- list(call=object$call,coefficients=TAB,mse = mse,
-              fpe=fpe,df=object$df,type=model$type)
+              fpe=fpe,df=object$df,model=model)
   class(res) <- "summary.estPoly"
   res
 }
 
 #' @export
 print.summary.estPoly <- function(object){
-  if(object$type=="arx"){
-    cat("Discrete-time ARX model: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n") 
-  } else if(object$type=="armax"){
-    cat("Discrete-time ARMAX model: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n")
-  }
+  print(object$model)
   cat("Call: ");print(object$call);cat("\n\n")
   
   print(coef(object))
