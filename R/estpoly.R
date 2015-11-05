@@ -9,6 +9,11 @@ estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
 }
 
 #' @export
+print.estPoly <- function(est,...){
+  print(summary(est),...)
+}
+
+#' @export
 summary.estPoly <- function(object)
 {
   model <- coef(object)
@@ -65,7 +70,7 @@ summary.estPoly <- function(object)
 }
 
 #' @export
-print.summary.estPoly <- function(object){
+print.summary.estPoly <- function(object,...){
   print(object$model)
   cat("Call: ");print(object$call);cat("\n\n")
   
