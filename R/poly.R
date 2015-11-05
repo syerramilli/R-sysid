@@ -1,3 +1,33 @@
+#' Polynomial model with identifiable parameters
+#' 
+#' Creates a polynomial model with identifiable coefficients
+#' 
+#' @param A Autoregressive coefficients
+#' @param B,F1 Coefficients of the numerator and denominator respectively
+#' of the deterministic model between the input and output 
+#' @param C,D Coefficients of the numerator and denominator respectively
+#' of the stochastic model 
+#' @param ioDelay the delay in the input-output channel
+#' @param Ts sampling interval
+#' 
+#' @details
+#' Discrete-time polynomials are of the form
+#' \deqn{
+#'  A(q^{-1}) y[k] = \frac{B(q^{-1})}{F1(q^{-1})} u[k] + 
+#'  \frac{C(q^{-1})}{D(q^{-1})} e[k] 
+#' }
+#' 
+#' @examples
+#' # define output-error model
+#' mod_oe <- idpoly(B=c(0.6,-0.2),F1=c(1,-0.5),ioDelay = 2,Ts=0.1)
+#' 
+#' # define box-jenkins model
+#' B <- c(0.6,-0.2)
+#' C <- c(1,-0.3)
+#' D <- c(1,1.5,0.7)
+#' F1 <- c(1,-0.5)
+#' mod_bj <- idpoly(1,B,C,D,F1,ioDelay=1)
+#' 
 #' @export
 idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1){
   out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts)
