@@ -71,10 +71,10 @@ summary.estPoly <- function(object)
 
 #' @export
 print.summary.estPoly <- function(object,...){
-  print(object$model)
+  print(object$model,...)
   cat("Call: ");print(object$call);cat("\n\n")
   
-  print(coef(object))
+  print(coef(object),...)
   cat(paste("\nMSE:",format(object$mse,digits=4),
             "\tFPE:",format(object$fpe,digits=4)))
   if(object$model$type=="arx") cat(paste("\nDoF:",object$df))

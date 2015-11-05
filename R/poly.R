@@ -54,7 +54,7 @@ checkUnity <- function(x){
 }
 
 #' @export
-print.idpoly <- function(mod){
+print.idpoly <- function(mod,...){
   
   if(mod$type=="arx"){
     cat("Discrete-time ARX mod: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n\n")
