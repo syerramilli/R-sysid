@@ -19,7 +19,7 @@
 a vector containing the output
 }
 \description{
-Simulate the response of a system system governed by a polynomial model
+Simulate the response of a system governed by a polynomial model
 , given the input
 }
 \details{

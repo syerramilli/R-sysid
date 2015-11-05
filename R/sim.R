@@ -1,3 +1,22 @@
+#' Simulate dynamic system
+#' 
+#' Simulate the response of a system given the input
+#' 
+#' @param model the system model to simulate
+#' @param input a vector/matrix containing the input
+#' @param sigma standard deviation of the innovations (Default= \code{0})
+#' @param seed integer indicating the seed value of the random number generator
+#' 
+#' @return
+#' a vector containing the output
+#' 
+#' @details
+#' The routine is currently built only for SISO systems. Future Versions will
+#' include support for MIMO systems. Current support 
+#' 
+#' @seealso 
+#' \code{\link{sim.idpoly}} for simulating polynomial models
+#' 
 #' @export
 sim <- function(model,input,sigma=0,seed=NULL) UseMethod("sim")
 
@@ -8,7 +27,7 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
 
 #' Simulate from a Polynomial Model
 #' 
-#' Simulate the response of a system system governed by a polynomial model
+#' Simulate the response of a system governed by a polynomial model
 #' , given the input
 #' 
 #' @param model an object of class \code{idpoly} containing the coefficients
