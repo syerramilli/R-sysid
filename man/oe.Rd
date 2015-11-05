@@ -4,7 +4,7 @@
 \alias{oe}
 \title{Estimate Output-Error Models}
 \usage{
-oe(x, order = c(1, 0, 1))
+oe(x, order = c(1, 1, 0))
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
