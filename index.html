@@ -52,7 +52,7 @@ install(&lt;path_to_extracted_folder&gt;/sysid)</pre>
         	<div id="left-col" class="col-md-8 col-sm-12">
             	<div class="col-md-12 col-sm-12">
                 	<h4>Introduction: </h4>
-                	<p></p>
+                	<p>The <strong>sysid</strong> package provides functions for constructing mathematical models of dynamic systems from measured input-output data. The package contains functions for data visualization, data preprocessing, parametric and non-paramteric model estimation, and model predictions and validation.</p>
                 </div>
                 
                 <div class="col-md-12 col-sm-12">
@@ -66,19 +66,40 @@ install(&lt;path_to_extracted_folder&gt;/sysid)</pre>
                     <h4>Key Features: </h4>
                     <ol>
                         <li><strong>Data Acquisition: </strong>
+                        	<p>Data acquisition from mutliple sources - R workspace, table-formatted files, Excel spreadsheets and LibreOffice Documents </p>
                         </li>
-                        
-                        <li><strong>Input Generation: </strong></li>
-                        <li><strong>Output Simulation:</strong> </li>
-                        <li><strong>Data Visualization and Preprocessing: </strong></li>
-                        <li><strong>Non-parametric Estimation: </strong></li>
-                        <li><strong>Parametric Estimation: </strong></li>
-                        <li><strong>Model Validation: </strong></li>
+                        <li><strong>Output Simulation:</strong> 
+                        	<p>Generic <code>sim</code> to simulate outputs of Autoregressive (ARX and ARMAX), Output Error and Box Jenkins models</p>
+                        </li>
+                        <li><strong>Data Visualization and Preprocessing: </strong>
+                        	<ul>
+                            	<li>Detrending and resampling of data</li>
+                                <li>Imputing Missing Data using linear approximation</li>
+                            </ul>
+                        </li>
+                        <li><strong>Non-parametric Estimation: </strong>
+                        	<ul>
+                            	<li>Estimating impulse and step response from data</li>
+                                <li>Two routines (<code>spa</code> and <code>etfe</code>) for estimating the frequency response function.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Parametric Estimation:</strong>
+                        	<p> Estimation of Autoregressive (ARX and ARMAX), Output Error and Box Jenkins models for SISO systems using prediction error minimization</p>
+                        </li>
+                        <li><strong>Model Validation: </strong>
+                        	<p>Model Validation using model predictions on the original data, new data and residual plots.</p>
+                        </li>
                     </ol>
                 </div>
                 
                 <div class="col-md-12 col-sm-12">
                 	<h4>Features to be added in later versions: </h4>
+                    <ol>
+                    	<li>Estimation of transfer function and state space models</li>
+                    	<li>Outlier Detection and Handling</li>
+                        <li>Generation routine for common input signal types - Random Gaussian, Random Binary, Psuedo-random Binary and Multi-sine</li>
+                        <li>Support for constrained modelling - options for fixed and free parameters</li>
+                    </ol>
                 </div>  
                 
             </div>
