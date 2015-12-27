@@ -1,20 +1,20 @@
 #' @export
-estPoly <- function(coefficients,vcov,sigma,df,fitted.values,
+estpoly <- function(coefficients,vcov,sigma,df,fitted.values,
                     residuals,call,input){
   out <- list(coefficients= coefficients,vcov= vcov,sigma = sigma,
               df= df,fitted.values=fitted.values, 
               residuals= residuals,call= call,input=input)
-  class(out) <- "estPoly"
+  class(out) <- "estpoly"
   out
 }
 
 #' @export
-print.estPoly <- function(est,...){
+print.estpoly <- function(est,...){
   print(summary(est),...)
 }
 
 #' @export
-summary.estPoly <- function(object)
+summary.estpoly <- function(object)
 {
   model <- coef(object)
   if(model$type=="arx"||model$type=="armax"){
@@ -65,12 +65,12 @@ summary.estPoly <- function(object)
   
   res <- list(call=object$call,coefficients=TAB,mse = mse,
               fpe=fpe,df=object$df,model=model)
-  class(res) <- "summary.estPoly"
+  class(res) <- "summary.estpoly"
   res
 }
 
 #' @export
-print.summary.estPoly <- function(object,...){
+print.summary.estpoly <- function(object,...){
   print(object$model,...)
   cat("Call: ");print(object$call);cat("\n\n")
   
@@ -81,7 +81,7 @@ print.summary.estPoly <- function(object,...){
 }
 
 #' @export
-predict.estPoly <- function(model,newdata=NULL){
+predict.estpoly <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
@@ -97,7 +97,7 @@ predict.estPoly <- function(model,newdata=NULL){
 }
 
 #' @export
-plot.estPoly <- function(model,newdata=NULL){
+plot.estpoly <- function(model,newdata=NULL){
   require(ggplot2)
   
   if(is.null(newdata)){
@@ -156,7 +156,7 @@ residplot <- function(model,newdata=NULL){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object of class \code{estPoly} containing the following elements:
+#' An object of class \code{estpoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -214,7 +214,7 @@ arx <- function(x,order=c(0,1,0)){
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x))
   
-  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+  estpoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
               df = df,fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
 }
@@ -242,7 +242,7 @@ arx <- function(x,order=c(0,1,0)){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object of class \code{estPoly} containing the following elements:
+#' An object of class \code{estpoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -343,7 +343,7 @@ armax <- function(x,order=c(0,1,1,0)){
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
   
-  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+  estpoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
           df = df,fitted.values=y-e, residuals=e,call=match.call(),
           input=u)
 }
@@ -371,7 +371,7 @@ armax <- function(x,order=c(0,1,1,0)){
 #' using the \code{\link{detrend}} function. 
 #' 
 #' @return
-#' An object of class \code{estPoly} containing the following elements:
+#' An object of class \code{estpoly} containing the following elements:
 #' 
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
@@ -455,7 +455,7 @@ oe <- function(x,order=c(1,1,0)){
   model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
                   ioDelay = nk,Ts=deltat(x))
   
-  estPoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
+  estpoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
           df = df,fitted.values=y-e, residuals=e[,],call=match.call(),
           input=u)
 }
