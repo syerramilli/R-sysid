@@ -1,18 +1,46 @@
+armaxGrad <- function(theta,e,dots){
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]]; N <- dots[[4]]
+  na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
+  
+  if(is.null(e)){
+    eout <- matrix(rep(0,N+2*n))
+  } else{
+    eout <- matrix(c(rep(0,n),e[,]))
+  }
+  
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    matrix(c(-y[i-1:na,],u[v,],eout[i-1:nc,]))
+  }
+  
+  X <- t(sapply(n+1:(N+n),reg))
+  Y <- y[n+1:(N+n),,drop=F]
+  l <- list(X=X,Y=Y)
+  
+  if(!is.null(e)){
+    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
+    grad <- apply(X,2,filter,filt=filt1) 
+    l$grad <- grad
+  }
+  
+  return(l)
+}
+
 # Implementation of the Levenberg Marquardt Algorithm
-levbmqdt <- function(y,u,n,reg,theta0,opt=optimOptions()){
+levbmqdt <- function(...,obj,theta0,N,opt=optimOptions()){
+  dots <- list(...)
   
   # Optimization Parameters
   tol <- opt$tol; maxIter <- opt$maxIter
   d <- opt$adv$LMinit; mu <- opt$adv$LMstep
   
-  N <- dim(y,1); df <- N - length(theta0)
+  df <- N - dim(theta0)[1]
   
   # Initialize Algorithm
   i <- 0
-  eout <- matrix(rep(0,N+2*n))
-  X <- t(sapply(n+1:(N+n),reg,y,u,e))
-  Y <- yout[n+1:(N+n),,drop=F]
-  e <- Y-X%*%theta0
+  l <- obj(theta=theta0,e=NULL,dots)
+  e <- l$Y-l$X%*%theta0
   sumsq0 <- sum(e^2)
   # parameter indicating whether to update gradient in the iteration
   update <- 1 
@@ -24,39 +52,35 @@ levbmqdt <- function(y,u,n,reg,theta0,opt=optimOptions()){
     if(update ==1){
       countObj <- countObj+1
       # Update gradient
-      eout <- matrix(c(rep(0,n),e[,]))
-      X <- t(sapply(n+1:(N+n),reg,y,u,e))
-      filt1 <- Arma(b=1,a=c(1,theta0[(na+nb+1:nc)]))
-      grad <- apply(X,2,filter,filt=filt1) 
+      l <- obj(theta0,e,dots)
     }
     
     # Update Parameters
-    H <- 1/N*(t(grad)%*%grad) + d*diag(na+nb+nc)
+    H <- 1/N*(t(l$grad)%*%l$grad) + d*diag(dim(theta0)[1])
     Hinv <- solve(H)
-    theta <- theta0 + 1/N*Hinv%*%t(grad)%*%e
+    theta <- theta0 + 1/N*Hinv%*%t(l$grad)%*%e
     
     # Update residuals
-    e <- Y-X%*%theta
+    e <- l$Y-l$X%*%theta
     sumsq <- sum(e^2)
+    sumSqRatio <- (sumsq0-sumsq)/sumsq0*100
     
     # If sum square error with the updated parameters is less than the 
     # previous one, the updated parameters become the current parameters
     # and the damping coefficient is reduced by a factor of mu
-    if(sumsq<sumsq0){
+    if(sumSqRatio > 0){
       d <- d/mu
       theta0 <- theta
       sumsq0 <- sumsq
       update <- 1
     } else{ # increase damping coefficient by a factor of mu
-      d <- d*v
+      d <- d*mu
       update <- 0
     }
     
-    sumSqRatio <- abs(sumsq0-sumsq)/sumsq0*100
-    #     print(sumsq);print(sumSqRatio)
-    
-    if(sumSqRatio < tol || i > maxIter)
+    if((sumSqRatio < tol) || (i == maxIter)){
       break
+    }
   }
   
   if(sumSqRatio < tol){
@@ -74,7 +98,12 @@ levbmqdt <- function(y,u,n,reg,theta0,opt=optimOptions()){
 }
 
 #' @export
-optimOptions <- function(tol=0.01,maxIter=50,LMinit=0.1,LMstep=2){
+optimOptions <- function(tol=0.01,maxIter=20,LMinit=10,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
+}
+
+#' @export
+getcov <- function(sys){
+  sys$stats$vcov
 }

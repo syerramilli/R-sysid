@@ -14,7 +14,7 @@ armax(x, order = c(0, 1, 1, 0))
 + 1, order of the polynomial C,and the input-output delay respectively}
 }
 \value{
-An object of class \code{estPoly} containing the following elements:
+An object of class \code{estpoly} containing the following elements:
 
 \tabular{ll}{
    \code{coefficients} \tab an \code{idpoly} object containing the
