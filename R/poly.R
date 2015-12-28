@@ -54,7 +54,7 @@ checkUnity <- function(x){
 }
 
 #' @export
-print.idpoly <- function(mod,...){
+print.idpoly <- function(mod,se=NULL,...){
   
   if(mod$type=="arx"){
     cat("Discrete-time ARX mod: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n\n")
@@ -68,6 +68,14 @@ print.idpoly <- function(mod,...){
     cat("Discrete-time Polynomial mod: A(q^{-1}) y[k] = B(q^{-1})/F(q^{-1}) u[k] + C(q^{-1})/D(q^{-1}) e[k] \n\n")
   }
   
+  # Printing Standard error sequence
+  j=1
+  print_se <- function(se){
+    if(!is.null(se)){
+      cat(" (+/- ",se[j],") ",sep = "")
+      j <<- j+1
+    }
+  }
   
   if(length(mod$A)>1){
     cat("A(q^{-1}) = ")
@@ -78,6 +86,7 @@ print.idpoly <- function(mod,...){
         if(mod$A[i]>0) cat(" + ") else cat("- ")
         
         if(!(abs(mod$A[i])==1)) cat(abs(mod$A[i]))
+        print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
       cat("\t")
@@ -98,6 +107,7 @@ print.idpoly <- function(mod,...){
       }
       
       if(!(abs(mod$B[i])==1)) cat(abs(mod$B[i]))
+      print_se(se)
       cat("q^{-",i+mod$ioDelay-1,"}",sep="")
     }
     cat("\t")
@@ -113,6 +123,7 @@ print.idpoly <- function(mod,...){
         if(mod$C[i]>0) cat(" + ") else cat("- ")
         
         if(!(abs(mod$C[i])==1)) cat(abs(mod$C[i]))
+        print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
       cat("\t")
@@ -129,6 +140,7 @@ print.idpoly <- function(mod,...){
         if(mod$D[i]>0) cat(" + ") else cat("- ")
         
         if(!(abs(mod$D[i])==1)) cat(abs(mod$D[i]))
+        print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
       cat("\t")
@@ -145,6 +157,7 @@ print.idpoly <- function(mod,...){
         if(mod$F1[i]>0) cat(" + ") else cat("- ")
         
         if(!(abs(mod$F1[i])==1)) cat(abs(mod$F1[i]))
+        print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
       cat("\t")
