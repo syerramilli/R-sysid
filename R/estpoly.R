@@ -1,9 +1,9 @@
 #' @export
 estpoly <- function(model,fitted.values,residuals,options=NULL,
                     call,stats,termination=NULL,datainfo){
-  out <- list(model=model,fitted.values=fitted.values,residuals=residuals,
-              datainfo=datainfo,call=call,stats=stats,options=options,
-              termination=termination)
+  out <- list(model=model,fitted.values=fitted.values,
+              residuals=residuals,input=input,call=call,
+              stats=stats,options=options,termination=termination)
   class(out) <- "estpoly"
   out
 }
@@ -33,47 +33,23 @@ summary.estpoly <- function(object)
   }
   
   se <- sqrt(diag(getcov(object)))
-  
-  rownames(TAB) <- rep("a",nrow(TAB))
-  
-  if(model$type=="arx"||model$type=="armax"){
-    for(i in 1:na) rownames(TAB)[i] <- paste("a",i,sep="")
-    for(j in (na+1:nb)) {
-      rownames(TAB)[j] <- paste("b",j-na-1+nk,sep="")
-    }
-    if(model$type=="armax"){
-      for(j in (na+nb+1:nc)) {
-        rownames(TAB)[j] <- paste("c",j-na-nb,sep="")
-      }
-    }
-  } else if(model$type=="oe"||model$type=="bj"){
-    
-    for(i in 1:nb) rownames(TAB)[i] <- paste("b",i-1+nk,sep="")
-    for(j in (nb+1:nf)) {
-      rownames(TAB)[j] <- paste("f",j-nb,sep="")
-    }
-  }
+  params <- data.frame(Estimated=coefs,se=se)
   
   ek <- as.matrix(resid(object))
   N <- nrow(ek); np <- nrow(TAB)
   mse <- t(ek)%*%ek/N
   fpe <- det(mse)*(1+np/N)/(1-np/N)
   
-  res <- list(call=object$call,coefficients=TAB,mse = mse,
-              fpe=fpe,df=object$df,model=model)
+  report <- list(fit=list(N=N,mse=mse,fpe=fpe),params=params)
+  res <- list(model=model,report=report)
   class(res) <- "summary.estpoly"
   res
 }
 
 #' @export
 print.summary.estpoly <- function(object,...){
-  print(object$model,...)
-  cat("Call: ");print(object$call);cat("\n\n")
-  
-  print(coef(object),...)
-  cat(paste("\nMSE:",format(object$mse,digits=4),
-            "\tFPE:",format(object$fpe,digits=4)))
-  if(object$model$type=="arx") cat(paste("\nDoF:",object$df))
+  print(object$model,se=object$report$params[,2],...)
+  print(object$report$fit,...)
 }
 
 #' @export
