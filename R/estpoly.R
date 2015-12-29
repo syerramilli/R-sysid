@@ -54,6 +54,7 @@ print.summary.estpoly <- function(object,...){
 
 #' @export
 predict.estpoly <- function(model,newdata=NULL){
+  require(signal)
   if(is.null(newdata)){
     return(fitted(model))
   } else{
@@ -62,7 +63,7 @@ predict.estpoly <- function(model,newdata=NULL){
     if(mod$type=="arx"){
       f1 <- Ma(c(rep(0,mod$ioDelay),mod$B))
       f2 <- Ma(c(0,-mod$A[-1]))
-      ypred <- filter(f1,u) + filter(f2,y)
+      ypred <- signal::filter(f1,u) + signal::filter(f2,y)
     }
     return(ypred)
   }
@@ -84,7 +85,7 @@ plot.estpoly <- function(model,newdata=NULL){
     time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
   }
-  df <- data.frame(Predicted=ypred[,1],Actual=yact[,1],Time=time)
+  df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
   ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
     geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point()
 }
@@ -156,7 +157,7 @@ residplot <- function(model,newdata=NULL){
 #' @examples
 #' data(arxsim)
 #' model <- arx(data,c(2,1,1))
-#' summary(model) # obtain estimates and their covariances
+#' model
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
