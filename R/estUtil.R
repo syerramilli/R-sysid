@@ -97,8 +97,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   vcov <- sigma2 * Hinv/sqrt(N)
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
-       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj,
-                        damping=d,sumSqRatio=sumSqRatio))
+       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
 }
 
 #' @export

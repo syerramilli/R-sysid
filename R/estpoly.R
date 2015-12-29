@@ -235,7 +235,12 @@ arx <- function(x,order=c(0,1,0)){
 #'    \code{options} \tab Option set used for estimation. If no 
 #'    custom options were configured, this is a set of default options. \cr
 #'    \code{termination} \tab Termination conditions for the iterative
-#'     search used for prediction error minimization.  
+#'     search used for prediction error minimization.
+#'    \tabular{ll}{
+#'      \code{WhyStop} \tab Reason for termination
+#'      \code{iter} \tab Number of Iterations
+#'      \code{iter} \tab Number of Function Evaluations 
+#'    }  
 #'  }
 #' 
 #' 
