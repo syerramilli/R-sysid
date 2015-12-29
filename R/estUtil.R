@@ -100,6 +100,19 @@ levbmqdt <- function(...,obj,theta0,N,opt){
        termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
 }
 
+#' Create optimization options
+#' 
+#' Specify optimization options that are to be passed to the 
+#' numerical estimation routines
+#' 
+#' @param tol Minimum ratio of the improvement to the current loss 
+#' function. Iterations stop if this ratio goes below the tolerance
+#' limit (Default: \code{1e-5})
+#' @param maxIter Maximum number of iterations to be performed
+#' @param LMinit Starting value of search-direction length 
+#' in the Levenberg-Marquardt method.
+#' @param LMstep Size of the Levenberg-Marquardt step
+#' 
 #' @export
 optimOptions <- function(tol=1e-5,maxIter=20,LMinit=2,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
