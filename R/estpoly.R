@@ -131,16 +131,18 @@ residplot <- function(model,newdata=NULL){
 #' An object of class \code{estpoly} containing the following elements:
 #' 
 #' \tabular{ll}{
-#'    \code{coefficients} \tab an \code{idpoly} object containing the 
+#'    \code{sys} \tab an \code{idpoly} object containing the 
 #'    fitted coefficients \cr
-#'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
-#'    \code{sigma} \tab the standard deviation of the innovations\cr
-#'    \code{df} \tab the residual degrees of freedom \cr
 #'    \code{fitted.values} \tab the predicted response \cr
 #'    \code{residuals} \tab the residuals  \cr
+#'    \code{input} \tab the input data used \cr
 #'    \code{call} \tab the matched call \cr
-#'    \code{time} \tab the time of the data used \cr
-#'    \code{input} \tab the input data used
+#'    \code{stats} \tab A list containing the following fields:
+#'    \tabular{ll}{
+#'      \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+#'      \code{sigma} \tab the standard deviation of the innovations\cr
+#'      \code{df} \tab the residual degrees of freedom 
+#'    }
 #'  }
 #' 
 #' 
@@ -219,11 +221,11 @@ arx <- function(x,order=c(0,1,0)){
 #' \tabular{ll}{
 #'    \code{coefficients} \tab an \code{idpoly} object containing the 
 #'    fitted coefficients \cr
+#'    \code{fitted.values} \tab the predicted response \cr
+#'    \code{residuals} \tab the residuals  \cr
 #'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
 #'    \code{sigma} \tab the standard deviation of the innovations\cr
 #'    \code{df} \tab the residual degrees of freedom \cr
-#'    \code{fitted.values} \tab the predicted response \cr
-#'    \code{residuals} \tab the residuals  \cr
 #'    \code{call} \tab the matched call \cr
 #'    \code{time} \tab the time of the data used \cr
 #'    \code{input} \tab the input data used
