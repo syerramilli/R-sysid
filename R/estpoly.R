@@ -357,51 +357,10 @@ oe <- function(x,order=c(1,1,0)){
   
   leftPadZeros <- function(x,n) c(rep(0,n),x)
 
-  reg <- function(i) {
-    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(uout[v,],-eout[i-1:nf,]))
-  }
-  
-  # Initialize Algorithm
-  i = 0
+  # Initial Guess
   mod_arx <- arx(x,c(nf,nb,nk)) # fitting ARX model
-  iv <- matrix(predict(mod_arx))
-  e <- resid(mod_arx)
-  theta <- c(coef(mod_arx)$B,coef(mod_arx)$A[-1])
-
+  theta0 <- c(coef(mod_arx)$B,coef(mod_arx)$A[-1])
   uout <- apply(u,2,leftPadZeros,n=n)
   
-  tol <- 10^(-5); sumSqRatio <- 1000; lambda <- 1
   
-  while (sumSqRatio > tol){
-    sumsq0 <- sum(e^2)
-    # Compute gradient
-    eout <- apply(iv,2,leftPadZeros,n=n)
-    X <- t(sapply(n+1:N,reg))
-    filt1 <- Arma(b=1,a=c(1,theta[nb+1:nf]))
-    grad <- apply(X,2,filter,filt=filt1)
-    
-    # Update Parameters
-    H <- 1/N*(t(grad)%*%grad) + lambda*diag(nb+nf)
-    Hinv <- solve(H)
-    theta <- theta + 1/N*Hinv%*%t(grad)%*%e
-    
-    # Update IVs and residuals
-    iv <- X%*%theta; e <- y-iv
-    sumsq <- sum(e^2)
-    
-    sumSqRatio <- abs(sumsq0-sumsq)/sumsq0
-    #     print(sumsq);print(sumSqRatio)
-    i=i+1
-  }
-  # print(sumSqRatio)
-  sigma2 <- sum(e^2)/df
-  vcov <- sigma2 * Hinv
-  
-  model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
-                  ioDelay = nk,Ts=deltat(x))
-  
-  estpoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
-          df = df,fitted.values=y-e, residuals=e[,],call=match.call(),
-          input=u)
 }

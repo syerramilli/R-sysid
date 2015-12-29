@@ -1,34 +1,3 @@
-armaxGrad <- function(theta,e,dots){
-  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
-  na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
-  
-  N <- dim(y)[1]-2*n
-  
-  if(is.null(e)){
-    eout <- matrix(rep(0,N+2*n))
-  } else{
-    eout <- matrix(c(rep(0,n),e[,]))
-  }
-  
-  reg <- function(i) {
-    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(-y[i-1:na,],u[v,],eout[i-1:nc,]))
-  }
-  
-  X <- t(sapply(n+1:(N+n),reg))
-  Y <- y[n+1:(N+n),,drop=F]
-  l <- list(X=X,Y=Y)
-  
-  if(!is.null(e)){
-    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
-    grad <- apply(X,2,filter,filt=filt1) 
-    l$grad <- grad
-  }
-  
-  return(l)
-}
-
 # Implementation of the Levenberg Marquardt Algorithm
 levbmqdt <- function(...,obj,theta0,N,opt){
   dots <- list(...)
@@ -129,4 +98,62 @@ optimOptions <- function(tol=1e-5,maxIter=20,LMinit=2,LMstep=2){
 #' @export
 getcov <- function(sys){
   sys$stats$vcov
+}
+
+armaxGrad <- function(theta,e,dots){
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
+  na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
+  
+  N <- dim(y)[1]-2*n
+  
+  if(is.null(e)){
+    eout <- matrix(rep(0,N+2*n))
+  } else{
+    eout <- matrix(c(rep(0,n),e[,]))
+  }
+  
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    matrix(c(-y[i-1:na,],u[v,],eout[i-1:nc,]))
+  }
+  
+  X <- t(sapply(n+1:(N+n),reg))
+  Y <- y[n+1:(N+n),,drop=F]
+  l <- list(X=X,Y=Y)
+  
+  if(!is.null(e)){
+    filt1 <- Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
+    grad <- apply(X,2,filter,filt=filt1) 
+    l$grad <- grad
+  }
+  
+  return(l)
+}
+
+oeGrad <- function(theta,e,dots){
+  # e - Instrument Variable, not necessarily residuals
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
+  nb <- order[1];nf <- order[2]; nk <- order[3];
+  nb1 <- nb+nk-1 ; n <- max(nb1,nf); df <- N - nb - nf
+  
+  N <- dim(y)[1]-n
+  eout <- matrix(c(rep(0,n),e[,]))
+  
+  reg <- function(i) {
+    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
+    matrix(c(uout[v,],-eout[i-1:nf,]))
+  }
+  
+  X <- t(sapply(n+1:(N+n),reg))
+  Y <- y[n+1:(N+n),,drop=F]
+  l <- list(X=X,Y=Y)
+  
+  if(!is.null(e)){
+    filt1 <- Arma(b=1,a=c(1,theta[nb+1:nf]))
+    grad <- apply(X,2,filter,filt=filt1)
+    l$grad <- grad
+  }
+  
+  return(l)
 }
