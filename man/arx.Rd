@@ -18,7 +18,7 @@ An object of class \code{estpoly} containing the following elements:
 
 \tabular{ll}{
    \code{sys} \tab an \code{idpoly} object containing the
-   fitted coefficients \cr
+   fitted ARX coefficients \cr
    \code{fitted.values} \tab the predicted response \cr
    \code{residuals} \tab the residuals  \cr
    \code{input} \tab the input data used \cr

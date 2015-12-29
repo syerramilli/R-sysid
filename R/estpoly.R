@@ -132,7 +132,7 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' \tabular{ll}{
 #'    \code{sys} \tab an \code{idpoly} object containing the 
-#'    fitted coefficients \cr
+#'    fitted ARX coefficients \cr
 #'    \code{fitted.values} \tab the predicted response \cr
 #'    \code{residuals} \tab the residuals  \cr
 #'    \code{input} \tab the input data used \cr
@@ -188,8 +188,8 @@ arx <- function(x,order=c(0,1,0)){
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x))
   
-  estpoly(coefficients = model,vcov = vcov, sigma = sqrt(sigma2),
-              df = df,fitted.values=(X%*%coef)[1:N,],
+  estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2),
+              df = df),fitted.values=(X%*%coef)[1:N,],
               residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
 }
 
