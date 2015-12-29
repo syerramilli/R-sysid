@@ -1,7 +1,9 @@
 armaxGrad <- function(theta,e,dots){
-  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]]; N <- dots[[4]]
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
   nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
+  
+  N <- dim(y)[1]-2*n
   
   if(is.null(e)){
     eout <- matrix(rep(0,N+2*n))
@@ -63,7 +65,8 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     # Update residuals
     e <- l$Y-l$X%*%theta
     sumsq <- sum(e^2)
-    sumSqRatio <- (sumsq0-sumsq)/sumsq0*100
+    sumSqRatio <- (sumsq0-sumsq)/sumsq0
+    print(c(i,maxIter,sumsq0,sumSqRatio))
     
     # If sum square error with the updated parameters is less than the 
     # previous one, the updated parameters become the current parameters
@@ -78,12 +81,13 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       update <- 0
     }
     
-    if((sumSqRatio < tol) || (i == maxIter)){
+    if((abs(sumSqRatio) < tol) || (i == maxIter)){
       break
+      
     }
   }
   
-  if(sumSqRatio < tol){
+  if(abs(sumSqRatio) < tol){
     WhyStop <- "Tolerance"
   } else{
     WhyStop <- "Maximum Iteration Limit"
@@ -91,14 +95,15 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
-  vcov <- sigma2 * Hinv
+  vcov <- sigma2 * Hinv/sqrt(N)
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
-       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
+       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj,
+                        damping=d,sumSqRatio=sumSqRatio))
 }
 
 #' @export
-optimOptions <- function(tol=0.01,maxIter=20,LMinit=10,LMstep=2){
+optimOptions <- function(tol=1e-5,maxIter=20,LMinit=2,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }

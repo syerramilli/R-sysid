@@ -264,13 +264,9 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
   
-  reg <- function(i,y,u,e) {
-    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(-y[i-1:na,],u[v,],e[i-1:nc,]))
-  }
   theta0 <- matrix(rnorm(na+nb+nc)) # current parameters
   
-  l <- levbmqdt(yout,uout,order,N,obj=armaxGrad,theta0=theta0,N=N,
+  l <- levbmqdt(yout,uout,order,obj=armaxGrad,theta0=theta0,N=N,
                 opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
