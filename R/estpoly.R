@@ -278,7 +278,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
   
-  estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2)),
+  estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
           options = options,termination = l$termination)
 }
