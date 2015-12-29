@@ -1,7 +1,7 @@
 #' @export
-estpoly <- function(model,fitted.values,residuals,options=NULL,
-                    call,stats,termination=NULL,datainfo){
-  out <- list(model=model,fitted.values=fitted.values,
+estpoly <- function(sys,fitted.values,residuals,options=NULL,
+                    call,stats,termination=NULL,input){
+  out <- list(sys=sys,fitted.values=fitted.values,
               residuals=residuals,input=input,call=call,
               stats=stats,options=options,termination=termination)
   class(out) <- "estpoly"
@@ -17,7 +17,7 @@ print.estpoly <- function(est,...){
 #' @export
 summary.estpoly <- function(object)
 {
-  model <- estpoly$sys
+  model <- object$sys
   if(model$type=="arx"||model$type=="armax"){
     coefs <- c(model$A[-1],model$B)
     na <- length(model$A) - 1; nk <- model$ioDelay; 
@@ -36,7 +36,7 @@ summary.estpoly <- function(object)
   params <- data.frame(Estimated=coefs,se=se)
   
   ek <- as.matrix(resid(object))
-  N <- nrow(ek); np <- nrow(TAB)
+  N <- nrow(ek); np <- nrow(params)
   mse <- t(ek)%*%ek/N
   fpe <- det(mse)*(1+np/N)/(1-np/N)
   
@@ -57,7 +57,7 @@ predict.estpoly <- function(model,newdata=NULL){
   if(is.null(newdata)){
     return(fitted(model))
   } else{
-    mod <- coef(model)
+    mod <- model$sys
     y <- outputData(newdata); u <- inputData(newdata)
     if(mod$type=="arx"){
       f1 <- Ma(c(rep(0,mod$ioDelay),mod$B))
