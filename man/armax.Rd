@@ -4,10 +4,12 @@
 \alias{armax}
 \title{Estimate ARMAX Models}
 \usage{
-armax(x, order = c(0, 1, 1, 0))
+armax(x, order = c(0, 1, 1, 0), options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
+
+\item{options}{Estimation Options, setup using \code{\link{optimOptions}}}
 
 \item{order:}{Specification of the orders: the four integer components
 (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B
@@ -17,16 +19,21 @@ armax(x, order = c(0, 1, 1, 0))
 An object of class \code{estpoly} containing the following elements:
 
 \tabular{ll}{
-   \code{coefficients} \tab an \code{idpoly} object containing the
-   fitted coefficients \cr
+   \code{sys} \tab an \code{idpoly} object containing the
+   fitted ARMAX coefficients \cr
    \code{fitted.values} \tab the predicted response \cr
    \code{residuals} \tab the residuals  \cr
-   \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
-   \code{sigma} \tab the standard deviation of the innovations\cr
-   \code{df} \tab the residual degrees of freedom \cr
+   \code{input} \tab the input data used \cr
    \code{call} \tab the matched call \cr
-   \code{time} \tab the time of the data used \cr
-   \code{input} \tab the input data used
+   \code{stats} \tab A list containing the following fields:
+   \tabular{ll}{
+     \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+     \code{sigma} \tab the standard deviation of the innovations
+   } \cr
+   \code{options} \tab Option set used for estimation. If no
+   custom options were configured, this is a set of default options. \cr
+   \code{termination} \tab Termination conditions for the iterative
+    search used for prediction error minimization.
  }
 }
 \description{

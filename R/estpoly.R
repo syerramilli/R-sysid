@@ -202,6 +202,7 @@ arx <- function(x,order=c(0,1,0)){
 #' @param order: Specification of the orders: the four integer components 
 #' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
 #' + 1, order of the polynomial C,and the input-output delay respectively
+#' @param options Estimation Options, setup using \code{\link{optimOptions}}
 #' 
 #' @details
 #' SISO ARMAX models are of the form 
@@ -220,16 +221,21 @@ arx <- function(x,order=c(0,1,0)){
 #' An object of class \code{estpoly} containing the following elements:
 #' 
 #' \tabular{ll}{
-#'    \code{coefficients} \tab an \code{idpoly} object containing the 
-#'    fitted coefficients \cr
+#'    \code{sys} \tab an \code{idpoly} object containing the 
+#'    fitted ARMAX coefficients \cr
 #'    \code{fitted.values} \tab the predicted response \cr
 #'    \code{residuals} \tab the residuals  \cr
-#'    \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
-#'    \code{sigma} \tab the standard deviation of the innovations\cr
-#'    \code{df} \tab the residual degrees of freedom \cr
+#'    \code{input} \tab the input data used \cr
 #'    \code{call} \tab the matched call \cr
-#'    \code{time} \tab the time of the data used \cr
-#'    \code{input} \tab the input data used
+#'    \code{stats} \tab A list containing the following fields:
+#'    \tabular{ll}{
+#'      \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
+#'      \code{sigma} \tab the standard deviation of the innovations
+#'    } \cr
+#'    \code{options} \tab Option set used for estimation. If no 
+#'    custom options were configured, this is a set of default options. \cr
+#'    \code{termination} \tab Termination conditions for the iterative
+#'     search used for prediction error minimization.  
 #'  }
 #' 
 #' 
@@ -245,7 +251,7 @@ arx <- function(x,order=c(0,1,0)){
 #' plot(mod_armax) # plot the predicted and actual responses
 #' 
 #' @export
-armax <- function(x,order=c(0,1,1,0)){
+armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   require(signal)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]

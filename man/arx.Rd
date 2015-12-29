@@ -50,7 +50,7 @@ using the \code{\link{detrend}} function.
 \examples{
 data(arxsim)
 model <- arx(data,c(2,1,1))
-summary(model) # obtain estimates and their covariances
+model
 plot(model) # plot the predicted and actual responses
 }
 \references{
