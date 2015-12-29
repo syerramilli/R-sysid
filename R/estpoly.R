@@ -270,15 +270,17 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   }
   theta0 <- matrix(rnorm(na+nb+nc)) # current parameters
   
-  l <- levbmqdt(yout,uout,order,N,obj=armaxGrad,theta0=theta0,N=N)
-  theta <- l$theta
+  l <- levbmqdt(yout,uout,order,N,obj=armaxGrad,theta0=theta0,N=N,
+                opt=options)
+  theta <- l$params
+  e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
   
-  estpoly(coefficients = model,vcov = l$vcov, sigma = l$sigma,df = df,
-          fitted.values=y, residuals=l$e,call=match.call(),
-          input=u)
+  estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2)),
+          fitted.values=y-e,residuals=e,call=match.call(),input=u,
+          options = options,termination = l$termination)
 }
 
 #' Estimate Output-Error Models

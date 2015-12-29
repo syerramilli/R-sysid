@@ -28,7 +28,7 @@ armaxGrad <- function(theta,e,dots){
 }
 
 # Implementation of the Levenberg Marquardt Algorithm
-levbmqdt <- function(...,obj,theta0,N,opt=optimOptions()){
+levbmqdt <- function(...,obj,theta0,N,opt){
   dots <- list(...)
   
   # Optimization Parameters
