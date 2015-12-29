@@ -119,6 +119,13 @@ optimOptions <- function(tol=1e-5,maxIter=20,LMinit=2,LMstep=2){
                                                   LMstep=LMstep)))
 }
 
+#' Parameter covariance of the identified model
+#' 
+#' Obtain the parameter covariance matrix of the linear, identified 
+#' parametric model
+#' 
+#' @param sys a linear, identified parametric model
+#' 
 #' @export
 getcov <- function(sys){
   sys$stats$vcov
