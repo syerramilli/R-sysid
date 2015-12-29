@@ -237,8 +237,8 @@ arx <- function(x,order=c(0,1,0)){
 #'    \code{termination} \tab Termination conditions for the iterative
 #'     search used for prediction error minimization.
 #'    \tabular{ll}{
-#'      \code{WhyStop} \tab Reason for termination
-#'      \code{iter} \tab Number of Iterations
+#'      \code{WhyStop} \tab Reason for termination \cr
+#'      \code{iter} \tab Number of Iterations \cr
 #'      \code{iter} \tab Number of Function Evaluations 
 #'    }  
 #'  }
