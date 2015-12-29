@@ -66,7 +66,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     e <- l$Y-l$X%*%theta
     sumsq <- sum(e^2)
     sumSqRatio <- (sumsq0-sumsq)/sumsq0
-    print(c(i,maxIter,sumsq0,sumSqRatio))
     
     # If sum square error with the updated parameters is less than the 
     # previous one, the updated parameters become the current parameters
