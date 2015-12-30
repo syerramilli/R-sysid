@@ -61,8 +61,8 @@ using the \code{\link{detrend}} function.
 \examples{
 data(oesim)
 z <- dataSlice(data,end=1533) # training set
-mod_oe <- oe(z,c(2,1,2))
-summary(mod_oe) # obtain estimates and their covariances
+mod_oe <- oe(z,c(2,1,2),optimOptions(tol=1e-04,LMinit=0.01))
+mod_oe
 plot(mod_oe) # plot the predicted and actual responses
 }
 \references{
