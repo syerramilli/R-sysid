@@ -54,18 +54,19 @@ print.summary.estpoly <- function(object,...){
 
 #' @export
 predict.estpoly <- function(model,newdata=NULL){
-  require(signal)
   if(is.null(newdata)){
     return(fitted(model))
   } else{
     mod <- model$sys
     y <- outputData(newdata); u <- inputData(newdata)
     if(mod$type=="arx"){
-      f1 <- Ma(c(rep(0,mod$ioDelay),mod$B))
-      f2 <- Ma(c(0,-mod$A[-1]))
+      f1 <- signal::Ma(c(rep(0,mod$ioDelay),mod$B))
+      f2 <- signal::Ma(c(0,-mod$A[-1]))
       ypred <- signal::filter(f1,u) + signal::filter(f2,y)
     }
     return(ypred)
+  } else if(mod$type=="armax"){
+    
   }
 }
 
