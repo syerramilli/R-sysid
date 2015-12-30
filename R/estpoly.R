@@ -74,8 +74,8 @@ plot.estpoly <- function(model,newdata=NULL){
   require(ggplot2)
   
   if(is.null(newdata)){
-    ypred <- fitted(model)
-    yact <- fitted(model) + resid(model)
+    ypred <- ts(fitted(model),names="Predicted")
+    yact <- ts(fitted(model) + resid(model),names="Actual")
     time <- time(model$input)
     titstr <- "Predictions of Model on Training Set"
   } else{  
