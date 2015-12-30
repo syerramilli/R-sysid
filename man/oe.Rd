@@ -4,10 +4,13 @@
 \alias{oe}
 \title{Estimate Output-Error Models}
 \usage{
-oe(x, order = c(1, 1, 0))
+oe(x, order = c(1, 1, 0), options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
+
+\item{options}{Estimation Options, setup using
+\code{\link{optimOptions}}}
 
 \item{order:}{Specification of the orders: the four integer components
 (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,

@@ -292,6 +292,8 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' @param order: Specification of the orders: the four integer components 
 #' (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
 #' and the input-output delay respectively
+#' @param options Estimation Options, setup using 
+#' \code{\link{optimOptions}}
 #' 
 #' @details
 #' SISO OE models are of the form 
