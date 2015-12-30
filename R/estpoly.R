@@ -346,7 +346,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' plot(mod_oe) # plot the predicted and actual responses
 #' 
 #' @export
-oe <- function(x,order=c(1,1,0)){
+oe <- function(x,order=c(1,1,0),options=optimOptions()){
   require(signal)
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   nb <- order[1];nf <- order[2]; nk <- order[3];
@@ -369,7 +369,7 @@ oe <- function(x,order=c(1,1,0)){
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
   model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
-                  -                  ioDelay = nk,Ts=deltat(x))
+                  ioDelay = nk,Ts=deltat(x))
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
