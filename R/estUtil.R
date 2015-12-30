@@ -132,13 +132,17 @@ armaxGrad <- function(theta,e,dots){
 }
 
 oeGrad <- function(theta,e,dots){
-  # e - Instrument Variable, not necessarily residuals
   y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   nb <- order[1];nf <- order[2]; nk <- order[3];
-  nb1 <- nb+nk-1 ; n <- max(nb1,nf); df <- N - nb - nf
+  nb1 <- nb+nk-1 ; n <- max(nb1,nf)
+  N <- dim(y)[1]
   
-  N <- dim(y)[1]-n
-  eout <- matrix(c(rep(0,n),e[,]))
+  if(is.null(e)){
+    iv <- dots[[4]]
+  } else{
+    iv <- y-e
+  }
+  eout <- matrix(c(rep(0,n),iv[,]))
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1

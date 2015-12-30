@@ -359,8 +359,19 @@ oe <- function(x,order=c(1,1,0)){
 
   # Initial Guess
   mod_arx <- arx(x,c(nf,nb,nk)) # fitting ARX model
+  iv <- matrix(predict(mod_arx))
   theta0 <- c(coef(mod_arx)$B,coef(mod_arx)$A[-1])
   uout <- apply(u,2,leftPadZeros,n=n)
   
+  l <- levbmqdt(y,uout,order,iv,obj=armaxGrad,theta0=theta0,N=N,
+                opt=options)
+  theta <- l$params
+  e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
+  model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
+                  -                  ioDelay = nk,Ts=deltat(x))
+  
+  estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
+          fitted.values=y-e,residuals=e,call=match.call(),input=u,
+          options = options,termination = l$termination)
 }
