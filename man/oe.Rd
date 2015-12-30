@@ -4,10 +4,13 @@
 \alias{oe}
 \title{Estimate Output-Error Models}
 \usage{
-oe(x, order = c(1, 1, 0))
+oe(x, order = c(1, 1, 0), options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
+
+\item{options}{Estimation Options, setup using
+\code{\link{optimOptions}}}
 
 \item{order:}{Specification of the orders: the four integer components
 (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
@@ -58,8 +61,8 @@ using the \code{\link{detrend}} function.
 \examples{
 data(oesim)
 z <- dataSlice(data,end=1533) # training set
-mod_oe <- oe(z,c(2,1,2))
-summary(mod_oe) # obtain estimates and their covariances
+mod_oe <- oe(z,c(2,1,2),optimOptions(tol=1e-04,LMinit=0.01))
+mod_oe
 plot(mod_oe) # plot the predicted and actual responses
 }
 \references{

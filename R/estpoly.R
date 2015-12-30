@@ -74,8 +74,8 @@ plot.estpoly <- function(model,newdata=NULL){
   require(ggplot2)
   
   if(is.null(newdata)){
-    ypred <- fitted(model)
-    yact <- fitted(model) + resid(model)
+    ypred <- ts(fitted(model),names="Predicted")
+    yact <- ts(fitted(model) + resid(model),names="Actual")
     time <- time(model$input)
     titstr <- "Predictions of Model on Training Set"
   } else{  
@@ -292,6 +292,8 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' @param order: Specification of the orders: the four integer components 
 #' (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
 #' and the input-output delay respectively
+#' @param options Estimation Options, setup using 
+#' \code{\link{optimOptions}}
 #' 
 #' @details
 #' SISO OE models are of the form 
@@ -341,8 +343,8 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' @examples
 #' data(oesim)
 #' z <- dataSlice(data,end=1533) # training set
-#' mod_oe <- oe(z,c(2,1,2))
-#' summary(mod_oe) # obtain estimates and their covariances
+#' mod_oe <- oe(z,c(2,1,2),optimOptions(tol=1e-04,LMinit=0.01))
+#' mod_oe 
 #' plot(mod_oe) # plot the predicted and actual responses
 #' 
 #' @export
