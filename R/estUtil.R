@@ -132,7 +132,7 @@ armaxGrad <- function(theta,e,dots){
 }
 
 oeGrad <- function(theta,e,dots){
-  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
+  y <- dots[[1]]; uout <- dots[[2]]; order <- dots[[3]];
   nb <- order[1];nf <- order[2]; nk <- order[3];
   nb1 <- nb+nk-1 ; n <- max(nb1,nf)
   N <- dim(y)[1]
@@ -143,18 +143,17 @@ oeGrad <- function(theta,e,dots){
     iv <- y-e
   }
   eout <- matrix(c(rep(0,n),iv[,]))
-  
+
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
     matrix(c(uout[v,],-eout[i-1:nf,]))
   }
   
-  X <- t(sapply(n+1:(N+n),reg))
-  Y <- y[n+1:(N+n),,drop=F]
-  l <- list(X=X,Y=Y)
+  X <- t(sapply(n+1:N,reg))
+  l <- list(X=X,Y=y)
   
   if(!is.null(e)){
-    filt1 <- Arma(b=1,a=c(1,theta[nb+1:nf]))
+    filt1 <- Arma(b=1,a=c(1,theta[nb+1:nf,]))
     grad <- apply(X,2,filter,filt=filt1)
     l$grad <- grad
   }
