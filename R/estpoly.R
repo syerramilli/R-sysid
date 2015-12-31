@@ -63,11 +63,13 @@ predict.estpoly <- function(model,newdata=NULL){
       f1 <- signal::Ma(c(rep(0,mod$ioDelay),mod$B))
       f2 <- signal::Ma(c(0,-mod$A[-1]))
       ypred <- signal::filter(f1,u) + signal::filter(f2,y)
+    } else if(mod$type=="armax"){
+      f1 <- signal::Arma(b=c(rep(0,mod$ioDelay),mod$B),a=mod$C)
+      f2 <- signal::Arma(b=mod$A,a=mod$C)
+      ypred <- signal::filter(f1,u) + y - signal::filter(f2,y)
     }
     return(ypred)
-  } else if(mod$type=="armax"){
-    
-  }
+  } 
 }
 
 #' @export
