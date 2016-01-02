@@ -54,6 +54,8 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' data(cstr)
 #' plot(cstr,col="blue")
 #' 
+#' @import tfplot
+#' 
 #' @export
 plot.idframe <- function(x,par=list(mar=c(3,4,2,2)),
                          col="steelblue",...){
@@ -148,14 +150,16 @@ idfrd <- function(response,freq,Ts){
 #' frf <- spa(data) # Estimates the frequency response from data
 #' plot(frf)
 #' 
+#' @import ggplot2
+#' 
 #' @export
 plot.idfrd <- function(x){
   require(ggplot2);require(reshape2);require(signal)
 
   mag <- 20*log10(Mod(x$resp))
-  phase <- 180/pi*unwrap(Arg(x$resp))
+  phase <- 180/pi*signal::unwrap(Arg(x$resp))
   sys_df <- data.frame(Frequency = x$freq,Gain = mag,Phase = phase)
-  melted_sys_df <- melt(sys_df, id.var = c("Frequency"))
+  melted_sys_df <- reshape2::melt(sys_df, id.var = c("Frequency"))
   
   bode <-  ggplot(sys_df, aes(x = Frequency)) + 
     geom_line(colour="steelblue") + scale_x_log10() + theme_bw() + 
