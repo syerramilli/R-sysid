@@ -7,14 +7,12 @@
 #' 
 #' @return 
 #' A list containing the following elements
-#' 
-#' \tabular{ll}{
-#'    \code{fitted.values} \tab \code{idframe} object with detrended variables \cr
-#'    \code{output_trend} \tab \code{list} containing trend fits for each output 
-#'    variable \cr
-#'    \code{input_trend} \tab \code{list} containing trend fits for each input 
-#'    variable
-#'  }
+#' \item{fitted.values}{\code{idframe} object with detrended variables}
+#' \item{output_trend}{\code{list} containing trend fits for each output 
+#'    variable}
+#' \item{input_trend}{\code{list} containing trend fits for each input 
+#'    variable}
+#'
 #' 
 #' @examples
 #' data(cstr)
