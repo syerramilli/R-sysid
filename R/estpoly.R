@@ -63,21 +63,19 @@ print.summary.estpoly <- function(x,digits=4){
 }
 
 #' @export
-predict.estpoly <- function(x,newdata=NULL){
-  if(is.null(newdata)){
+predict.estpoly <- function(x,newdata=NULL,nahead=1){
+  if(is.null(newdata)&&nahead=1){
     return(fitted(x))
   } else{
     mod <- x$sys
-    y <- outputData(newdata); u <- inputData(newdata)
-    if(mod$type=="arx"){
-      f1 <- signal::Ma(c(rep(0,mod$ioDelay),mod$B))
-      f2 <- signal::Ma(c(0,-mod$A[-1]))
-      ypred <- signal::filter(f1,u) + signal::filter(f2,y)
-    } else if(mod$type=="armax"){
-      f1 <- signal::Arma(b=c(rep(0,mod$ioDelay),mod$B),a=mod$C)
-      f2 <- signal::Arma(b=mod$A,a=mod$C)
-      ypred <- signal::filter(f1,u) + y - signal::filter(f2,y)
+    if(is.null(newdata)){
+      y <- fitted(mod)+resid(mod)
+      u <- mod$input
+    } else{
+      y <- outputData(newdata); u <- inputData(newdata)
     }
+   
+    
     return(ypred)
   } 
 }
