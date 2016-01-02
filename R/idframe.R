@@ -154,7 +154,6 @@ idfrd <- function(response,freq,Ts){
 #' 
 #' @export
 plot.idfrd <- function(x){
-  require(ggplot2);require(reshape2);require(signal)
 
   mag <- 20*log10(Mod(x$resp))
   phase <- 180/pi*signal::unwrap(Arg(x$resp))

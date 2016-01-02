@@ -135,7 +135,6 @@ predict.detrend <- function(model,newdata=NULL,...){
 #' @importFrom zoo na.approx
 #' @export
 misdata <- function(data){
-  require(zoo)
   
   f <- function(var,start,end,Ts){
     time_range <- range(time(var))
