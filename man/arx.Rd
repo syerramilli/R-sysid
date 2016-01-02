@@ -15,20 +15,16 @@ the input-output delay}
 }
 \value{
 An object of class \code{estpoly} containing the following elements:
-
-\tabular{ll}{
-   \code{sys} \tab an \code{idpoly} object containing the 
-   fitted ARX coefficients \cr
-   \code{fitted.values} \tab the predicted response \cr
-   \code{residuals} \tab the residuals  \cr
-   \code{input} \tab the input data used \cr
-   \code{call} \tab the matched call \cr
-   \code{stats} \tab A list containing the following fields:
-     \code{vcov} - the covariance matrix of the fitted coefficients,
-     \code{sigma} - the standard deviation of the innovations,
-     \code{df} -the residual degrees of freedom
-
- }
+ \item{sys}{an \code{idpoly} object containing the 
+   fitted ARX coefficients}
+ \item{fitted.values}{the predicted response}
+ \item{residuals}{the residuals}
+ \item{input}{the input data used}
+ \item{call}{the matched call}
+ \item{stats}{A list containing the following fields: \cr
+     \code{vcov} - the covariance matrix of the fitted coefficients \cr
+     \code{sigma} - the standard deviation of the innovations\cr
+     \code{df} - the residual degrees of freedom}
 }
 \description{
 Fit an ARX model of the specified order given the input-output data
