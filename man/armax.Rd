@@ -58,8 +58,7 @@ using the \code{\link{detrend}} function.
 data(armaxsim)
 z <- dataSlice(data,end=1533) # training set
 mod_armax <- armax(z,c(1,2,1,2))
-summary(mod_armax) # obtain estimates and their covariances
-plot(mod_armax) # plot the predicted and actual responses
+mod_armax
 
 }
 \references{

@@ -251,8 +251,7 @@ arx <- function(x,order=c(0,1,0)){
 #' data(armaxsim)
 #' z <- dataSlice(data,end=1533) # training set
 #' mod_armax <- armax(z,c(1,2,1,2))
-#' summary(mod_armax) # obtain estimates and their covariances
-#' plot(mod_armax) # plot the predicted and actual responses
+#' mod_armax
 #' 
 #' @export
 armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
