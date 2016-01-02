@@ -27,9 +27,9 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     }
     
     # Update Parameters
-    H <- 1/N*(t(l$grad)%*%l$grad) + d*diag(dim(theta0)[1])
+    H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
     Hinv <- solve(H)
-    theta <- theta0 + 1/N*Hinv%*%t(l$grad)%*%e
+    theta <- theta0 + Hinv%*%t(l$grad)%*%e
     
     # Update residuals
     e <- l$Y-l$X%*%theta
@@ -63,7 +63,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
-  vcov <- sigma2 * Hinv/sqrt(N)
+  vcov <- Hinv
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
        termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
@@ -83,7 +83,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' @param LMstep Size of the Levenberg-Marquardt step
 #' 
 #' @export
-optimOptions <- function(tol=1e-5,maxIter=20,LMinit=2,LMstep=2){
+optimOptions <- function(tol=1e-5,maxIter=20,LMinit=100,LMstep=8){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }
