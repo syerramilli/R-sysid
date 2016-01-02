@@ -27,19 +27,16 @@ An object of class \code{estpoly} containing the following elements:
    \code{input} \tab the input data used \cr
    \code{call} \tab the matched call \cr
    \code{stats} \tab A list containing the following fields:
-   \tabular{ll}{
-     \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
-     \code{sigma} \tab the standard deviation of the innovations
-   } \cr
+     \code{vcov} - the covariance matrix of the fitted coefficients,
+     \code{sigma} - the standard deviation of the innovations \cr
    \code{options} \tab Option set used for estimation. If no 
    custom options were configured, this is a set of default options. \cr
    \code{termination} \tab Termination conditions for the iterative
-    search used for prediction error minimization.
-   \tabular{ll}{
-     \code{WhyStop} \tab Reason for termination \cr
-     \code{iter} \tab Number of Iterations \cr
-     \code{iter} \tab Number of Function Evaluations 
-   }  
+    search used for prediction error minimization:
+     \code{WhyStop} - Reason for termination,
+     \code{iter} - Number of Iterations, 
+     \code{iter} - Number of Function Evaluations 
+    
  }
 }
 \description{

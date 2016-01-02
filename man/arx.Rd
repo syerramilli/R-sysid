@@ -24,11 +24,10 @@ An object of class \code{estpoly} containing the following elements:
    \code{input} \tab the input data used \cr
    \code{call} \tab the matched call \cr
    \code{stats} \tab A list containing the following fields:
-   \tabular{ll}{
-     \code{vcov} \tab the covariance matrix of the fitted coefficients\cr
-     \code{sigma} \tab the standard deviation of the innovations\cr
-     \code{df} \tab the residual degrees of freedom 
-   }
+     \code{vcov} - the covariance matrix of the fitted coefficients,
+     \code{sigma} - the standard deviation of the innovations,
+     \code{df} -the residual degrees of freedom
+
  }
 }
 \description{
