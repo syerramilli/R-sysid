@@ -268,7 +268,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
   
-  theta0 <- matrix(rnorm(na+nb+nc)) # current parameters
+  theta0 <- matrix(runif(na+nb+nc,min=-0.3,max=0.3)) # current parameters
   
   l <- levbmqdt(yout,uout,order,obj=armaxGrad,theta0=theta0,N=N,
                 opt=options)
@@ -339,7 +339,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' @examples
 #' data(oesim)
 #' z <- dataSlice(data,end=1533) # training set
-#' mod_oe <- oe(z,c(2,1,2),optimOptions(tol=1e-04,LMinit=0.01))
+#' mod_oe <- oe(z,c(2,1,2))
 #' mod_oe 
 #' plot(mod_oe) # plot the predicted and actual responses
 #' 

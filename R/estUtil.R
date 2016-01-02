@@ -124,7 +124,7 @@ armaxGrad <- function(theta,e,dots){
   
   if(!is.null(e)){
     filt1 <- signal::Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
-    grad <- apply(X,2,filter,filt=filt1) 
+    grad <- apply(X,2,signal::filter,filt=filt1) 
     l$grad <- grad
   }
   
