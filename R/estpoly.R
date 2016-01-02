@@ -10,14 +10,14 @@ estpoly <- function(sys,fitted.values,residuals,options=NULL,
 
 
 #' @export
-print.estpoly <- function(est,...){
-  print(summary(est),...)
+print.estpoly <- function(x,...){
+  print(summary(x),...)
 }
 
 #' @export
-summary.estpoly <- function(object)
+summary.estpoly <- function(x)
 {
-  model <- object$sys
+  model <- x$sys
   if(model$type=="arx"||model$type=="armax"){
     coefs <- c(model$A[-1],model$B)
     na <- length(model$A) - 1; nk <- model$ioDelay; 
@@ -32,10 +32,10 @@ summary.estpoly <- function(object)
     nb <- length(model$B)
   }
   
-  se <- sqrt(diag(getcov(object)))
+  se <- sqrt(diag(getcov(x)))
   params <- data.frame(Estimated=coefs,se=se)
   
-  ek <- as.matrix(resid(object))
+  ek <- as.matrix(resid(x))
   N <- nrow(ek); np <- nrow(params)
   mse <- t(ek)%*%ek/N
   fpe <- det(mse)*(1+np/N)/(1-np/N)
@@ -47,17 +47,17 @@ summary.estpoly <- function(object)
 }
 
 #' @export
-print.summary.estpoly <- function(object,...){
-  print(object$model,se=object$report$params[,2],...)
-  print(object$report$fit,...)
+print.summary.estpoly <- function(x,...){
+  print(x$model,se=x$report$params[,2],...)
+  print(x$report$fit,...)
 }
 
 #' @export
-predict.estpoly <- function(model,newdata=NULL){
+predict.estpoly <- function(x,newdata=NULL){
   if(is.null(newdata)){
-    return(fitted(model))
+    return(fitted(x))
   } else{
-    mod <- model$sys
+    mod <- x$sys
     y <- outputData(newdata); u <- inputData(newdata)
     if(mod$type=="arx"){
       f1 <- signal::Ma(c(rep(0,mod$ioDelay),mod$B))
