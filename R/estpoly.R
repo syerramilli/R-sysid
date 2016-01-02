@@ -35,12 +35,16 @@ summary.estpoly <- function(x)
   se <- sqrt(diag(getcov(x)))
   params <- data.frame(Estimated=coefs,se=se)
   
+  y <- fitted(x) + resid(x)
   ek <- as.matrix(resid(x))
   N <- nrow(ek); np <- nrow(params)
+  
+  # fit characteristics
   mse <- t(ek)%*%ek/N
   fpe <- det(mse)*(1+np/N)/(1-np/N)
+  nrmse <- 1 - sqrt(sum(ek^2))/sqrt(sum((y-mean(y))^2))
   
-  report <- list(fit=list(N=N,mse=mse,fpe=fpe),params=params)
+  report <- list(fit=list(N=N,mse=mse,fpe=fpe,fitper = nrmse),params=params)
   res <- list(model=model,report=report)
   class(res) <- "summary.estpoly"
   res
