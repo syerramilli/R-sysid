@@ -54,25 +54,25 @@ checkUnity <- function(x){
 }
 
 #' @export
-print.idpoly <- function(mod,se=NULL,...){
+print.idpoly <- function(mod,se=NULL,dig=3){
   
   if(mod$type=="arx"){
-    cat("Discrete-time ARX mod: A(q^{-1})y[k] = B(q^{-1})u[k] + e[k] \n\n")
+    cat("Discrete-time ARX mod: A(z)y[k] = B(z)u[k] + e[k] \n\n")
   } else if(mod$type=="armax"){
-    cat("Discrete-time ARMAX mod: A(q^{-1})y[k] = B(q^{-1})u[k] + C(q^{-1})e[k] \n\n")
+    cat("Discrete-time ARMAX mod: A(z)y[k] = B(z)u[k] + C(z)e[k] \n\n")
   } else if(mod$type=="oe"){
-    cat("Discrete-time OE mod: y[k] = B(q^{-1})/F(q^{-1}) u[k] + e[k] \n\n")
+    cat("Discrete-time OE mod: y[k] = B(z)/F(z) u[k] + e[k] \n\n")
   } else if(mod$type=="bj"){
-    cat("Discrete-time BJ mod: y[k] = B(q^{-1})/F(q^{-1}) u[k] + C(q^{-1})/D(q^{-1}) e[k] \n\n")
+    cat("Discrete-time BJ mod: y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
   } else{
-    cat("Discrete-time Polynomial mod: A(q^{-1}) y[k] = B(q^{-1})/F(q^{-1}) u[k] + C(q^{-1})/D(q^{-1}) e[k] \n\n")
+    cat("Discrete-time Polynomial mod: A(z) y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
   }
   
   # Printing Standard error sequence
   j=1
   print_se <- function(se){
     if(!is.null(se)){
-      cat(" (+/- ",se[j],") ",sep = "")
+      cat(" (+/- ",round(se[j],dig),") ",sep = "")
       j <<- j+1
     }
   }
@@ -81,11 +81,11 @@ print.idpoly <- function(mod,se=NULL,...){
     cat("A(q^{-1}) = ")
     for(i in seq_along(mod$A)){
       if(i-1==0){
-        cat(mod$A[i])
+        cat(round(mod$A[i],dig))
       } else{
         if(mod$A[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$A[i])==1)) cat(abs(mod$A[i]))
+        if(!(abs(mod$A[i])==1)) cat(abs(round(mod$A[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -97,7 +97,7 @@ print.idpoly <- function(mod,se=NULL,...){
   cat("B(q^{-1}) = ")
   for(i in seq_along(mod$B)){
     if(i+mod$ioDelay-1==0){
-      cat(mod$B[i])
+      cat(round(mod$B[i],dig))
     } else{
       
       if(!((mod$ioDelay!=0) && (i==1))){
@@ -106,7 +106,7 @@ print.idpoly <- function(mod,se=NULL,...){
         if(mod$B[i]<0) cat("-")
       }
       
-      if(!(abs(mod$B[i])==1)) cat(abs(mod$B[i]))
+      if(!(abs(mod$B[i])==1)) cat(abs(round(mod$B[i],dig)))
       print_se(se)
       cat("q^{-",i+mod$ioDelay-1,"}",sep="")
     }
@@ -118,11 +118,11 @@ print.idpoly <- function(mod,se=NULL,...){
     cat("C(q^{-1}) = ")
     for(i in seq_along(mod$C)){
       if(i-1==0){
-        cat(mod$C[i])
+        cat(round(mod$C[i],dig))
       } else{
         if(mod$C[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$C[i])==1)) cat(abs(mod$C[i]))
+        if(!(abs(mod$C[i])==1)) cat(abs(round(mod$C[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -135,11 +135,11 @@ print.idpoly <- function(mod,se=NULL,...){
     cat("D(q^{-1}) = ")
     for(i in seq_along(mod$D)){
       if(i-1==0){
-        cat(mod$D[i])
+        cat(round(mod$D[i],dig))
       } else{
         if(mod$D[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$D[i])==1)) cat(abs(mod$D[i]))
+        if(!(abs(mod$D[i])==1)) cat(abs(round(mod$D[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -152,15 +152,16 @@ print.idpoly <- function(mod,se=NULL,...){
     cat("F(q^{-1}) = ")
     for(i in seq_along(mod$F1)){
       if(i-1==0){
-        cat(mod$F1[i])
+        cat(round(mod$F1[i],dig))
       } else{
         if(mod$F1[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$F1[i])==1)) cat(abs(mod$F1[i]))
+        if(!(abs(mod$F1[i])==1)) cat(abs(round(mod$F1[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
       cat("\t")
     }
   }
+  cat("\n")
 }

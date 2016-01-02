@@ -48,7 +48,7 @@ summary.estpoly <- function(x)
   nAIC <- log(mse) + 2*np/N
   BIC <- N*log(mse) + N*dim(matrix(y))[2]*(log(2*pi)+1) + np*log(N)
   
-  report <- list(fit=list(mse=mse,fpe=fpe,fitper = nrmse*100,AIC=AIC,AICc=AICc,
+  report <- list(fit=list(MSE=mse,FPE=fpe,FitPer = nrmse*100,AIC=AIC,AICc=AICc,
                           nAIC=nAIC,BIC=BIC),params=params)
   res <- list(model=model,report=report)
   class(res) <- "summary.estpoly"
@@ -56,11 +56,10 @@ summary.estpoly <- function(x)
 }
 
 #' @export
-print.summary.estpoly <- function(x,...){
-  dots <- list(...)
-  dig <- if(is.null(dots$digits)) 3 else dot$digits
-  print(x$model,se=x$report$params[,2],...)
-  print(x$report$fit,digits=dig,...)
+print.summary.estpoly <- function(x,digits=4){
+  print(x$model,se=x$report$params[,2],dig=digits)
+  cat("\n Fit Characteristics \n")
+  print(data.frame(x$report$fit),digits=digits)
 }
 
 #' @export
