@@ -165,19 +165,3 @@ print.idpoly <- function(mod,se=NULL,dig=3){
   }
   cat("\n")
 }
-
-#' @export
-predict.idpoly <- function(x,data,nahead=1){
-  y <- outputData(z); u<- inputData(z)
-  G <- signal::Arma(b=c(rep(0,x$ioDelay),x$B),
-                    a= as.numeric(polynom::polynomial(x$A)*
-                                    polynom::polynomial(x$F1)))
-  if(x$type=="oe" || nahead==Inf){
-    ypred <- signal::filter(G,u)
-  } else{
-    Hden <- as.numeric(polynom::polynomial(x$A)*polynom::polynomial(x$D))
-    Hinv <- signal::Arma(b=Hden,a=x$C) 
-  }
-  
-  return(ypred)
-}

@@ -63,23 +63,6 @@ print.summary.estpoly <- function(x,digits=4){
 }
 
 #' @export
-predict.estpoly <- function(x,newdata=NULL,nahead=1){
-  if(is.null(newdata)&&nahead=1){
-    return(fitted(x))
-  } else{
-    model <- x$sys
-    if(is.null(newdata)){
-      y <- fitted(x)+resid(x)
-      u <- x$input
-      z <- idframe(y,u,Ts = deltat(y),start=start(y))
-    } else{
-      z <- newdata
-    }
-    predict(model,z,nahead)
-  } 
-}
-
-#' @export
 plot.estpoly <- function(model,newdata=NULL){
   require(ggplot2)
   
