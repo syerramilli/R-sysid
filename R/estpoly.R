@@ -67,16 +67,15 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
   if(is.null(newdata)&&nahead=1){
     return(fitted(x))
   } else{
-    mod <- x$sys
+    model <- x$sys
     if(is.null(newdata)){
-      y <- fitted(mod)+resid(mod)
-      u <- mod$input
+      y <- fitted(x)+resid(x)
+      u <- x$input
+      z <- idframe(y,u,Ts = deltat(y),start=start(y))
     } else{
-      y <- outputData(newdata); u <- inputData(newdata)
+      z <- newdata
     }
-   
-    
-    return(ypred)
+    predict(model,z,nahead)
   } 
 }
 
