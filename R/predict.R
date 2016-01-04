@@ -54,8 +54,16 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
   } 
 }
 
-#' @import ggplot2 reshape
+#' @import ggplot2 reshape2
 #' @export
-compare <- function(){
+compare <- function(data,nahead=1,...){
+  # Input Validation
+  dots <- list(...)
+  if(is.null(dots)) stop("No model supplied")
   
+  Y <- sapply(dots,predict,newdata=data,nahead=nahead)
+  df <- data.frame(Time = time(data),Actual=outputData(data)[,1],Y)
+  meltdf <- melt(df,id="Time")
+  
+  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line()
 }
