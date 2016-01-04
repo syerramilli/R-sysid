@@ -1,4 +1,3 @@
-#' @export
 predict.idpoly <- function(x,data,nahead=1){
   y <- outputData(data); u<- inputData(data)
   G <- signal::Arma(b=c(rep(0,x$ioDelay),x$B),
@@ -22,6 +21,22 @@ predict.idpoly <- function(x,data,nahead=1){
   ts(ypred,start=start(data),deltat=deltat(data))
 }
 
+polyinv <- function(x,k){
+  gamma <- 1/Re(polyroot(x))
+  
+  inverse <- function(y,k){
+    sapply(1:k-1,function(i) y^i)
+  }
+  z <- lapply(lapply(gamma,inverse,k=2),polynom::polynomial)
+  temp = z[[1]]
+  if(length(z)>1){
+    for(i in 2:length(z)){
+      temp = temp*z[[i]]
+    }
+  }
+  temp
+}
+
 #' @export
 predict.estpoly <- function(x,newdata=NULL,nahead=1){
   if(is.null(newdata)&& nahead==1){
@@ -39,18 +54,8 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
   } 
 }
 
-polyinv <- function(x,k){
-  gamma <- 1/Re(polyroot(x))
+#' @import ggplot2 reshape
+#' @export
+compare <- function(){
   
-  inverse <- function(y,k){
-    sapply(1:k-1,function(i) y^i)
-  }
-  z <- lapply(lapply(gamma,inverse,k=2),polynom::polynomial)
-  temp = z[[1]]
-  if(length(z)>1){
-    for(i in 2:length(z)){
-      temp = temp*z[[i]]
-    }
-  }
-  temp
 }
