@@ -1,25 +1,25 @@
 #' @export
 predict.idpoly <- function(x,data,nahead=1){
-  y <- outputData(x); u<- inputData(x)
+  y <- outputData(data); u<- inputData(data)
   G <- signal::Arma(b=c(rep(0,x$ioDelay),x$B),
                     a= as.numeric(polynom::polynomial(x$A)*
                                     polynom::polynomial(x$F1)))
-  det_sys <- signal::filter(G,u)
+  det_sys <- as.numeric(signal::filter(G,u))
   if(x$type=="oe" || nahead==Inf){
     ypred <- det_sys
   } else{
     Hden <- as.numeric(polynom::polynomial(x$A)*polynom::polynomial(x$D))
     Hinv <- signal::Arma(b=Hden,a=x$C)
-    filtered <- signal::filter(Hinv,y-det_sys)
+    filtered <- as.numeric(signal::filter(Hinv,as.numeric(y)-det_sys))
     if(nahead!=1){
       H <- as.numeric(polynom::polynomial(x$C)*polyinv(Hden,nahead))
       Hl <- signal::Ma(H[1:nahead])
-      filtered <- signal::filter(Hl,filtered)
+      filtered <- as.numeric(signal::filter(Hl,filtered))
     }
-    ypred <- y[k] - filtered
+    ypred <- as.numeric(y) - filtered
   }
   
-  return(ypred)
+  ts(ypred,start=start(data),deltat=deltat(data))
 }
 
 #' @export
