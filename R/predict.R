@@ -12,7 +12,9 @@ predict.idpoly <- function(x,data,nahead=1){
     Hinv <- signal::Arma(b=Hden,a=x$C)
     filtered <- signal::filter(Hinv,y-det_sys)
     if(nahead!=1){
-      
+      H <- as.numeric(polynom::polynomial(x$C)*polyinv(Hden,nahead))
+      Hl <- signal::Ma(H[1:nahead])
+      filtered <- signal::filter(Hl,filtered)
     }
     ypred <- y[k] - filtered
   }
@@ -39,4 +41,16 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 
 polyinv <- function(x,k){
   gamma <- 1/Re(polyroot(x))
+  
+  inverse <- function(y,k){
+    sapply(1:k-1,function(i) y^i)
+  }
+  z <- lapply(lapply(gamma,inverse,k=2),polynom::polynomial)
+  temp = z[[1]]
+  if(length(z)>1){
+    for(i in 2:length(z)){
+      temp = temp*z[[i]]
+    }
+  }
+  temp
 }
