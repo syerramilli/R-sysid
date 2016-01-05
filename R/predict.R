@@ -58,11 +58,13 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' @export
 compare <- function(data,nahead=1,...){
   # Input Validation
+  input_list <- as.list(substitute(list(...)))[-1]
   dots <- list(...)
   if(is.null(dots)) stop("No model supplied")
   
+  names(dots) <- as.character(input_list)
   Y <- sapply(dots,predict,newdata=data,nahead=nahead)
-  df <- data.frame(Time = time(data),Actual=outputData(data)[,1],Y)
+  df <- data.frame(Time = time(data),Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- melt(df,id="Time")
   
   ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line()
