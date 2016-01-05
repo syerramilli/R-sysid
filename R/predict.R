@@ -64,8 +64,11 @@ compare <- function(data,nahead=1,...){
   
   names(dots) <- as.character(input_list)
   Y <- sapply(dots,predict,newdata=data,nahead=nahead)
-  df <- data.frame(Time = time(data),Actual=as.numeric(outputData(data)[,1]),Y)
+  df <- data.frame(Time = as.numeric(time(data)),
+                   Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- melt(df,id="Time")
   
-  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line()
+  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line()+
+    ggtitle(paste("Comparison with model predictions",nahead,"step(s) ahead"))+
+    theme_bw()
 }
