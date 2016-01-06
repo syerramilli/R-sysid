@@ -54,6 +54,19 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
   } 
 }
 
+#' Compare the measured output and the predicted output(s)
+#' 
+#' Plots the output predictions of model(s) superimposed over validation data, 
+#' data, for comparison. 
+#' 
+#' @param data validation data in the form of an \code{idframe} object
+#' @param nahead number of steps ahead at which to predict
+#' @param \ldots models whose predictions are to be compared
+#' 
+#' @examples 
+#' data(arxsim)
+#' compare(data,nahead=1,mod1,mod2,mod3)
+#' 
 #' @import ggplot2 reshape2
 #' @export
 compare <- function(data,nahead=1,...){
