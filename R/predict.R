@@ -77,7 +77,9 @@ compare <- function(data,nahead=1,...){
   if(is.null(dots)) stop("No model supplied")
   
   Y <- sapply(dots,predict,newdata=data,nahead=nahead)
-  colnames(Y) <- as.character(input_list)
+  nrmse <- sapply(dots,FUN = function(x) fitch(x)$FitPer)
+  colnames(Y) <- paste(as.character(input_list),paste(round(nrmse,2),"%",sep=""),
+                       sep=": ")
   df <- data.frame(Time = as.numeric(time(data)),
                    Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- melt(df,id="Time")
