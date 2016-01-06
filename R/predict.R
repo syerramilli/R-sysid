@@ -62,8 +62,8 @@ compare <- function(data,nahead=1,...){
   dots <- list(...)
   if(is.null(dots)) stop("No model supplied")
   
-  names(dots) <- as.character(input_list)
   Y <- sapply(dots,predict,newdata=data,nahead=nahead)
+  colnames(Y) <- as.character(input_list)
   df <- data.frame(Time = as.numeric(time(data)),
                    Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- melt(df,id="Time")
