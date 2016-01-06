@@ -165,3 +165,20 @@ print.idpoly <- function(mod,se=NULL,dig=3){
   }
   cat("\n")
 }
+
+params <- function(x){
+  if(x$type=="arx"||x$type=="armax"){
+    coefs <- c(x$A[-1],x$B)
+    na <- length(x$A) - 1; nk <- x$ioDelay; 
+    nb <- length(x$B)
+    if(x$type=="armax"){
+      coefs <- c(coefs,x$C[-1])
+      nc <- length(x$C)-1
+    } 
+  } else if(x$type=="oe"){
+    coefs <- c(x$B,x$F1[-1])
+    nf <- length(x$F1) - 1; nk <- x$ioDelay; 
+    nb <- length(x$B)
+  }
+  coefs
+} 

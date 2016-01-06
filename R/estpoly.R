@@ -18,26 +18,22 @@ print.estpoly <- function(x,...){
 summary.estpoly <- function(x)
 {
   model <- x$sys
-  if(model$type=="arx"||model$type=="armax"){
-    coefs <- c(model$A[-1],model$B)
-    na <- length(model$A) - 1; nk <- model$ioDelay; 
-    nb <- length(model$B)
-    if(model$type=="armax"){
-      coefs <- c(coefs,model$C[-1])
-      nc <- length(model$C)-1
-    } 
-  } else if(model$type=="oe"){
-    coefs <- c(model$B,model$F1[-1])
-    nf <- length(model$F1) - 1; nk <- model$ioDelay; 
-    nb <- length(model$B)
-  }
+  coefs <- params(model)
   
   se <- sqrt(diag(getcov(x)))
   params <- data.frame(Estimated=coefs,se=se)
   
+  report <- list(fit=fitch(x),params=params)
+  res <- list(model=model,report=report)
+  class(res) <- "summary.estpoly"
+  res
+}
+
+#' @export
+fitch <- function(x){
   y <- fitted(x) + resid(x)
   ek <- as.matrix(resid(x))
-  N <- nrow(ek); np <- nrow(params)
+  N <- nrow(ek); np <- length(params(x$sys))
   
   # fit characteristics
   mse <- det(t(ek)%*%ek)/N
@@ -48,11 +44,7 @@ summary.estpoly <- function(x)
   nAIC <- log(mse) + 2*np/N
   BIC <- N*log(mse) + N*dim(matrix(y))[2]*(log(2*pi)+1) + np*log(N)
   
-  report <- list(fit=list(MSE=mse,FPE=fpe,FitPer = nrmse*100,AIC=AIC,AICc=AICc,
-                          nAIC=nAIC,BIC=BIC),params=params)
-  res <- list(model=model,report=report)
-  class(res) <- "summary.estpoly"
-  res
+  list(MSE=mse,FPE=fpe,FitPer = nrmse*100,AIC=AIC,AICc=AICc,nAIC=nAIC,BIC=BIC)
 }
 
 #' @export
