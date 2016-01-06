@@ -84,7 +84,7 @@ compare <- function(data,nahead=1,...){
                    Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- melt(df,id="Time")
   
-  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line()+
+  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line(size=1)+
     ggtitle(paste("Comparison with model predictions",nahead,"step(s) ahead"))+
-    theme_bw()
+    theme_bw()+ylab(outputNames(data)) + labs(colour="") + scale_colour_hue(l=50)
 }
