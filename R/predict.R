@@ -60,7 +60,8 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' data, for comparison. 
 #' 
 #' @param data validation data in the form of an \code{idframe} object
-#' @param nahead number of steps ahead at which to predict
+#' @param nahead number of steps ahead at which to predict (Default:1). For infinite-
+#' step ahead predictions, supply \code{Inf}.
 #' @param \ldots models whose predictions are to be compared
 #' 
 #' @examples 

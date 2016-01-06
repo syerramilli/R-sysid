@@ -9,7 +9,8 @@ compare(data, nahead = 1, ...)
 \arguments{
 \item{data}{validation data in the form of an \code{idframe} object}
 
-\item{nahead}{number of steps ahead at which to predict}
+\item{nahead}{number of steps ahead at which to predict (Default:1). For infinite-
+step ahead predictions, supply \code{Inf}.}
 
 \item{\ldots}{models whose predictions are to be compared}
 }
