@@ -29,6 +29,25 @@ summary.estpoly <- function(x)
   res
 }
 
+#' Fit Characteristics
+#' 
+#' Returns quantitative assessment of the estimated model as a list
+#' 
+#' @param x the estimated model
+#' 
+#' @return 
+#' A list containing the following elements
+#' 
+#' \item{MSE}{Mean Square Error measure of how well the response of the model fits
+#' the estimation data}
+#' \item{FPE}{Final Prediction Error}
+#' \item{FitPer}{Normalized root mean squared error (NRMSE) measure of how well the 
+#' response of the model fits the estimation data, expressed as a percentage.}
+#' \item{AIC}{Raw Akaike Information Citeria (AIC) measure of model quality}
+#' \item{AICc}{Small sample-size corrected AIC}
+#' \item{nAIC}{Normalized AIC}
+#' \item{BIC}{Bayesian Information Criteria (BIC)}
+#' 
 #' @export
 fitch <- function(x){
   y <- fitted(x) + resid(x)
