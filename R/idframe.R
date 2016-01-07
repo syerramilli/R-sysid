@@ -45,9 +45,9 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' Plotting method for objects inherting from class \code{idframe}
 #' 
 #' @param x an \code{idframe} object
-#' @param par a list of arguments passed to par() before plotting.
 #' @param col line color, to be passed to plot.(Default=\code{"steelblue"})
 #' @param lwd line width, in millimeters(Default=\code{1})
+#' @param main the plot title. (Default = \code{NULL})
 #' 
 #' @examples
 #' data(cstr)
@@ -56,7 +56,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' @import ggplot2 reshape2
 #' 
 #' @export
-plot.idframe <- function(x,col="steelblue",lwd=1){
+plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL){
     if(nInputSeries(x)==0){
       data <- outputData(x)
     } else if(nOutputSeries(x)==0){
@@ -67,8 +67,8 @@ plot.idframe <- function(x,col="steelblue",lwd=1){
     }
     ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
           aes(time, value)) + geom_line(size=lwd,color=col) +
-      facet_grid(variable ~ .,scale="free") + theme_bw(16,"sans") + ylab("") +
-      theme(axis.title.x=element_text(size=11))
+      facet_grid(variable ~ .,scale="free") + theme_bw(14,"sans") + ylab("") +
+      theme(axis.title.x=element_text(size=11)) + ggtitle(main)
 }
 
 #' @export

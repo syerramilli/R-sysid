@@ -4,16 +4,16 @@
 \alias{plot.idframe}
 \title{Plotting idframe objects}
 \usage{
-\method{plot}{idframe}(x, col = "steelblue", lwd = 0.5)
+\method{plot}{idframe}(x, col = "steelblue", lwd = 1, main = NULL)
 }
 \arguments{
 \item{x}{an \code{idframe} object}
 
 \item{col}{line color, to be passed to plot.(Default=\code{"steelblue"})}
 
-\item{lwd}{line width, in millimeters(Default=\code{0.5})}
+\item{lwd}{line width, in millimeters(Default=\code{1})}
 
-\item{par}{a list of arguments passed to par() before plotting.}
+\item{main}{the plot title. (Default = \code{NULL})}
 }
 \description{
 Plotting method for objects inherting from class \code{idframe}
