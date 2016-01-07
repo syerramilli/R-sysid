@@ -27,7 +27,9 @@ Yhat <- predict(mod1,data) #  1-step ahead predictions
 Yhat_2 <- predict(mod1,data,nahead=2) # 2-step ahead predictions
 Yhat_inf <- predict(mod1,data,nahead=Inf) # Infinite-step ahead predictions
 
-
-
+}
+\references{
+Arun K. Tangirala (2015), \emph{Principles of System Identification: Theory 
+and Practice}, CRC Press, Boca Raton. Chapter 18
 }
 
