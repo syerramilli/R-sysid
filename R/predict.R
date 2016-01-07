@@ -102,7 +102,7 @@ compare <- function(data,nahead=1,...){
   
   Y <- sapply(dots,predict,newdata=data,nahead=nahead)
   nrmse <- sapply(dots,FUN = function(x) fitch(x)$FitPer)
-  colnames(Y) <- paste(as.character(input_list),paste(round(nrmse,2),"%",sep=""),
+  temp <- paste(as.character(input_list),paste(round(nrmse,2),"%",sep=""),
                        sep=": ")
   df <- data.frame(Time = as.numeric(time(data)),
                    Actual=as.numeric(outputData(data)[,1]),Y)
@@ -110,5 +110,6 @@ compare <- function(data,nahead=1,...){
   
   ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line(size=1)+
     ggtitle(paste("Comparison with model predictions",nahead,"step(s) ahead"))+
-    theme_bw()+ylab(outputNames(data)) + labs(colour="") + scale_colour_hue(l=50)
+    theme_bw()+ylab(outputNames(data)) + labs(colour="") + 
+    scale_colour_hue(labels=c("Measured",temp),l=50)
 }
