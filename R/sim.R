@@ -51,6 +51,8 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
 #' model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),ioDelay=1)
 #' y <- sim(model,u,sigma=0.1)
 #' 
+#' @import polynom
+#' 
 #' @export
 sim.idpoly <- function(model,input,sigma=0,seed=NULL){
   if(model$type=="arx"){
@@ -67,7 +69,7 @@ sim.idpoly <- function(model,input,sigma=0,seed=NULL){
     
     B <- c(rep(0,model$ioDelay),model$B)
     den2 <- as.numeric(polynomial(model$A)*polynomial(model$F1))
-    filt2 <- Arma(b=B,a=den2)
+    filt2 <- signal::Arma(b=B,a=den2)
     ufk <- signal::filter(filt2,input)
     
     yk <- as.numeric(ufk) + as.numeric(vk)

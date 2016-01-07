@@ -150,7 +150,7 @@ idfrd <- function(response,freq,Ts){
 #' frf <- spa(data) # Estimates the frequency response from data
 #' plot(frf)
 #' 
-#' @import ggplot2
+#' @import ggplot2 reshape2
 #' 
 #' @export
 plot.idfrd <- function(x){
