@@ -89,7 +89,7 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' 
 #' @examples 
 #' data(arxsim)
-#' compare(data,nahead=1,mod1,mod2,mod3)
+#' compare(data,nahead=Inf,mod1,mod2,mod3)
 #' 
 #' @seealso \code{\link{predict.estpoly}} for obtaining model predictions
 #' @import ggplot2 reshape2
