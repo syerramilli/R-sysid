@@ -11,5 +11,5 @@ Description: The sysid package provides functions for constructing mathematical
     paramteric model estimation, and model predictions and validation.
 License: GPL-3
 Imports:
-    signal,tframe,tfplot,zoo, ggplot2, reshape2, polynom
+    signal,tframe,zoo, ggplot2, reshape2, polynom
 RoxygenNote: 5.0.1

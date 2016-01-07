@@ -44,22 +44,19 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
 #' 
 #' Plotting method for objects inherting from class \code{idframe}
 #' 
-#' @param x an object of class \code{idframe}
+#' @param x an \code{idframe} object
 #' @param par a list of arguments passed to par() before plotting.
 #' @param col line color, to be passed to plot.(Default=\code{"steelblue"})
-#' @param ... additional arguments to be passed to the \code{tfplot} function
+#' @param lwd line width, in millimeters(Default=\code{1})
 #' 
-#' @seealso \code{\link[tfplot]{tfplot}}
 #' @examples
 #' data(cstr)
 #' plot(cstr,col="blue")
 #' 
-#' @import tfplot
+#' @import ggplot2 reshape2
 #' 
 #' @export
-plot.idframe <- function(x,par=list(mar=c(3,4,2,2)),
-                         col="steelblue",...){
-    require(tfplot)
+plot.idframe <- function(x,col="steelblue",lwd=1){
     if(nInputSeries(x)==0){
       data <- outputData(x)
     } else if(nOutputSeries(x)==0){
@@ -68,7 +65,10 @@ plot.idframe <- function(x,par=list(mar=c(3,4,2,2)),
       data <- cbind(outputData(x),inputData(x))
       colnames(data) <- c(outputNames(x),inputNames(x))
     }
-    tfplot(data,Xaxis=NULL,par=par,col=col,...)
+    ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
+          aes(time, value)) + geom_line(size=lwd,color=col) +
+      facet_grid(variable ~ .,scale="free") + theme_bw(16,"sans") + ylab("") +
+      theme(axis.title.x=element_text(size=11))
 }
 
 #' @export

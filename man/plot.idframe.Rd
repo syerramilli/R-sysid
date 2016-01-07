@@ -4,17 +4,16 @@
 \alias{plot.idframe}
 \title{Plotting idframe objects}
 \usage{
-\method{plot}{idframe}(x, par = list(mar = c(3, 4, 2, 2)),
-  col = "steelblue", ...)
+\method{plot}{idframe}(x, col = "steelblue", lwd = 0.5)
 }
 \arguments{
-\item{x}{an object of class \code{idframe}}
-
-\item{par}{a list of arguments passed to par() before plotting.}
+\item{x}{an \code{idframe} object}
 
 \item{col}{line color, to be passed to plot.(Default=\code{"steelblue"})}
 
-\item{...}{additional arguments to be passed to the \code{tfplot} function}
+\item{lwd}{line width, in millimeters(Default=\code{0.5})}
+
+\item{par}{a list of arguments passed to par() before plotting.}
 }
 \description{
 Plotting method for objects inherting from class \code{idframe}
@@ -23,8 +22,5 @@ Plotting method for objects inherting from class \code{idframe}
 data(cstr)
 plot(cstr,col="blue")
 
-}
-\seealso{
-\code{\link[tfplot]{tfplot}}
 }
 
