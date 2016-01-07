@@ -23,4 +23,7 @@ data(arxsim)
 compare(data,nahead=1,mod1,mod2,mod3)
 
 }
+\seealso{
+\code{\link{predict.estpoly}} for obtaining model predictions
+}
 

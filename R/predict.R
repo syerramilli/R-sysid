@@ -37,6 +37,27 @@ polyinv <- function(x,k){
   temp
 }
 
+#' Predictions of identified model
+#' 
+#' Predicts the output of an identified model (\code{estpoly}) object K steps ahead. 
+#' 
+#' @param x \code{estpoly} object containing the identified model
+#' @param newdata optional dataset to be used for predictions. If not supplied, 
+#' predictions are made on the training set.
+#' @param nahead number of steps ahead at which to predict (Default:1). For infinite-
+#' step ahead predictions or pure simulation, supply \code{Inf}.
+#' 
+#' @return 
+#' Time-series containing the predictions
+#' 
+#' @examples 
+#' data(arxsim)
+#' Yhat <- predict(mod1,data) #  1-step ahead predictions 
+#' Yhat_2 <- predict(mod1,data,nahead=2) # 2-step ahead predictions
+#' Yhat_inf <- predict(mod1,data,nahead=Inf) # Infinite-step ahead predictions
+#' 
+#' 
+#' 
 #' @export
 predict.estpoly <- function(x,newdata=NULL,nahead=1){
   if(is.null(newdata)&& nahead==1){
@@ -68,6 +89,7 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' data(arxsim)
 #' compare(data,nahead=1,mod1,mod2,mod3)
 #' 
+#' @seealso \code{\link{predict.estpoly}} for obtaining model predictions
 #' @import ggplot2 reshape2
 #' @export
 compare <- function(data,nahead=1,...){
