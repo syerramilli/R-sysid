@@ -219,5 +219,5 @@ comdiv <- function(z1,z2){
   mag1 <- Mod(z1);mag2 <- Mod(z2)
   phi1 <- Arg(z1); phi2 <- Arg(z2)
   
-  complex(modulus=mag1/mag2,argument=unwrap(phi1-phi2))
+  complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
 }
