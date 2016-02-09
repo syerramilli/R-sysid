@@ -26,9 +26,10 @@
 idinput<-function(n,type='rgs',band=c(0,1),levels=c(-1,1)){
   if(type=="rbs"){
     rbs(n,band,levels)
-  } 
-  else if(type=="rgs"){
+  } else if(type=="rgs"){
     rgs(n,band,levels)
+  } else if(type=="sine"){
+    multisine(n,1,band,levels)
   }
 }
 
@@ -42,6 +43,32 @@ rgs <- function(n,band,levels){
 rbs <- function(n,band,levels){
   u <- butter_filt(rnorm(n),band)
   sapply(u,function(x) if(x>0) levels[2] else levels[1])
+}
+
+multisine <- function(N,nin=1,band,levels){
+  sinedata <- list(nSin=10,nTrial=10,gridSkip=1)
+  freq <- 2*pi*seq(1,floor(N/2),by=sinedata$gridSkip)/N
+  band <- band*pi
+  freq <- freq[freq>=band[1] & freq<=band[2]]
+  nl <- length(freq)
+  freqInd <- seq(from=1,to=nl,length.out = nin*sinedata$nSin)
+  
+  # Begin Trials
+  trials <- function(x){
+    freqs <- freq[freqInd[seq(from=x,to=nin*sinedata$nSin,by=nin)]]
+    for(k in 1:sinedata$nTrial){
+      utrial <- rowSums(cos(sapply(freqs,
+                                   function(x) (1:N-1)*x+2*pi*rnorm(1))))
+      if(k==1) u <- utrial; temp <- diff(range(utrial))
+      if(diff(range(utrial))< temp) {
+        u <- utrial; temp <- diff(range(utrial))
+      }
+    }
+    clevel <- max(abs(u))
+    diff(levels)/2/clevel*(u+clevel)+levels[1]
+  }
+  u <- sapply(1:nin,trials) 
+  return(u)
 }
 
 butter_filt <- function(x,band){
