@@ -46,7 +46,7 @@ rbs <- function(n,band,levels){
 
 butter_filt <- function(x,band){
   filt <- T; type <- "pass"
-  if(band[1]==0){
+  if(band[1]<=2e-3){
     if(band[2]==1){
       filt <- F
     } else{
