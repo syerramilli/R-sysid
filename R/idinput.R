@@ -25,31 +25,47 @@
 #' @export
 idinput<-function(n,type='rgs',band=c(0,1),levels=c(-1,1)){
   if(type=="rbs"){
-    v1<-gen.rbs(n,band,levels)
+    rbs(n,band,levels)
   } 
   else if(type=="rgs"){
-    v1<-gen.rgs(n,band,levels)
+    rgs(n,band,levels)
   }
-  return(v1)
 }
 
-gen.rgs<-function(n,band,levels){
+rgs <- function(n,band,levels){
+  u <- butter_filt(rnorm(n),band)
   mu<-(levels[1]+levels[2])/2
   sigma<-(levels[2]-levels[1])/2
-  v<-rnorm(n,mu,sigma)
-  v<-sapply(v, function(x) {if(x==0) rnorm(1) else x})
-  gfilt<-signal::butter(8,band,type ='pass',plane ='z')
-  v1<-signal::filter(gfilt,v)
-  return(v1)
+  u*sigma+mu
 }
 
-gen.rbs<-function(n,band,levels){
-  v<-rnorm(n)
-  
-  v<-sapply(v, function(x) {if(x==0) rnorm(1) else x}, simplify = 'vector')
-  #if we do not specify else case, it assigns it as NULL
-  bfilt<-signal::butter(8,band,type = 'pass',plane = 'z')
-  v1<-signal::filter(bfilt,v)
-  v1<-sapply(v1, function(x) {ifelse(x>0 , levels[2] , levels[1]) })
-  return(v1)
+rbs <- function(n,band,levels){
+  u <- butter_filt(rnorm(n),band)
+  sapply(u,function(x) if(x>0) levels[2] else levels[1])
+}
+
+butter_filt <- function(x,band){
+  filt <- T; type <- "pass"
+  if(band[1]==0){
+    if(band[2]==1){
+      filt <- F
+    } else{
+      type <- "low"
+    }
+  } else{
+    if(band[2]==1){
+      type <- "high"  
+    }
+  }
+  if(filt==T){
+    if(type=="low"){
+      bf <- signal::butter(8,band[2],type,"z")
+    } else if(type=="pass"){
+      bf <- signal::butter(8,band,type,"z")
+    }else{
+      bf <- signal::butter(8,band[1],type,"z")
+    }
+    x <- as.numeric(signal::filter(bf,x))
+  }
+  return(matrix(x,ncol=1))
 }
