@@ -175,12 +175,12 @@ bjGrad <- function(theta,e,dots){
   } else{
     filt_ts <- signal::Arma(b=c(1,theta[nb+1:nc]),
                             a=c(1,theta[nb+nc+1:nd]))
-    w <- signal::filter(filt_ts,e)
+    w <- matrix(signal::filter(filt_ts,e))
     zeta <- y-w
   }
   zetaout <- matrix(c(rep(0,n),zeta[,]))
   wout <- matrix(c(rep(0,n),w[,]))
-  eout <- matrix(c(rep(0,n)),e[,])
+  eout <- matrix(c(rep(0,n),e[,]))
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
