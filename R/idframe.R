@@ -27,6 +27,7 @@ idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL,
   l <- list(output,input)
   l2 <- lapply(l,data.frame)
   n <- dim(l2[[1]])
+  dims <- sapply(l2,ncol)
   colnames(l2[[1]]) <- sapply(1:dims[1],
                               function(x) paste("y",x,sep = ""))
   colnames(l2[[2]]) <- sapply(1:dims[2],
