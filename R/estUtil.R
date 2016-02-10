@@ -17,42 +17,40 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   update <- 1 
   # variable to count the number of times objective function is called
   countObj <- 0
+  sumSqRatio <- 1
   
   repeat{
     i=i+1
-    if(update ==1){
-      countObj <- countObj+1
-      # Update gradient
-      l <- obj(theta0,e,dots)
+    # Update gradient
+    l <- obj(theta0,e,dots)
+    
+    repeat{
+      # Update Parameters
+      H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
+      Hinv <- solve(H)
+      theta <- theta0 + Hinv%*%t(l$grad)%*%e
+
+      # Update residuals
+      e <- l$Y-l$X%*%theta
+      sumsq <- sum(e^2)
+      sumSqRatio <- (sumsq0-sumsq)/sumsq0
+      countObj <- countObj + 1
+
+      if(abs(sumSqRatio) < tol) break
+      # If sum square error with the updated parameters is less than the 
+      # previous one, the updated parameters become the current parameters
+      # and the damping coefficient is reduced by a factor of mu
+      if(sumSqRatio > 0){
+        d <- d/mu
+        theta0 <- theta
+        sumsq0 <- sumsq
+        break
+      } else{ # increase damping coefficient by a factor of mu
+        d <- d*mu
+      } 
     }
-    
-    # Update Parameters
-    H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
-    Hinv <- solve(H)
-    theta <- theta0 + Hinv%*%t(l$grad)%*%e
-    
-    # Update residuals
-    e <- l$Y-l$X%*%theta
-    sumsq <- sum(e^2)
-    sumSqRatio <- (sumsq0-sumsq)/sumsq0
-    
-    # If sum square error with the updated parameters is less than the 
-    # previous one, the updated parameters become the current parameters
-    # and the damping coefficient is reduced by a factor of mu
-    if(sumSqRatio > 0){
-      d <- d/mu
-      theta0 <- theta
-      sumsq0 <- sumsq
-      update <- 1
-    } else{ # increase damping coefficient by a factor of mu
-      d <- d*mu
-      update <- 0
-    }
-    
-    if((abs(sumSqRatio) < tol) || (i == maxIter)){
-      break
-      
-    }
+
+    if((abs(sumSqRatio) < tol)||(i == maxIter)) break
   }
   
   if(abs(sumSqRatio) < tol){
@@ -83,7 +81,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' @param LMstep Size of the Levenberg-Marquardt step
 #' 
 #' @export
-optimOptions <- function(tol=1e-5,maxIter=20,LMinit=100,LMstep=8){
+optimOptions <- function(tol=1e-3,maxIter=20,LMinit=0.1,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }
