@@ -23,12 +23,13 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     
     g <- t(l$grad)%*%e
     termPar <- norm(g,"2")/sumsq0/100
-    if(termPar < tol) break
+    theta <- theta0
     
     repeat{
       # Update Parameters
       H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
-      Hinv <- solve(H); 
+      Hinv <- solve(H);
+      if(termPar < tol) break
       theta <- theta0 + Hinv%*%g
       
       # Evaulate sum square error
