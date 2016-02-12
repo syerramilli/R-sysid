@@ -13,8 +13,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$Y-l$X%*%theta0
   sumsq0 <- sum(e^2)
-  # parameter indicating whether to update gradient in the iteration
-  update <- 1 
   # variable to count the number of times objective function is called
   countObj <- 0
   
@@ -23,14 +21,15 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     # Update gradient
     l <- obj(theta0,e,dots)
     
+    g <- t(l$grad)%*%e
+    termPar <- norm(g,"2")/sumsq0/100
+    if(termPar < tol) break
+    
     repeat{
       # Update Parameters
       H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
-      Hinv <- solve(H); g <- t(l$grad)%*%e
+      Hinv <- solve(H); 
       theta <- theta0 + Hinv%*%g
-      
-      termPar <- norm(g,"2")/sumsq0/100
-      if(termPar < tol) break
       
       # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
@@ -38,7 +37,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
 
-      
       # If sum square error with the updated parameters is less than the 
       # previous one, the updated parameters become the current parameters
       # and the damping coefficient is reduced by a factor of mu
@@ -53,7 +51,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       } 
     }
 
-    if((termPar < tol)||(i == maxIter)) break
+    if(i == maxIter) break
   }
   
   if(termPar < tol){
@@ -84,7 +82,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' @param LMstep Size of the Levenberg-Marquardt step
 #' 
 #' @export
-optimOptions <- function(tol=1e-4,maxIter=20,LMinit=0.1,LMstep=2){
+optimOptions <- function(tol=1e-2,maxIter=20,LMinit=0.1,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }
