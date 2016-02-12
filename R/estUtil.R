@@ -31,8 +31,8 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       theta <- theta0 + Hinv%*%g
       
       # Update residuals
-      e <- l$Y-l$X%*%theta
-      sumsq <- sum(e^2)
+      fn <- l$Y-l$X%*%theta
+      sumsq <- sum(fn^2)
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
 
@@ -44,6 +44,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
         d <- d/mu
         theta0 <- theta
         sumsq0 <- sumsq
+        e <- fn
         break
       } else{ # increase damping coefficient by a factor of mu
         d <- d*mu
