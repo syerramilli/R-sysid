@@ -17,7 +17,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   update <- 1 
   # variable to count the number of times objective function is called
   countObj <- 0
-  sumSqDiff <- 1
   
   repeat{
     i=i+1
@@ -32,6 +31,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       
       termPar <- norm(g,"2")/sumsq0/100
       if(termPar < tol) break
+      
       # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
       sumsq <- sum(fn^2)
@@ -53,7 +53,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       } 
     }
 
-    if(termPar < tol)||(i == maxIter)) break
+    if((termPar < tol)||(i == maxIter)) break
   }
   
   if(termPar < tol){
