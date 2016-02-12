@@ -30,13 +30,15 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       Hinv <- solve(H); g <- t(l$grad)%*%e
       theta <- theta0 + Hinv%*%g
       
-      # Update residuals
+      termPar <- norm(g,"2")/sumsq0/100
+      if(termPar < tol) break
+      # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
       sumsq <- sum(fn^2)
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
 
-      if(abs(sumSqDiff)/100 < tol) break
+      
       # If sum square error with the updated parameters is less than the 
       # previous one, the updated parameters become the current parameters
       # and the damping coefficient is reduced by a factor of mu
@@ -51,10 +53,10 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       } 
     }
 
-    if((abs(sumSqDiff)/100 < tol)||(i == maxIter)) break
+    if(termPar < tol)||(i == maxIter)) break
   }
   
-  if(abs(sumSqDiff)/100 < tol){
+  if(termPar < tol){
     WhyStop <- "Tolerance"
   } else{
     WhyStop <- "Maximum Iteration Limit"
