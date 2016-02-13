@@ -71,7 +71,7 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Step 4
   G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  x2 <- as.numeric(signal::filter(G2,u))
+  x2 <- matrix(sim(mod_iv1$sys,u,sigma=0))
   
   Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
   filtered <- lapply(list(y,u,x2),Lf,L=Lhat)
