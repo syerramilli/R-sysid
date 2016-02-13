@@ -260,10 +260,15 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   yout <- apply(y,2,padZeros,n=n)
   uout <- apply(u,2,padZeros,n=n)
   
-  theta0 <- matrix(runif(na+nb+nc,min=-0.3,max=0.3)) # current parameters
+  # Initial Parameter Estimates
+  mod_arx <- arx(x,c(na,nb,nk)) # fitting ARX model
+  eps_init <- matrix(resid(mod_arx))
+  mod_ar <- ar(eps_init,aic=F,order=nc)
+  e_init <- matrix(mod_ar$resid); e_init[is.na(e_init)] <- 0 
+  theta0 <- matrix(c(mod_arx$sys$A[-1],mod_arx$sys$B,-mod_ar$ar))
   
-  l <- levbmqdt(yout,uout,order,obj=armaxGrad,theta0=theta0,N=N,
-                opt=options)
+  l <- levbmqdt(yout,uout,order,e_init,obj=armaxGrad,
+                theta0=theta0,N=N,opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
