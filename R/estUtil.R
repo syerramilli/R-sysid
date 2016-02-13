@@ -13,6 +13,8 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$Y-l$X%*%theta0
   sumsq0 <- sum(e^2)/N
+  theta <- theta0
+  
   # variable to count the number of times objective function is called
   countObj <- 0
   sumSqDiff <- 9E-3*sumsq0
@@ -24,7 +26,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     
     g <- 1/N*t(l$grad)%*%e
     termPar <- norm(g,"2")
-    theta <- theta0
     
     repeat{
       # Update Parameters
@@ -40,7 +41,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       countObj <- countObj + 1
       
       # no major improvement
-      if(abs(sumSqDiff) < 1E-4*sumsq0) break
+      if(abs(sumSqDiff) < 0.01*sumsq0) break
       
       # If sum square error with the updated parameters is less than the 
       # previous one, the updated parameters become the current parameters
@@ -55,14 +56,18 @@ levbmqdt <- function(...,obj,theta0,N,opt){
         d <- d*mu
       } 
     }
-    if(abs(sumSqDiff) < 0.01*sumsq0) break
-    if(termPar < tol) break
-    if(i == maxIter) break
-  }
-  if(termPar < tol){
-    WhyStop <- "Tolerance"
-  } else{
-    WhyStop <- "Maximum Iteration Limit"
+    if(abs(sumSqDiff) < 0.01*sumsq0){
+      WhyStop <- "No significant change"
+      break
+    } 
+    if(termPar < tol) {
+      WhyStop <- "Tolerance"
+      break
+    }
+    if(i == maxIter){
+      WhyStop <- "Maximum Iteration Limit"
+      break
+    } 
   }
   
   e <- e[1:N,]
@@ -70,7 +75,8 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   vcov <- 1/N*Hinv*sigma2
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
-       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
+       termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj,
+                        CostFcn=sumsq0))
 }
 
 #' Create optimization options
@@ -87,7 +93,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' @param LMstep Size of the Levenberg-Marquardt step
 #' 
 #' @export
-optimOptions <- function(tol=1e-3,maxIter=20,LMinit=0.01,LMstep=2){
+optimOptions <- function(tol=1e-2,maxIter=20,LMinit=0.01,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }
