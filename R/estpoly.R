@@ -345,12 +345,12 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
     stop("Not an OE model")
   
   leftPadZeros <- function(x,n) c(rep(0,n),x)
-  mod_arx <- arx(x,c(nf,nb,nk)) # fitting ARX model
-  iv <- matrix(predict(mod_arx))
+  mod_arx <- iv4(x,c(nf,nb,nk)) # fitting ARX model
+  ivs <- matrix(predict(mod_arx))
   theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
   uout <- apply(u,2,leftPadZeros,n=n)
   
-  l <- levbmqdt(y,uout,order,iv,obj=oeGrad,theta0=theta0,N=N,
+  l <- levbmqdt(y,uout,order,ivs,obj=oeGrad,theta0=theta0,N=N,
                 opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
