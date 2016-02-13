@@ -12,32 +12,34 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   i <- 0
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$Y-l$X%*%theta0
-  sumsq0 <- sum(e^2)
+  sumsq0 <- sum(e^2)/N
   # variable to count the number of times objective function is called
   countObj <- 0
   
   repeat{
-    i=i+1
     # Update gradient
     l <- obj(theta0,e,dots)
     
-    g <- t(l$grad)%*%e
-    termPar <- norm(g,"2")/sumsq0/100
+    g <- 1/N*t(l$grad)%*%e
+    termPar <- norm(g,"2")
     theta <- theta0
     
     repeat{
       # Update Parameters
-      H <- t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
+      H <- 1/N*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
       Hinv <- solve(H);
       if(termPar < tol) break
       theta <- theta0 + Hinv%*%g
       
       # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
-      sumsq <- sum(fn^2)
+      sumsq <- sum(fn^2)/N
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
-
+      
+      # no major improvement
+      if(abs(sumSqDiff) < 0.01*sumsq0) break
+      
       # If sum square error with the updated parameters is less than the 
       # previous one, the updated parameters become the current parameters
       # and the damping coefficient is reduced by a factor of mu
@@ -51,10 +53,11 @@ levbmqdt <- function(...,obj,theta0,N,opt){
         d <- d*mu
       } 
     }
-
+    if(abs(sumSqDiff) < 0.01*sumsq0) break
+    if(termPar < tol) break
+    i=i+1
     if(i == maxIter) break
   }
-  
   if(termPar < tol){
     WhyStop <- "Tolerance"
   } else{
@@ -63,7 +66,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
-  vcov <- Hinv*sigma2
+  vcov <- 1/N*Hinv*sigma2
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
        termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj))
@@ -83,7 +86,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' @param LMstep Size of the Levenberg-Marquardt step
 #' 
 #' @export
-optimOptions <- function(tol=1e-2,maxIter=20,LMinit=0.1,LMstep=2){
+optimOptions <- function(tol=1e-3,maxIter=20,LMinit=0.01,LMstep=2){
   return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
                                                   LMstep=LMstep)))
 }
