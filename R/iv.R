@@ -10,6 +10,10 @@ iv <- function(z,order=c(0,1,0),x=NULL){
     x <- matrix(sim(mod_arx$sys,u,sigma=0))
   }
   
+  ivcompute(y,u,x,na,nb,nk,n,N)
+}
+
+ivcompute <- function(y,u,x,na,nb,nk,n,N){
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
   xout <- apply(x,2,padZeros,n=n);
@@ -63,7 +67,15 @@ iv4 <- function(z,order=c(0,1,0)){
   w <- matrix(as.numeric(signal::filter(A,y)) - 
                 as.numeric(signal::filter(B,u)))
   mod_ar <- ar(w,aic = F,order=na+nb)
-  L <- signal::Ma(c(1,-mod_ar$ar))
+  Lhat <- signal::Ma(c(1,-mod_ar$ar))
   
   # Step 4
+  G2 <- signal::Arma(as.numeric(B),as.numeric(A))
+  x2 <- as.numeric(signal::filter(G2,u))
+  
+  Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
+  filtered <- lapply(list(y,u,x2),Lf,L=Lhat)
+  yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
+  
+  ivcompute(yf,uf,xf,na,nb,nk,n,N)
 }
