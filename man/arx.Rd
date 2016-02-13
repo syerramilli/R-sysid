@@ -4,7 +4,7 @@
 \alias{arx}
 \title{Estimate ARX Models}
 \usage{
-arx(x, order = c(0, 1, 0))
+arx(x, order = c(0, 1, 0), lambda = 0.1)
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}

@@ -4,7 +4,7 @@
 \alias{optimOptions}
 \title{Create optimization options}
 \usage{
-optimOptions(tol = 1e-05, maxIter = 20, LMinit = 100, LMstep = 8)
+optimOptions(tol = 0.001, maxIter = 20, LMinit = 0.01, LMstep = 2)
 }
 \arguments{
 \item{tol}{Minimum ratio of the improvement to the current loss 
