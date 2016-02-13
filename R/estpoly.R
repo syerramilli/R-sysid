@@ -261,7 +261,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   uout <- apply(u,2,padZeros,n=n)
   
   # Initial Parameter Estimates
-  mod_arx <- arx(x,c(na,nb,nk)) # fitting ARX model
+  mod_arx <- iv4(x,c(na,nb,nk)) # fitting ARX model
   eps_init <- matrix(resid(mod_arx))
   mod_ar <- ar(eps_init,aic=F,order=nc)
   e_init <- matrix(mod_ar$resid); e_init[is.na(e_init)] <- 0 
