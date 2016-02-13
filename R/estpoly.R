@@ -160,7 +160,7 @@ residplot <- function(model,newdata=NULL){
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
-arx <- function(x,order=c(0,1,0)){
+arx <- function(x,order=c(0,1,0),lambda=0.1){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
@@ -176,7 +176,7 @@ arx <- function(x,order=c(0,1,0)){
   X <- t(sapply(n+1:(N+n),reg))
   Y <- yout[n+1:(N+n),,drop=F]
   
-  lambda <- 0.1
+  # lambda <- 0.1
   inner <- t(X)%*%X + lambda*diag(dim(X)[2])
   innerinv <- solve(inner)
   pinv <- innerinv%*% t(X)
