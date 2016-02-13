@@ -2,7 +2,6 @@
 iv <- function(z,order=c(0,1,0),x=NULL){
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   
   if(is.null(x)){
     # Initial Guess using ARX
@@ -14,6 +13,7 @@ iv <- function(z,order=c(0,1,0),x=NULL){
 }
 
 ivcompute <- function(y,u,x,na,nb,nk,n,N){
+  nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
   xout <- apply(x,2,padZeros,n=n);
