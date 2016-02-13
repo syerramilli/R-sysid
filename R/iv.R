@@ -1,12 +1,14 @@
 #' @export
-iv <- function(z,order=c(0,1,0)){
+iv <- function(z,order=c(0,1,0),x=NULL){
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   
-  # Initial Guess using ARX
-  mod_arx <- arx(z,order)
-  x <- matrix(sim(mod_arx$sys,u,sigma=0))
+  if(is.null(x)){
+    # Initial Guess using ARX
+    mod_arx <- arx(z,order)
+    x <- matrix(sim(mod_arx$sys,u,sigma=0))
+  }
   
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
