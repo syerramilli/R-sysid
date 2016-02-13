@@ -15,8 +15,10 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   sumsq0 <- sum(e^2)/N
   # variable to count the number of times objective function is called
   countObj <- 0
+  sumSqDiff <- 9E-3*sumsq0
   
   repeat{
+    i=i+1
     # Update gradient
     l <- obj(theta0,e,dots)
     
@@ -38,7 +40,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       countObj <- countObj + 1
       
       # no major improvement
-      if(abs(sumSqDiff) < 0.01*sumsq0) break
+      if(abs(sumSqDiff) < 1E-4*sumsq0) break
       
       # If sum square error with the updated parameters is less than the 
       # previous one, the updated parameters become the current parameters
@@ -55,7 +57,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     }
     if(abs(sumSqDiff) < 0.01*sumsq0) break
     if(termPar < tol) break
-    i=i+1
     if(i == maxIter) break
   }
   if(termPar < tol){
@@ -111,7 +112,7 @@ armaxGrad <- function(theta,e,dots){
   N <- dim(y)[1]-2*n
   
   if(is.null(e)){
-    eout <- matrix(rep(0,N+2*n))
+    eout <- matrix(c(rep(0,n),dots[[4]][,],rep(0,n)))
   } else{
     eout <- matrix(c(rep(0,n),e[,]))
   }
