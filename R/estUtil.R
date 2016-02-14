@@ -31,7 +31,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       # Update Parameters
       H <- 1/N*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
       Hinv <- solve(H);
-      if(termPar < tol) break
+      
       theta <- theta0 + Hinv%*%g
       
       # Evaulate sum square error
@@ -40,6 +40,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
       
+      if(termPar < tol) break
       # no major improvement
       if(abs(sumSqDiff) < 0.01*sumsq0) break
       
@@ -56,14 +57,14 @@ levbmqdt <- function(...,obj,theta0,N,opt){
         d <- d*mu
       } 
     }
-    if(abs(sumSqDiff) < 0.01*sumsq0){
-      WhyStop <- "No significant change"
-      break
-    } 
     if(termPar < tol) {
       WhyStop <- "Tolerance"
       break
     }
+    if(abs(sumSqDiff) < 0.01*sumsq0){
+      WhyStop <- "No significant change"
+      break
+    } 
     if(i == maxIter){
       WhyStop <- "Maximum Iteration Limit"
       break
