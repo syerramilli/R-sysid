@@ -344,10 +344,14 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
   if(nf<1) 
     stop("Not an OE model")
   
-  leftPadZeros <- function(x,n) c(rep(0,n),x)
+  # Initial Model
   mod_arx <- iv4(x,c(nf,nb,nk)) # fitting ARX model
-  ivs <- matrix(predict(mod_arx))
+  wk <- resid(mod_arx)
+  e_init <- as.numeric(signal::filter(signal::Ma(mod_arx$sys$A),wk))
+  ivs <- y-e_init
   theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
+  
+  leftPadZeros <- function(x,n) c(rep(0,n),x)
   uout <- apply(u,2,leftPadZeros,n=n)
   
   l <- levbmqdt(y,uout,order,ivs,obj=oeGrad,theta0=theta0,N=N,
