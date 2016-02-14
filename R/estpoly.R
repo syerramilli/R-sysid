@@ -345,7 +345,7 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
     stop("Not an OE model")
   
   # Initial Model
-  mod_arx <- iv4(x,c(nf,nb,nk)) # fitting ARX model
+  mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
   wk <- resid(mod_arx)
   e_init <- as.numeric(signal::filter(signal::Ma(mod_arx$sys$A),wk))
   ivs <- y-e_init
