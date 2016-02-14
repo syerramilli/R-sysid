@@ -31,7 +31,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       H <- 1/N*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
       Hinv <- solve(H);
       
-      theta <- theta0 + Hinv%*%g
+      theta <- theta0 - Hinv%*%g
       
       # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
