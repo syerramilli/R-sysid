@@ -13,7 +13,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$Y-l$X%*%theta0
   sumsq0 <- sum(e^2)/N
-  theta <- theta0
   
   # variable to count the number of times objective function is called
   countObj <- 0
@@ -70,7 +69,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       break
     } 
   }
-  
+  theta <- theta0
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
   vcov <- 1/N*Hinv*sigma2
