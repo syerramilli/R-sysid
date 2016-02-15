@@ -369,19 +369,19 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
 }
 
 #' @export
-bj <- function(x,order=c(1,1,1,1,0),init_sys=NULL,
+bj <- function(z,order=c(1,1,1,1,0),init_sys=NULL,
                options=optimOptions()){
-  y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
+  y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   nb <- order[1];nc <- order[2]; nd <- order[3];
   nf <- order[4]; nk <- order[5];
   nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf); df <- N-nb-nc-nd-nf
   
   # Initial Guess
-  mod_oe <- oe(x,c(nb,nf,nk))
+  mod_oe <- oe(z,c(nb,nf,nk))
   v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
-  mod_arma <- arima(v,order=c(nd,0,nc),include.mean = F)
-  theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nd+1:nc],
-                  -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
+  mod_arma <- arima(v,order=c(nc,0,nd),include.mean = F)
+  theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nc+1:nd],
+                  -coef(mod_arma)[1:nc],mod_oe$sys$F1[-1]))
   eps <- matrix(resid(mod_arma))
   
   leftPadZeros <- function(x,n) c(rep(0,n),x)
@@ -395,7 +395,7 @@ bj <- function(x,order=c(1,1,1,1,0),init_sys=NULL,
   model <- idpoly(B = theta[1:nb],C=c(1,theta[nb+1:nc]),
                   D=c(1,theta[nb+nc+1:nd]),
                   F1 = c(1,theta[nb+nc+nd+1:nf]),
-                  ioDelay = nk,Ts=deltat(x))
+                  ioDelay = nk,Ts=deltat(z))
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
