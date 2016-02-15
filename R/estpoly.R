@@ -380,8 +380,8 @@ bj <- function(z,order=c(1,1,1,1,0),init_sys=NULL,
   mod_oe <- oe(z,c(nb,nf,nk))
   v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
   mod_arma <- arima(v,order=c(nc,0,nd),include.mean = F)
-  theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nc+1:nd],
-                  -coef(mod_arma)[1:nc],mod_oe$sys$F1[-1]))
+  theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nd+1:nc],
+                  -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
   eps <- matrix(resid(mod_arma))
   
   leftPadZeros <- function(x,n) c(rep(0,n),x)
