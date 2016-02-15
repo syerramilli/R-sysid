@@ -60,7 +60,7 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Steps 1-2
   mod_iv1 <- iv(z,order)
-  A <- signal::Ma(c(1,mod_iv1$sys$A))
+  A <- signal::Ma(mod_iv1$sys$A)
   B <- signal::Ma(c(rep(0,nk),mod_iv1$sys$B))
   
   # Step 3 (AR Modeling)
