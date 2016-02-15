@@ -84,18 +84,19 @@ levbmqdt <- function(...,obj,theta0,N,opt){
 #' Specify optimization options that are to be passed to the 
 #' numerical estimation routines
 #' 
-#' @param tol Minimum ratio of the improvement to the current loss 
-#' function. Iterations stop if this ratio goes below the tolerance
-#' limit (Default: \code{1e-5})
+#' @param tol Minimum 2-norm of the gradient (Default: \code{1e-2})
 #' @param maxIter Maximum number of iterations to be performed
 #' @param LMinit Starting value of search-direction length 
-#' in the Levenberg-Marquardt method.
-#' @param LMstep Size of the Levenberg-Marquardt step
+#' in the Levenberg-Marquardt method (Default: \code{0.01})
+#' @param LMstep Size of the Levenberg-Marquardt step (Default: \code{2})
+#' @param display Argument whether to display iteration details or not
+#' (Default: \code{"off"})
 #' 
 #' @export
-optimOptions <- function(tol=1e-2,maxIter=20,LMinit=0.01,LMstep=2){
-  return(list(tol=tol,maxIter= maxIter, adv= list(LMinit=LMinit,
-                                                  LMstep=LMstep)))
+optimOptions <- function(tol=1e-2,maxIter=20,LMinit=0.01,LMstep=2,
+                         display=c("off","on")[1]){
+  return(list(tol=tol,maxIter= maxIter, 
+              adv= list(LMinit=LMinit,LMstep=LMstep),display=display))
 }
 
 #' Parameter covariance of the identified model
@@ -201,8 +202,10 @@ bjGrad <- function(theta,e,dots){
   l <- list(X=X,Y=y)
   
   if(!is.null(e)){
+    den <- as.numeric(polynom::polynomial(c(1,theta[nb+1:nc]))*
+                        polynom::polynomial(c(1,theta[nb+nc+nd+1:nf])))
     filt1 <- signal::Arma(b=c(1,theta[nb+nc+1:nd]),
-                          a=c(1,theta[nb+1:nc]))
+                          a=den)
     grad <- apply(X,2,signal::filter,filt=filt1)
     l$grad <- grad
   }

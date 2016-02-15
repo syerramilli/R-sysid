@@ -4,19 +4,21 @@
 \alias{optimOptions}
 \title{Create optimization options}
 \usage{
-optimOptions(tol = 0.001, maxIter = 20, LMinit = 0.01, LMstep = 2)
+optimOptions(tol = 0.01, maxIter = 20, LMinit = 0.01, LMstep = 2,
+  display = c("off", "on")[1])
 }
 \arguments{
-\item{tol}{Minimum ratio of the improvement to the current loss 
-function. Iterations stop if this ratio goes below the tolerance
-limit (Default: \code{1e-5})}
+\item{tol}{Minimum 2-norm of the gradient (Default: \code{1e-2})}
 
 \item{maxIter}{Maximum number of iterations to be performed}
 
 \item{LMinit}{Starting value of search-direction length 
-in the Levenberg-Marquardt method.}
+in the Levenberg-Marquardt method (Default: \code{0.01})}
 
-\item{LMstep}{Size of the Levenberg-Marquardt step}
+\item{LMstep}{Size of the Levenberg-Marquardt step (Default: \code{2})}
+
+\item{display}{Argument whether to display iteration details or not
+(Default: \code{"off"})}
 }
 \description{
 Specify optimization options that are to be passed to the 
