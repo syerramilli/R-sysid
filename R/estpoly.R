@@ -368,6 +368,62 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
           options = options,termination = l$termination)
 }
 
+#' Estimate Box-Jenkins Models
+#' 
+#' Fit a box-jenkins model of the specified order from input-output data 
+#' 
+#' @param z an \code{idframe} object containing the data
+#' @param order Specification of the orders: the five integer components 
+#' (nb,nc,nd,nf,nk) are order of polynomial B + 1, order of the polynomial C,
+#' order of the polynomial D, order of the polynomial F, and the 
+#' input-output delay respectively
+#' @param options Estimation Options, setup using 
+#' \code{\link{optimOptions}}
+#' 
+#' @details
+#' SISO BJ models are of the form 
+#' \deqn{
+#'    y[k] + f_1 y[k-1] + \ldots + f_{nf} y[k-nf] = b_{nk} u[k-nk] + 
+#'    \ldots + b_{nk+nb} u[k-nk-nb] + f_{1} e[k-1] + \ldots f_{nf} e[k-nf]
+#'    + e[k] 
+#' }
+#' The function estimates the coefficients using non-linear least squares 
+#' (Levenberg-Marquardt Algorithm)
+#' \\
+#' The data is expected to have no offsets or trends. They can be removed 
+#' using the \code{\link{detrend}} function. 
+#' 
+#' @return
+#'  An object of class \code{estpoly} containing the following elements:
+#'  \item{sys}{an \code{idpoly} object containing the 
+#'    fitted BJ coefficients}
+#'  \item{fitted.values}{the predicted response}
+#'  \item{residuals}{the residuals}
+#'  \item{input}{the input data used}
+#'  \item{call}{the matched call}
+#'  \item{stats}{A list containing the following fields: \cr
+#'      \code{vcov} - the covariance matrix of the fitted coefficients \cr
+#'      \code{sigma} - the standard deviation of the innovations}
+#'  \item{options}{Option set used for estimation. If no 
+#'    custom options were configured, this is a set of default options}
+#'  \item{termination}{Termination conditions for the iterative
+#'     search used for prediction error minimization:
+#'      \code{WhyStop} - Reason for termination \cr
+#'      \code{iter} - Number of Iterations \cr
+#'      \code{iter} - Number of Function Evaluations }
+#' 
+#' @references
+#' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
+#' Theory and Practice}, CRC Press, Boca Raton. Sections 14.4.1, 17.5.2, 
+#' 21.6.3
+#' 
+#' @examples
+#' data(bjsim)
+#' z <- dataSlice(data,end=1500) # training set
+#' mod_bj <- bj(z,c(2,1,1,1,2))
+#' mod_bj 
+#' residplot(mod_bj) # residual plots
+#' 
 #' @export
 bj <- function(z,order=c(1,1,1,1,0),init_sys=NULL,
                options=optimOptions()){
