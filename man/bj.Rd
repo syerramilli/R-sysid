@@ -42,10 +42,25 @@ Fit a box-jenkins model of the specified order from input-output data
 \details{
 SISO BJ models are of the form 
 \deqn{
-   y[k] + f_1 y[k-1] + \ldots + f_{nf} y[k-nf] = b_{nk} u[k-nk] + 
-   \ldots + b_{nk+nb} u[k-nk-nb] + f_{1} e[k-1] + \ldots f_{nf} e[k-nf]
-   + e[k] 
+   y[k] = \frac{B(q^{-1})}{F(q^{-1})}u[k-nk] + 
+   \frac{C(q^{-1})}{D(q^{-1})} e[k]
 }
+The orders of Box-Jenkins model are defined as follows:
+\deqn{
+   B(q^{-1}) = b_1 + b_2q^{-1} + \ldots + b_{nb} q^{-nb+1}
+}
+
+\deqn{
+   C(q^{-1}) = 1 + c_1q^{-1} + \ldots + c_{nc} q^{-nc}
+}
+
+\deqn{
+   D(q^{-1}) = 1 + d_1q^{-1} + \ldots + d_{nd} q^{-nd}
+}
+\deqn{
+   F(q^{-1}) = 1 + f_1q^{-1} + \ldots + f_{nf} q^{-nf}
+}
+
 The function estimates the coefficients using non-linear least squares 
 (Levenberg-Marquardt Algorithm)
 \\
