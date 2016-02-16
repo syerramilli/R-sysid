@@ -175,8 +175,12 @@ params <- function(x){
       coefs <- c(coefs,x$C[-1])
       nc <- length(x$C)-1
     } 
-  } else if(x$type=="oe"){
-    coefs <- c(x$B,x$F1[-1])
+  } else if(x$type=="oe"||x$type=="bj"){
+    coefs <- c(x$B)
+    if(x$type=="bj"){
+      coefs <- c(coefs,x$C[-1],x$D[-1])
+    }
+    coefs <- c(coefs,x$F1[-1])
     nf <- length(x$F1) - 1; nk <- x$ioDelay; 
     nb <- length(x$B)
   }
