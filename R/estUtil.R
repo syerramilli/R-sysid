@@ -11,7 +11,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   # Initialize Algorithm
   i <- 0
   l <- obj(theta=theta0,e=NULL,dots)
-  e <- l$Y-l$X%*%theta0
+  e <- l$e
   sumsq0 <- sum(e^2)/N
   
   # variable to count the number of times objective function is called
@@ -119,7 +119,8 @@ armaxGrad <- function(theta,e,dots){
   N <- dim(y)[1]-2*n
   
   if(is.null(e)){
-    eout <- matrix(c(rep(0,n),dots[[4]][,],rep(0,n)))
+    e <- matrix(c(dots[[4]][,],rep(0,n)))
+    eout <- matrix(c(rep(0,n),e[,]))
   } else{
     eout <- matrix(c(rep(0,n),e[,]))
   }
@@ -131,7 +132,7 @@ armaxGrad <- function(theta,e,dots){
   
   X <- t(sapply(n+1:(N+n),reg))
   Y <- y[n+1:(N+n),,drop=F]
-  l <- list(X=X,Y=Y)
+  l <- list(X=X,Y=Y,e=e)
   
   if(!is.null(e)){
     filt1 <- signal::Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
@@ -150,6 +151,7 @@ oeGrad <- function(theta,e,dots){
   
   if(is.null(e)){
     iv <- dots[[4]]
+    e <- y-iv
   } else{
     iv <- y-e
   }
@@ -161,7 +163,7 @@ oeGrad <- function(theta,e,dots){
   }
   
   X <- t(sapply(n+1:N,reg))
-  l <- list(X=X,Y=y)
+  l <- list(X=X,Y=y,e=e)
   
   if(!is.null(e)){
     filt1 <- signal::Arma(b=1,a=c(1,theta[nb+1:nf,]))
@@ -199,7 +201,7 @@ bjGrad <- function(theta,e,dots){
   }
   
   X <- t(sapply(n+1:N,reg))
-  l <- list(X=X,Y=y)
+  l <- list(X=X,Y=y,e=e)
   
   if(!is.null(e)){
     den <- as.numeric(polynom::polynomial(c(1,theta[nb+1:nc]))*
