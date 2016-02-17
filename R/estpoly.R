@@ -126,9 +126,8 @@ residplot <- function(model,newdata=NULL){
 #'    \ldots + b_{nk+nb} u[k-nk-nb] + e[k] 
 #' }
 #' The function estimates the coefficients using linear least squares (with
-#' no regularization). Future versions may include regularization 
-#' parameters as well
-#' \\
+#' regularization).
+#' \cr
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
 #' 
@@ -212,7 +211,7 @@ arx <- function(x,order=c(0,1,0),lambda=0.1){
 #' }
 #' The function estimates the coefficients using non-linear least squares 
 #' (Levenberg-Marquardt Algorithm)
-#' \\
+#' \cr
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
 #' 
@@ -300,7 +299,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' }
 #' The function estimates the coefficients using non-linear least squares 
 #' (Levenberg-Marquardt Algorithm)
-#' \\
+#' \cr
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
 #' 
@@ -404,7 +403,7 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
 #' 
 #' The function estimates the coefficients using non-linear least squares 
 #' (Levenberg-Marquardt Algorithm)
-#' \\
+#' \cr
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
 #' 
@@ -440,8 +439,8 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
 #' residplot(mod_bj) # residual plots
 #' 
 #' @export
-bj <- function(z,order=c(1,1,1,1,0),init_sys=NULL,
-               options=optimOptions()){
+bj <- function(z,order=c(1,1,1,1,0),
+               init_sys=NULL,options=optimOptions()){
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   nb <- order[1];nc <- order[2]; nd <- order[3];
   nf <- order[4]; nk <- order[5];

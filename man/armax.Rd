@@ -46,7 +46,7 @@ SISO ARMAX models are of the form
 }
 The function estimates the coefficients using non-linear least squares 
 (Levenberg-Marquardt Algorithm)
-\\
+\cr
 The data is expected to have no offsets or trends. They can be removed 
 using the \code{\link{detrend}} function.
 }

@@ -36,9 +36,8 @@ SISO ARX models are of the form
    \ldots + b_{nk+nb} u[k-nk-nb] + e[k] 
 }
 The function estimates the coefficients using linear least squares (with
-no regularization). Future versions may include regularization 
-parameters as well
-\\
+regularization).
+\cr
 The data is expected to have no offsets or trends. They can be removed 
 using the \code{\link{detrend}} function.
 }
