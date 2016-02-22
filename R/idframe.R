@@ -135,6 +135,11 @@ deltat.idframe <- function(data){
 #' 
 #' @export
 idfrd <- function(response,freq,Ts){
+  response <- ifelse(is.vector(response),
+                     array(response,c(0,0,length(response))),
+                     ifelse(nrow(response)==1,
+                            array(response,c(0,0,nrow(response))),
+                            response)) 
   out <- list(response=response,freq=freq,Ts=Ts)
   class(out) <- "idfrd"
   return(out)
@@ -159,8 +164,8 @@ idfrd <- function(response,freq,Ts){
 #' @export
 plot.idfrd <- function(x){
 
-  mag <- 20*log10(Mod(x$resp))
-  phase <- 180/pi*signal::unwrap(Arg(x$resp))
+  mag <- 20*log10(Mod(x$resp[1,1,]))
+  phase <- 180/pi*signal::unwrap(Arg(x$resp[1,1,]))
   sys_df <- data.frame(Frequency = x$freq,Gain = mag,Phase = phase)
   melted_sys_df <- reshape2::melt(sys_df, id.var = c("Frequency"))
   
