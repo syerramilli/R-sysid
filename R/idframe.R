@@ -162,8 +162,11 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
   mag <- 20*log10(Mod(x$resp))
   nout <- dim(mag)[1]; nin <- dim(mag)[2]
   dim(mag) <- c(nin*nout,nfreq)
-  phase <-180/pi*apply((Arg(x$resp)),3,signal::unwrap)
   
+  temp <- aperm(Arg(x$resp),c(3,2,1));dim(temp) <- c(nfreq,4)
+  l <- t(split(temp, rep(1:ncol(temp), each = nrow(temp))))
+  phase <- 180/pi*t(sapply(l,signal::unwrap))
+
   g <- vector("list",nin*nout)
   
   for(i in 1:length(g)){
