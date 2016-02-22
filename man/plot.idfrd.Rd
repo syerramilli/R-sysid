@@ -4,7 +4,7 @@
 \alias{plot.idfrd}
 \title{Plotting idfrd objects}
 \usage{
-\method{plot}{idfrd}(x)
+\method{plot}{idfrd}(x, col = "steelblue", lwd = 1)
 }
 \arguments{
 \item{x}{An object of class \code{idframe}}

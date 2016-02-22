@@ -135,11 +135,6 @@ deltat.idframe <- function(data){
 #' 
 #' @export
 idfrd <- function(response,freq,Ts){
-  response <- ifelse(is.vector(response),
-                     array(response,c(0,0,length(response))),
-                     ifelse(nrow(response)==1,
-                            array(response,c(0,0,nrow(response))),
-                            response)) 
   out <- list(response=response,freq=freq,Ts=Ts)
   class(out) <- "idfrd"
   return(out)
@@ -159,23 +154,31 @@ idfrd <- function(response,freq,Ts){
 #' frf <- spa(data) # Estimates the frequency response from data
 #' plot(frf)
 #' 
-#' @import ggplot2 reshape2
+#' @import ggplot2 reshape2 signal
 #' 
 #' @export
-plot.idfrd <- function(x){
-
-  mag <- 20*log10(Mod(x$resp[1,1,]))
-  phase <- 180/pi*signal::unwrap(Arg(x$resp[1,1,]))
-  sys_df <- data.frame(Frequency = x$freq,Gain = mag,Phase = phase)
-  melted_sys_df <- reshape2::melt(sys_df, id.var = c("Frequency"))
+plot.idfrd <- function(x,col="steelblue",lwd=1){
+  nfreq <- dim(x$freq)[1]
+  mag <- 20*log10(Mod(x$resp))
+  nout <- dim(mag)[1]; nin <- dim(mag)[2]
+  dim(mag) <- c(nin*nout,nfreq)
+  phase <-180/pi*apply((Arg(x$resp)),3,signal::unwrap)
   
-  bode <-  ggplot(sys_df, aes(x = Frequency)) + 
-    geom_line(colour="steelblue") + scale_x_log10() + theme_bw() + 
-    geom_vline(xintercept=max(x$freq),size=1.2)
-  bode_gain <- bode + aes(y = Gain)
-  bode_phase <- bode + aes(y = Phase)
+  g <- vector("list",nin*nout)
   
-  multiplot(bode_gain,bode_phase)
+  for(i in 1:length(g)){
+    df <- data.frame(Frequency=x$freq[,],Magnitude=mag[i,],
+                     Phase = phase[i,])
+    melt_df <- reshape2::melt(df,id.var="Frequency")
+    g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
+      geom_line(size=lwd,color=col) + scale_x_log10() + 
+      facet_grid(variable ~ .,scale="free") + 
+      theme_bw(14,"sans") + ylab("") + 
+      theme(axis.title.x=element_text(size=11)) +
+      geom_vline(xintercept=max(x$freq),size=1.2)
+  }
+  
+  multiplot(plotlist=g,cols=nin)
 }
 
 # Multiple plot function
