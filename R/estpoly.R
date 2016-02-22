@@ -103,8 +103,8 @@ residplot <- function(model,newdata=NULL){
     e <- newdata$output[,1] - predict(model,newdata)[,1]
     u <- newdata$input
   }
-  
-  acorr <- acf(e,plot = F); ccorr <- ccf(u[,1],e,plot = F)
+  e <- matrix(e)
+  acorr <- acf(e[,],plot = F); ccorr <- ccf(u[,1],e[,],plot = F)
   par(mfrow=c(2,1),mar=c(3,4,3,2))
   plot(acorr,main="ACF of residuals")
   plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
