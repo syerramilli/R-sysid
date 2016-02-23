@@ -177,7 +177,7 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
   nout <- dim(mag)[1]; nin <- dim(mag)[2]
   dim(mag) <- c(nin*nout,nfreq)
   
-  temp <- aperm(Arg(x$resp),c(3,2,1));dim(temp) <- c(nfreq,4)
+  temp <- aperm(Arg(x$resp),c(3,2,1));dim(temp) <- c(nfreq,nin*nout)
   l <- t(split(temp, rep(1:ncol(temp), each = nrow(temp))))
   phase <- 180/pi*t(sapply(l,signal::unwrap))
 
