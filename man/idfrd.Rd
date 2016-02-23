@@ -2,29 +2,31 @@
 % Please edit documentation in R/idframe.R
 \name{idfrd}
 \alias{idfrd}
-\title{S3 class for storing frequency response data}
+\title{S3 class constructor for storing frequency response data}
 \usage{
-idfrd(response, freq, Ts)
+idfrd(response, freq, Ts, specdata)
 }
 \arguments{
-\item{response}{complex vector/matrix containing the response}
+\item{response}{frequency response data. For SISO systems, supply a 
+vector of frequency response values. For MIMO systems with Ny 
+outputs and Nu inputs, supply an array of size c(Ny,Nu,Nw).}
 
-\item{freq}{the frequencies at which the response is observed/estimated}
+\item{freq}{frequency points of the response}
 
 \item{Ts}{sampling time of data}
+
+\item{spec}{power spectra and cross spectra of the system 
+output disturbances (noise). Supply an array of size (Ny,Ny,Nw)}
 }
 \value{
 an idfrd object
 }
 \description{
-S3 class for storing frequency response data
-}
-\note{
-The class can currently store only SISO Responses. Future versions will 
-have support for multivariate data
+S3 class constructor for storing frequency response data
 }
 \seealso{
-\code{\link{plot.idfrd}} for generating bode plots; \code{\link{spa}} and
-\code{\link{etfe}} for estimating the frequency response given input/output data
+\code{\link{plot.idfrd}} for generating bode plots, 
+\code{\link{spa}} and \code{\link{etfe}} for estimating the 
+frequency response given input/output data
 }
 

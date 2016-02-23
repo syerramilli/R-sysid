@@ -117,24 +117,25 @@ deltat.idframe <- function(data){
   deltat(data$output)
 }
 
-#' S3 class for storing frequency response data
+#' S3 class constructor for storing frequency response data
 #' 
-#' @param response complex vector/matrix containing the response
-#' @param freq the frequencies at which the response is observed/estimated
+#' @param response frequency response data. For SISO systems, supply a 
+#' vector of frequency response values. For MIMO systems with Ny 
+#' outputs and Nu inputs, supply an array of size c(Ny,Nu,Nw).
+#' @param freq frequency points of the response
 #' @param Ts sampling time of data
+#' @param spec power spectra and cross spectra of the system 
+#' output disturbances (noise). Supply an array of size (Ny,Ny,Nw)
 #' 
 #' @return an idfrd object
 #' 
-#' @note
-#' The class can currently store only SISO Responses. Future versions will 
-#' have support for multivariate data
-#' 
 #' @seealso
-#' \code{\link{plot.idfrd}} for generating bode plots; \code{\link{spa}} and
-#' \code{\link{etfe}} for estimating the frequency response given input/output data
+#' \code{\link{plot.idfrd}} for generating bode plots, 
+#' \code{\link{spa}} and \code{\link{etfe}} for estimating the 
+#' frequency response given input/output data
 #' 
 #' @export
-idfrd <- function(response,freq,Ts){
+idfrd <- function(response,freq,Ts,specdata){
   out <- list(response=response,freq=freq,Ts=Ts)
   class(out) <- "idfrd"
   return(out)
