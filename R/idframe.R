@@ -181,12 +181,15 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     df <- data.frame(Frequency=x$freq[,],Magnitude=mag[i,],
                      Phase = phase[i,])
     melt_df <- reshape2::melt(df,id.var="Frequency")
+    yindex <- (i-1)%/%nin + 1;uindex <- i-nin*(yindex-1)
+    subtitle <- paste("From: u",uindex," to y",yindex,sep="")
     g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
       geom_line(size=lwd,color=col) + scale_x_log10() + 
       facet_grid(variable ~ .,scale="free") + 
-      theme_bw(14,"sans") + ylab("") + 
-      theme(axis.title.x=element_text(size=11)) +
-      geom_vline(xintercept=max(x$freq),size=1.2)
+      theme_bw(14,"sans") + ylab("") + ggtitle(subtitle) +
+      theme(axis.title.x=element_text(color = "black",face = "plain"),
+            title=element_text(size=9,color = "gray",face="bold")) + 
+      geom_vline(xintercept=max(x$freq),size=1)
   }
   
   multiplot(plotlist=g,cols=nin)
