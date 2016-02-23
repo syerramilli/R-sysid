@@ -143,12 +143,11 @@ deltat.idframe <- function(data){
 idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
                   noiseCov=NULL){
   # For SISO systems
-  if(is.vector(respData)||dim(respData)[1]==nrow(freq)){
+  if(is.vector(respData)){
     dim(respData) <- c(1,1,nrow(freq))
     dim(spec) <- c(1,1,nrow(freq))
   }
   
-  if(dim(respData)[1]==dim)
   out <- list(response=respData,freq=freq,Ts=Ts,spec=spec,covData=
                 covData,noiseCov = noiseCov)
   class(out) <- "idfrd"
