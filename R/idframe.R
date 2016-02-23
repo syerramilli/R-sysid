@@ -185,7 +185,7 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     subtitle <- paste("From: u",uindex," to y",yindex,sep="")
     g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
       geom_line(size=lwd,color=col) + scale_x_log10() + 
-      facet_grid(variable ~ .,scale="free") + 
+      facet_grid(variable ~ .,scale="free_y") +
       theme_bw(14,"sans") + ylab("") + ggtitle(subtitle) +
       theme(axis.title.x=element_text(color = "black",face = "plain"),
             title=element_text(size=9,color = "gray",face="bold")) + 
