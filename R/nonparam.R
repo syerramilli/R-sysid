@@ -177,7 +177,7 @@ spa <- function(data,npad=255){
   # WOSA and Hanning window
   gamma <- sapa::SDF(temp,method="wosa",sampling.interval = 
                        deltat(data),npad=npad)
-  freq <- attributes(gamma)$frequency*2*pi
+  freq <- matrix(attributes(gamma)$frequency*2*pi)
   resp <- Conj(gamma[,2])/Mod(gamma[,3])
   
   # power-spectrum
