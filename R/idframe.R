@@ -187,12 +187,13 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
       geom_line(size=lwd,color=col) + scale_x_log10() + 
       facet_grid(variable ~ .,scale="free_y") +
       theme_bw(14,"sans") + ylab("") + ggtitle(subtitle) +
+      xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
             title=element_text(size=9,color = "gray",face="bold")) + 
       geom_vline(xintercept=max(x$freq),size=1)
   }
   
-  multiplot(plotlist=g,cols=nin)
+  multiplot(plotlist=g,layout=matrix(1:length(g),nrow=nout,byrow=T))
 }
 
 # Multiple plot function
