@@ -119,13 +119,18 @@ deltat.idframe <- function(data){
 
 #' S3 class constructor for storing frequency response data
 #' 
-#' @param response frequency response data. For SISO systems, supply a 
+#' @param respData frequency response data. For SISO systems, supply a 
 #' vector of frequency response values. For MIMO systems with Ny 
 #' outputs and Nu inputs, supply an array of size c(Ny,Nu,Nw).
 #' @param freq frequency points of the response
 #' @param Ts sampling time of data
 #' @param spec power spectra and cross spectra of the system 
 #' output disturbances (noise). Supply an array of size (Ny,Ny,Nw)
+#' @param covData response data covariance matrices. Supply an array
+#' of size (Ny,Nu,Nw,2,2). covData[ky,ku,kw,,] is the covariance matrix
+#' of respData[ky,ku,kw]
+#' @param noiseCov power spectra variance. Supply an array of 
+#' size (Ny,Ny,Nw)
 #' 
 #' @return an idfrd object
 #' 
@@ -135,8 +140,10 @@ deltat.idframe <- function(data){
 #' frequency response given input/output data
 #' 
 #' @export
-idfrd <- function(response,freq,Ts,specdata){
-  out <- list(response=response,freq=freq,Ts=Ts)
+idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
+                  noiseCov=NULL){
+  out <- list(response=respData,freq=freq,Ts=Ts,spec=spec,covData=
+                covData,noiseCov = noiseCov)
   class(out) <- "idfrd"
   return(out)
 }

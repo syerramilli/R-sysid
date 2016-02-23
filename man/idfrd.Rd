@@ -4,10 +4,10 @@
 \alias{idfrd}
 \title{S3 class constructor for storing frequency response data}
 \usage{
-idfrd(response, freq, Ts, specdata)
+idfrd(respData, freq, Ts, spec = NULL, covData = NULL, noiseCov = NULL)
 }
 \arguments{
-\item{response}{frequency response data. For SISO systems, supply a 
+\item{respData}{frequency response data. For SISO systems, supply a 
 vector of frequency response values. For MIMO systems with Ny 
 outputs and Nu inputs, supply an array of size c(Ny,Nu,Nw).}
 
@@ -17,6 +17,13 @@ outputs and Nu inputs, supply an array of size c(Ny,Nu,Nw).}
 
 \item{spec}{power spectra and cross spectra of the system 
 output disturbances (noise). Supply an array of size (Ny,Ny,Nw)}
+
+\item{covData}{response data covariance matrices. Supply an array
+of size (Ny,Nu,Nw,2,2). covData[ky,ku,kw,,] is the covariance matrix
+of respData[ky,ku,kw]}
+
+\item{noiseCov}{power spectra variance. Supply an array of 
+size (Ny,Ny,Nw)}
 }
 \value{
 an idfrd object
