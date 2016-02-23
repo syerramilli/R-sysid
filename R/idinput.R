@@ -47,6 +47,32 @@ rbs <- function(n,band,levels){
   sapply(u,function(x) if(x>0) levels[2] else levels[1])
 }
 
+butter_filt <- function(x,band){
+  filt <- T; type <- "pass"
+  if(band[1]<=2e-3){
+    if(band[2]==1){
+      filt <- F
+    } else{
+      type <- "low"
+    }
+  } else{
+    if(band[2]==1){
+      type <- "high"  
+    }
+  }
+  if(filt==T){
+    if(type=="low"){
+      bf <- signal::butter(8,band[2],type,"z")
+    } else if(type=="pass"){
+      bf <- signal::butter(8,band,type,"z")
+    }else{
+      bf <- signal::butter(8,band[1],type,"z")
+    }
+    x <- as.numeric(signal::filter(bf,x))
+  }
+  return(matrix(x,ncol=1))
+}
+
 multisine <- function(N,nin=1,band,levels){
   sinedata <- list(nSin=10,nTrial=10,gridSkip=1)
   freq <- 2*pi*seq(1,floor(N/2),by=sinedata$gridSkip)/N
@@ -73,15 +99,12 @@ multisine <- function(N,nin=1,band,levels){
   return(u)
 }
 
-#' @export
-library(bitops)
-require(signal)
-
+#' @import bitops signal
 idin.prbs<-function(n,band=c(0,1),levels=c(0,1)){
-  u=vector()
+  u <- numeric(0)
   for(i in 1:18){
     if(n / (2^i) < 1){
-      u=idin.prbs12(i,band,levels)
+      u <- idin.prbs12(i,band,levels)
       break
     }
   }
@@ -130,32 +153,4 @@ idin.prbs12 <- function(N,band=c(0,1),levels=c(0,1)){
   
   v=sapply(v, function(x){if (x==0) levels[1] else levels[2]})
   return(v)
-}
-
-
-
-butter_filt <- function(x,band){
-  filt <- T; type <- "pass"
-  if(band[1]<=2e-3){
-    if(band[2]==1){
-      filt <- F
-    } else{
-      type <- "low"
-    }
-  } else{
-    if(band[2]==1){
-      type <- "high"  
-    }
-  }
-  if(filt==T){
-    if(type=="low"){
-      bf <- signal::butter(8,band[2],type,"z")
-    } else if(type=="pass"){
-      bf <- signal::butter(8,band,type,"z")
-    }else{
-      bf <- signal::butter(8,band[1],type,"z")
-    }
-    x <- as.numeric(signal::filter(bf,x))
-  }
-  return(matrix(x,ncol=1))
 }
