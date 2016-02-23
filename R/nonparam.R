@@ -168,18 +168,22 @@ step <- function(model){
 #' data(frf)
 #' frf <- spa(data)
 #' 
+#' @import sapa
 #' @export
 spa <- function(data,npad=255){
-  require(sapa)
   temp <- cbind(data$output,data$input)
   
   # Non-parametric Estimation of Spectral Densities - 
   # WOSA and Hanning window
-  gamma <- SDF(temp,method="wosa",sampling.interval = deltat(data),
-               npad=npad)
+  gamma <- sapa::SDF(temp,method="wosa",sampling.interval = 
+                       deltat(data),npad=npad)
   freq <- attributes(gamma)$frequency*2*pi
-  out <- idfrd(response = Conj(gamma[,2])/Mod(gamma[,3]),freq=freq,
-               Ts= deltat(data))
+  resp <- Conj(gamma[,2])/Mod(gamma[,3])
+  
+  # power-spectrum
+  spec <- gamma[,2] - resp*gamma[,3]
+    
+  out <- idfrd(resp,freq,deltat(data),spec)
   return(out)
 }
 
