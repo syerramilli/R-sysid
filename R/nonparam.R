@@ -87,25 +87,29 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' @param sig Significance Limits (Default: \code{0.975})
 #' 
 #' @seealso \code{\link{impulseest}},\code{\link{step}}
+#' @import ggplot2
+#' 
 #' @export
 plot.impulseest <- function(model,sig=0.975){
-  par(mfrow=c(model$noutputs,model$ninputs))
+  plotseq <- seq(model$noutputs*model$ninputs)
+  g <- vector("list",model$nin*model$nout)
   
-  impulseplot <- function(model,sig){
-    lim <- model$se*qnorm(sig)
-    
-    max <- max(abs(coef(model)))
-    ylim <- c(-max,max)
-    
-    title <- paste("Impulse Response \n From",model$x,"to",model$y)
-    plot(model$lags,coef(model),type="h",xlab="Lag",ylab= "IR Coefficient",
-         main = title)
-    abline(h=0);points(x=model$lags,y=lim,col="blue",lty=2,type="l")
-    points(x=model$lags,y=-lim,col="blue",lty=2,type="l")
+  for(i in plotseq){
+    z <- model[[i]]
+    lim <- z$se*qnorm(sig)
+    yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
+    df <- data.frame(x=z$lags,y=coef(z),lim=lim)
+    g[[i]] <- ggplot(df,aes(x,y))+ 
+      geom_segment(aes(xend=x,yend=0))+geom_hline(yintercept = 0) + 
+      geom_point(size=2) + ggtitle(paste("From",z$x,"to",z$y))+
+      geom_line(aes(y=lim),linetype="dashed",colour="steelblue") +
+      geom_line(aes(y=-lim),linetype="dashed",colour="steelblue") +
+      theme_bw(14) + ylab(ifelse(uindex==1,"IR Coefficients","")) +
+      xlab(ifelse(yindex==model$nout,"Lags","")) + 
+      theme(axis.title=element_text(color = "black",face = "plain"),
+            title=element_text(size=10,color = "gray",face="bold"))
   }
-  
-  l <- model[seq(model$noutputs*model$ninputs)]
-  p <- lapply(l,impulseplot,sig=sig)
+  multiplot(plotlist=g,layout=plotseq)
 }
 
 
