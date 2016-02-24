@@ -71,7 +71,7 @@ plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL){
     }
     ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
           aes(time, value)) + geom_line(size=lwd,color=col) +
-      facet_grid(variable ~ .,scale="free") + theme_bw(14,"sans") + ylab("") +
+      facet_grid(variable ~ .,scale="free") + theme_bw(14) + ylab("") +
       theme(axis.title.x=element_text(size=11)) + ggtitle(main)
 }
 
@@ -192,7 +192,7 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
       geom_line(size=lwd,color=col) + scale_x_log10() + 
       facet_grid(variable ~ .,scale="free_y") +
-      theme_bw(14,"sans") + ylab("") + ggtitle(subtitle) +
+      theme_bw(14) + ylab("") + ggtitle(subtitle) +
       xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
             title=element_text(size=9,color = "gray",face="bold")) + 
