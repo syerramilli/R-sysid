@@ -162,7 +162,8 @@ step <- function(model){
 #' (Default: \code{seq(1,128)/128*pi/Ts})
 #' 
 #' @return
-#' an \code{idfrd} object containing the estimated frequency response
+#' an \code{idfrd} object containing the estimated frequency response 
+#' and the noise spectrum
 #' 
 #' @references
 #' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
@@ -181,8 +182,10 @@ spa <- function(x,winsize=NULL,freq=NULL){
   if(is.null(winsize)) winsize <- min(N/10,30)
   if(is.null(freq)) freq <- (1:128)/128*pi/deltat(x)
   M <- winsize
+  
   Ryu <- mult_ccf(x$out,x$input,lag.max = M)
   Ruu <- mult_ccf(x$input,x$input,lag.max=M)
+  Ryy <- mult_ccf(x$out,x$out,lag.max = M)
   
   cov2spec <- function(omega,R,M){
     seq1 <- exp(-1i*(-M:M)*omega)
@@ -190,14 +193,19 @@ spa <- function(x,winsize=NULL,freq=NULL){
   }
   
   G <- array(0,c(nout,nin,length(freq)))
+  spec <- array(0,c(nout,nout,length(freq)))
   for(i in 1:nout){
+    phi_y <- sapply(freq,cov2spec,Ryy[i,i,],M)
+    temp <- phi_y
     for(j in 1:nin){
-      num <- sapply(freq,cov2spec,Ryu[i,j,],M)
-      den <- sapply(freq,cov2spec,Ruu[,j,],M)
-      G[i,j,] <- num/den
+      phi_yu <- sapply(freq,cov2spec,Ryu[i,j,],M)
+      phi_u <- sapply(freq,cov2spec,Ruu[j,j,],M)
+      G[i,j,] <- phi_yu/phi_u
+      temp <- phi_y - phi_yu*Conj(phi_yu)/phi_u
     }
+    spec[i,i,] <- temp
   }
-  out <- idfrd(G,matrix(freq),deltat(x))
+  out <- idfrd(G,matrix(freq),deltat(x),spec)
   return(out)
 }
 

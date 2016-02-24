@@ -4,28 +4,24 @@
 \alias{spa}
 \title{Estimate frequency response}
 \usage{
-spa(data, npad = 255)
+spa(x, winsize = NULL, freq = NULL)
 }
 \arguments{
-\item{data}{an \code{idframe} object}
+\item{x}{an \code{idframe} object}
 
-\item{npad}{an integer representing the total length of each time series 
-to analyze after padding with zeros. This argument allows the user to 
-control the spectral resolution of the SDF estimates: the normalized 
-frequency interval is deltaf=1/npad. (Default: 255)}
+\item{freq}{frequency points at which the response is evaluated
+(Default: \code{seq(1,128)/128*pi/Ts})}
+
+\item{W}{lag size of the Hanning window (Default: \code{min
+(length(x)/10,30)})}
 }
 \value{
-an \code{idfrd} object containing the estimated frequency response
+an \code{idfrd} object containing the estimated frequency response 
+and the noise spectrum
 }
 \description{
-Estimates Frequency Response with fixed frequency resolution using 
-spectral analysis
-}
-\details{
-The function calls the \code{SDF} function in the \code{sapa} package to
-compute the cross-spectral densities. The method used is \strong{Welch's 
-Overlapped Segment Averaging} with a normalized \strong{Hanning} window.
-The overlap used is 50%.
+Estimates frequency response and noise spectrum from data with 
+fixed resolution using spectral analysis
 }
 \examples{
 data(frf)
@@ -35,8 +31,5 @@ frf <- spa(data)
 \references{
 Arun K. Tangirala (2015), \emph{Principles of System Identification: 
 Theory and Practice}, CRC Press, Boca Raton. Sections 16.5 and 20.4
-}
-\seealso{
-\code{\link[sapa]{SDF}}
 }
 
