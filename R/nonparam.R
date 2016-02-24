@@ -94,7 +94,8 @@ plot.impulseest <- function(model,sig=0.975){
   impulseplot <- function(model,sig){
     lim <- model$se*qnorm(sig)
     
-    ylim <- c(min(coef(model)),max(coef(model)))
+    max <- max(abs(coef(model)))
+    ylim <- c(-max,max)
     
     title <- paste("Impulse Response \n From",model$x,"to",model$y)
     plot(model$lags,coef(model),type="h",xlab="Lag",ylab= "IR Coefficient",
