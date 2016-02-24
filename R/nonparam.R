@@ -104,10 +104,11 @@ plot.impulseest <- function(model,sig=0.975){
       geom_point(size=2) + ggtitle(paste("From",z$x,"to",z$y))+
       geom_line(aes(y=lim),linetype="dashed",colour="steelblue") +
       geom_line(aes(y=-lim),linetype="dashed",colour="steelblue") +
+      geom_ribbon(aes(ymax=lim,ymin=-lim),fill="steelblue",alpha=0.2)+
       theme_bw(14) + ylab(ifelse(uindex==1,"IR Coefficients","")) +
       xlab(ifelse(yindex==model$nout,"Lags","")) + 
-      theme(axis.title=element_text(color = "black",face = "plain"),
-            title=element_text(size=10,color = "gray",face="bold"))
+      theme(axis.title=element_text(size=12,color = "black",face = "plain"),
+            title=element_text(size=9,,color = "gray",face="bold"))
   }
   multiplot(plotlist=g,layout=plotseq)
 }
