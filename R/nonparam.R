@@ -129,19 +129,25 @@ plot.impulseest <- function(model,sig=0.975){
 #' fit <- impulseest(data)
 #' step(fit) 
 #' 
+#' @import ggplot2
 #' @export 
 step <- function(model){
-  par(mfrow=c(model$noutputs,model$ninputs))
+  plotseq <- seq(model$noutputs*model$ninputs)
+  g <- vector("list",model$nin*model$nout)
   
-  stepplot <- function(model){
-    title <- paste("Step Response \n From",model$x,"to",model$y)
-    stepResp <- cumsum(coef(model))
-    plot(model$lags,stepResp,type="s",xlab="Lag",ylab= model$y,
-         main = title)
-    abline(h=0)
+  for(i in plotseq){
+    z <- model[[i]]
+    stepResp <- cumsum(coef(z))
+    yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
+    df <- data.frame(x=z$lags,y=stepResp)
+    g[[i]] <- ggplot(df,aes(x,y))+ 
+      geom_step() + ggtitle(paste("From",z$x,"to",z$y)) +
+      theme_bw(14) + ylab(ifelse(uindex==1,"Step Response","")) +
+      xlab(ifelse(yindex==model$nout,"Lags","")) + 
+      theme(axis.title=element_text(size=12,color = "black",face = "plain"),
+            title=element_text(size=9,,color = "gray",face="bold"))
   }
-  l <- model[seq(model$noutputs*model$ninputs)]
-  p <- lapply(l,stepplot)
+  multiplot(plotlist=g,layout=plotseq)
 }
 
 #' Estimate frequency response 
