@@ -152,20 +152,14 @@ step <- function(model){
 
 #' Estimate frequency response 
 #' 
-#' Estimates Frequency Response with fixed frequency resolution using 
-#' spectral analysis
+#' Estimates frequency response and noise spectrum from data with 
+#' fixed resolution using spectral analysis
 #' 
-#' @param data an \code{idframe} object
-#' @param npad an integer representing the total length of each time series 
-#' to analyze after padding with zeros. This argument allows the user to 
-#' control the spectral resolution of the SDF estimates: the normalized 
-#' frequency interval is deltaf=1/npad. (Default: 255)
-#' 
-#' @details
-#' The function calls the \code{SDF} function in the \code{sapa} package to
-#' compute the cross-spectral densities. The method used is \strong{Welch's 
-#' Overlapped Segment Averaging} with a normalized \strong{Hanning} window.
-#' The overlap used is 50%. 
+#' @param x an \code{idframe} object
+#' @param W lag size of the Hanning window (Default: \code{min
+#' (length(x)/10,30)})
+#' @param freq frequency points at which the response is evaluated
+#' (Default: \code{seq(1,128)/128*pi/Ts})
 #' 
 #' @return
 #' an \code{idfrd} object containing the estimated frequency response
@@ -174,29 +168,53 @@ step <- function(model){
 #' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
 #' Theory and Practice}, CRC Press, Boca Raton. Sections 16.5 and 20.4
 #' 
-#' @seealso \code{\link[sapa]{SDF}}
-#' 
 #' @examples
 #' data(frf)
 #' frf <- spa(data)
 #' 
 #' @import signal
 #' @export
-spa <- function(data,npad=255){
-  temp <- cbind(data$output,data$input)
+spa <- function(x,winsize=NULL,freq=NULL){
+  N <- dim(x$out)[1]
+  nout <- nOutputSeries(x); nin <- nInputSeries(x)
   
-  # Non-parametric Estimation of Spectral Densities - 
-  # WOSA and Hanning window
-  gamma <- sapa::SDF(temp,method="wosa",sampling.interval = 
-                       deltat(data),npad=npad)
-  freq <- matrix(attributes(gamma)$frequency*2*pi)
-  resp <- Conj(gamma[,2])/Mod(gamma[,3])
+  if(is.null(winsize)) winsize <- min(N/10,30)
+  if(is.null(freq)) freq <- (1:128)/128*pi/deltat(x)
+  M <- winsize
+  Ryu <- mult_ccf(x$out,x$input,lag.max = M)
+  Ruu <- mult_ccf(x$input,x$input,lag.max=M)
   
-  # power-spectrum
-  spec <- gamma[,2] - resp*gamma[,3]
-    
-  out <- idfrd(resp,freq,deltat(data),spec)
+  cov2spec <- function(omega,R,M){
+    seq1 <- exp(-1i*(-M:M)*omega)
+    sum(R*signal::hanning(2*M+1)*seq1)
+  }
+  
+  G <- array(0,c(nout,nin,length(freq)))
+  for(i in 1:nout){
+    for(j in 1:nin){
+      num <- sapply(freq,cov2spec,Ryu[i,j,],M)
+      den <- sapply(freq,cov2spec,Ruu[,j,],M)
+      G[i,j,] <- num/den
+    }
+  }
+  out <- idfrd(G,matrix(freq),deltat(x))
   return(out)
+}
+
+mult_ccf <- function(X,Y=NULL,lag.max=30){
+  N <- dim(X)[1]; nx <- dim(X)[2]
+  ny <- ifelse(is.null(Y),nx,dim(Y)[2])
+  
+  ccvfij <- function(i,j,lag=30) ccf(X[,i],Y[,j],plot=F,lag=lag,
+                                     type="covariance")
+  Xindex <- matrix(sapply(1:nx,rep,nx),ncol=1)[,1]
+  temp <- mapply(ccvfij,i=Xindex,j=rep(1:ny,ny),
+                 MoreArgs = list(lag=lag.max))
+  
+  ccfextract <- function(i,l) l[,i]$acf
+  temp2 <- t(sapply(1:(nx*ny),ccfextract,l=temp))
+  dim(temp2) <- c(nx,ny,2*lag.max+1)
+  return(temp2)
 }
 
 #' Estimate empirical transfer function
@@ -236,20 +254,4 @@ comdiv <- function(z1,z2){
   phi1 <- Arg(z1); phi2 <- Arg(z2)
   
   complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
-}
-
-mult_ccf <- function(X,Y=NULL,lag.max=30){
-  N <- dim(X)[1]; nx <- dim(X)[2]
-  ny <- ifelse(is.null(Y),nx,dim(Y)[2])
-  
-  ccvfij <- function(i,j,lag=30) ccf(X[,i],Y[,j],plot=F,lag=lag,
-                                    type="covariance")
-  Xindex <- matrix(sapply(1:nx,rep,nx),ncol=1)[,1]
-  temp <- mapply(ccfij,i=Xindex,j=rep(1:ny,ny),
-                 MoreArgs = list(lag=lag.max))
-  
-  ccfextract <- function(i,l) l[,i]$acf
-  temp2 <- t(sapply(1:(nx*ny),ccfextract,l=temp))
-  dim(temp2) <- c(nx,ny,2*lag.max+1)
-  return(temp2)
 }
