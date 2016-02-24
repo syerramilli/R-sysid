@@ -180,7 +180,7 @@ step <- function(model){
 #' data(frf)
 #' frf <- spa(data)
 #' 
-#' @import sapa
+#' @import signal
 #' @export
 spa <- function(data,npad=255){
   temp <- cbind(data$output,data$input)
@@ -236,4 +236,20 @@ comdiv <- function(z1,z2){
   phi1 <- Arg(z1); phi2 <- Arg(z2)
   
   complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
+}
+
+mult_ccf <- function(X,Y=NULL,lag.max=30){
+  N <- dim(X)[1]; nx <- dim(X)[2]
+  ny <- ifelse(is.null(Y),nx,dim(Y)[2])
+  
+  ccvfij <- function(i,j,lag=30) ccf(X[,i],Y[,j],plot=F,lag=lag,
+                                    type="covariance")
+  Xindex <- matrix(sapply(1:nx,rep,nx),ncol=1)[,1]
+  temp <- mapply(ccfij,i=Xindex,j=rep(1:ny,ny),
+                 MoreArgs = list(lag=lag.max))
+  
+  ccfextract <- function(i,l) l[,i]$acf
+  temp2 <- t(sapply(1:(nx*ny),ccfextract,l=temp))
+  dim(temp2) <- c(nx,ny,2*lag.max+1)
+  return(temp2)
 }
