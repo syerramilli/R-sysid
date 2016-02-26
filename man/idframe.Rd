@@ -4,7 +4,7 @@
 \alias{idframe}
 \title{S3 class for storing input-output data.}
 \usage{
-idframe(output = NULL, input = NULL, Ts = 1, start = 0, end = NULL,
+idframe(output, input = NULL, Ts = 1, start = 0, end = NULL,
   unit = c("seconds", "minutes", "hours", "days")[1])
 }
 \arguments{
@@ -18,7 +18,7 @@ idframe(output = NULL, input = NULL, Ts = 1, start = 0, end = NULL,
 
 \item{end}{Time of the last observation Optional Argument}
 
-\item{unit}{Time Unit (Default: "seconds")}
+\item{unit}{Time unit (Default: "seconds")}
 }
 \value{
 an idframe object

@@ -7,7 +7,7 @@
 #' @param Ts sampling interval (Default: 1)
 #' @param start Time of the first observation
 #' @param end Time of the last observation Optional Argument
-#' @param unit Time Unit (Default: "seconds")
+#' @param unit Time unit (Default: "seconds")
 #'
 #' @return an idframe object
 #' 
@@ -20,26 +20,31 @@
 #' data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
 #' 
 #' @export
-idframe <- function(output=NULL,input=NULL,Ts = 1,start=0,end=NULL, 
+idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL, 
                     unit = c("seconds","minutes","hours",
                              "days")[1]){
   
-  l <- list(output,input)
+  l <- list(output)
+  if(!is.null(input)) l[[2]] <- input
   l2 <- lapply(l,data.frame)
   n <- dim(l2[[1]])
   dims <- sapply(l2,ncol)
   colnames(l2[[1]]) <- sapply(1:dims[1],
                               function(x) paste("y",x,sep = ""))
-  colnames(l2[[2]]) <- sapply(1:dims[2],
+  if(!is.null(input)){
+    colnames(l2[[2]]) <- sapply(1:dims[2],
                               function(x) paste("u",x,sep = "")) 
+  }
+  
   if(!is.null(end)){
     start <- end - Ts*(n-1)
   } 
   
   l3 <- lapply(l2,ts,start=start,deltat=Ts)
   
+  if(!is.null(input)) input <- l3[[2]]
   # Object Constructor
-  dat <- list(output=l3[[1]],input=l3[[2]],unit=unit)
+  dat <- list(output=l3[[1]],input=input,unit=unit)
   class(dat) <- "idframe"
   return(dat)
 }
