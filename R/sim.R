@@ -13,7 +13,7 @@
 #' a vector containing the output
 #' 
 #' @details
-#' The routine is currently built only for SISO systems. Future Versions will
+#' The routine is currently built only for SISO systems. Future versions will
 #' include support for MIMO systems.
 #' 
 #' @examples
@@ -30,9 +30,10 @@ sim.default <- function(model,input,sigma=0,seed=NULL){
   print("The sim method is not developed for the current class of the object")
 }
 
-#' @import polynom
+#' @import signal polynom
 #' @export
 sim.idpoly <- function(model,input,innov=NULL,sigma=0,seed=NULL){
+  n <- length(input)[1]
   if(!is.null(innov)){
     ek <- innov
   } else{
@@ -43,9 +44,6 @@ sim.idpoly <- function(model,input,innov=NULL,sigma=0,seed=NULL){
   if(model$type=="arx"){
     sim_arx(model,input,ek)
   } else{
-    require(signal);require(polynom)
-    
-    n <- length(input)[1]
    
     den1 <- as.numeric(polynomial(model$A)*polynomial(model$D))
     filt1 <- Arma(b=model$C,a=den1)

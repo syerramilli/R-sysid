@@ -25,7 +25,7 @@ a vector containing the output
 Simulate the response of a system given the input
 }
 \details{
-The routine is currently built only for SISO systems. Future Versions will
+The routine is currently built only for SISO systems. Future versions will
 include support for MIMO systems.
 }
 \examples{
