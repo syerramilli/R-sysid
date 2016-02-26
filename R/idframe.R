@@ -68,8 +68,6 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL){
     if(nInputSeries(x)==0){
       data <- outputData(x)
-    } else if(nOutputSeries(x)==0){
-      data <- inputData(x)
     } else{
       data <- cbind(outputData(x),inputData(x))
       colnames(data) <- c(outputNames(x),inputNames(x))

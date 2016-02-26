@@ -1,5 +1,7 @@
 #' @export
-nInputSeries <- function(data) ncol(data$input)
+nInputSeries <- function(data) {
+  ifelse(is.null(data$input),0,ncol(data$input))
+}
 
 #' @export
 nOutputSeries <- function(data) ncol(data$output)
