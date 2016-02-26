@@ -4,7 +4,8 @@
 \alias{plot.idframe}
 \title{Plotting idframe objects}
 \usage{
-\method{plot}{idframe}(x, col = "steelblue", lwd = 1, main = NULL)
+\method{plot}{idframe}(x, col = "steelblue", lwd = 1, main = NULL,
+  size = 12)
 }
 \arguments{
 \item{x}{an \code{idframe} object}
@@ -14,6 +15,8 @@
 \item{lwd}{line width, in millimeters(Default=\code{1})}
 
 \item{main}{the plot title. (Default = \code{NULL})}
+
+\item{size}{text size (Default = \code{12})}
 }
 \description{
 Plotting method for objects inherting from class \code{idframe}

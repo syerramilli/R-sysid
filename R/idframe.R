@@ -57,6 +57,7 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 #' @param col line color, to be passed to plot.(Default=\code{"steelblue"})
 #' @param lwd line width, in millimeters(Default=\code{1})
 #' @param main the plot title. (Default = \code{NULL})
+#' @param size text size (Default = \code{12})
 #' 
 #' @examples
 #' data(cstr)
@@ -65,7 +66,7 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 #' @import ggplot2 reshape2
 #' 
 #' @export
-plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL){
+plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
     if(nInputSeries(x)==0){
       data <- outputData(x)
     } else{
@@ -74,8 +75,10 @@ plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL){
     }
     ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
           aes(time, value)) + geom_line(size=lwd,color=col) +
-      facet_grid(variable ~ .,scale="free") + theme_bw(14) + ylab("") +
-      theme(axis.title.x=element_text(size=11)) + ggtitle(main)
+      facet_grid(variable ~ .,scale="free") + theme_bw(size) + 
+      ylab("Amplitude") + ggtitle(main) + 
+      xlab(paste("Time (",x$unit,")",sep=""))
+      #theme(axis.title.x=element_text(size=11)) + ggtitle(main)
 }
 
 #' @export
