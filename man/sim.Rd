@@ -4,12 +4,15 @@
 \alias{sim}
 \title{Simulate dynamic system}
 \usage{
-sim(model, input, sigma = 0, seed = NULL)
+sim(model, input, innov = NULL, sigma = 0, seed = NULL)
 }
 \arguments{
-\item{model}{the system model to simulate}
+\item{model}{the linear system to simulate}
 
 \item{input}{a vector/matrix containing the input}
+
+\item{innov}{an optional times series of innovations. If not provided,
+innovations are generated using the \code{rnorm} function}
 
 \item{sigma}{standard deviation of the innovations (Default= \code{0})}
 
@@ -23,9 +26,13 @@ Simulate the response of a system given the input
 }
 \details{
 The routine is currently built only for SISO systems. Future Versions will
-include support for MIMO systems. Current support
+include support for MIMO systems.
 }
-\seealso{
-\code{\link{sim.idpoly}} for simulating polynomial models
+\examples{
+# ARX Model
+u <- rnorm(200,sd=1)
+model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),ioDelay=1)
+y <- sim(model,u,sigma=0.1)
+
 }
 
