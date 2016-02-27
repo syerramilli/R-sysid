@@ -45,12 +45,12 @@ idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1,
 typecheck <- function(x){
   y <- lapply(x[1:5],checkUnity)
   if(y$A){
-    out <- if(y$C||y$F1) "oe" else "bj" 
+    out <- if(y$C && y$D) "oe" else "bj" 
   } else{
     if(y$D && y$F1){
       out <- if(y$C) "arx" else "armax"
     } else{
-      out <- "idpoly"
+      out <- "polynomial"
     }
   }
 }
