@@ -63,15 +63,15 @@ checkUnity <- function(x){
 print.idpoly <- function(mod,se=NULL,dig=3){
   
   if(mod$type=="arx"){
-    cat("Discrete-time ARX mod: A(z)y[k] = B(z)u[k] + e[k] \n\n")
+    cat("Discrete-time ARX model: A(z)y[k] = B(z)u[k] + e[k] \n\n")
   } else if(mod$type=="armax"){
-    cat("Discrete-time ARMAX mod: A(z)y[k] = B(z)u[k] + C(z)e[k] \n\n")
+    cat("Discrete-time ARMAX model: A(z)y[k] = B(z)u[k] + C(z)e[k] \n\n")
   } else if(mod$type=="oe"){
-    cat("Discrete-time OE mod: y[k] = B(z)/F(z) u[k] + e[k] \n\n")
+    cat("Discrete-time OE model: y[k] = B(z)/F(z) u[k] + e[k] \n\n")
   } else if(mod$type=="bj"){
-    cat("Discrete-time BJ mod: y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
+    cat("Discrete-time BJ model: y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
   } else{
-    cat("Discrete-time Polynomial mod: A(z) y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
+    cat("Discrete-time Polynomial model: A(z) y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
   }
   
   # Printing Standard error sequence
@@ -173,22 +173,5 @@ print.idpoly <- function(mod,se=NULL,dig=3){
 }
 
 params <- function(x){
-  if(x$type=="arx"||x$type=="armax"){
-    coefs <- c(x$A[-1],x$B)
-    na <- length(x$A) - 1; nk <- x$ioDelay; 
-    nb <- length(x$B)
-    if(x$type=="armax"){
-      coefs <- c(coefs,x$C[-1])
-      nc <- length(x$C)-1
-    } 
-  } else if(x$type=="oe"||x$type=="bj"){
-    coefs <- c(x$B)
-    if(x$type=="bj"){
-      coefs <- c(coefs,x$C[-1],x$D[-1])
-    }
-    coefs <- c(coefs,x$F1[-1])
-    nf <- length(x$F1) - 1; nk <- x$ioDelay; 
-    nb <- length(x$B)
-  }
-  coefs
+  c(x$A[-1],x$B,x$C[-1],x$D[-1],x$F1[-1])
 } 
