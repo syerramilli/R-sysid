@@ -49,7 +49,7 @@ sim.idpoly <- function(model,input,addNoise = F,innov=NULL,seed=NULL){
       ek <- innov
     } else{
       if(!is.null(seed)) set.seed(seed)
-      ek <- rnorm(n,sd=model$noiseVar)
+      ek <- rnorm(n,sd=sqrt(model$noiseVar))
     }
     den1 <- as.numeric(polynomial(model$A)*polynomial(model$D))
     filt1 <- Arma(b=model$C,a=den1)
