@@ -185,7 +185,7 @@ arx <- function(x,order=c(0,1,0),lambda=0.1){
   vcov <- sigma2 * innerinv
   
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
-               ioDelay = nk,Ts=deltat(x))
+               ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2),
               df = df),fitted.values=(X%*%coef)[1:N,],
@@ -272,7 +272,8 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
-                  C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x))
+                  C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x),
+                  noiseVar = l$sigma,unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
@@ -360,7 +361,7 @@ oe <- function(x,order=c(1,1,0),options=optimOptions()){
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
   
   model <- idpoly(B = theta[1:nb],F1 = c(1,theta[nb+1:nf]),
-                  ioDelay = nk,Ts=deltat(x))
+                  ioDelay = nk,Ts=deltat(x),noiseVar = l$sigma,unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
@@ -465,7 +466,7 @@ bj <- function(z,order=c(1,1,1,1,0),
   model <- idpoly(B = theta[1:nb],C=c(1,theta[nb+1:nc]),
                   D=c(1,theta[nb+nc+1:nd]),
                   F1 = c(1,theta[nb+nc+nd+1:nf]),
-                  ioDelay = nk,Ts=deltat(z))
+                  ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
           fitted.values=y-e,residuals=e,call=match.call(),input=u,
