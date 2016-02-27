@@ -23,64 +23,61 @@
 #' y <- sim(model,u,sigma=0.1)
 #' 
 #' @export
-sim <- function(model,input,innov=NULL,sigma=0,seed=NULL) UseMethod("sim")
+sim <- function(model,input,addNoise = F,innov=NULL,seed=NULL) UseMethod("sim")
 
 #' @export
-sim.default <- function(model,input,sigma=0,seed=NULL){
+sim.default <- function(model,input,addNoise = F,innov=NULL,seed=NULL){
   print("The sim method is not developed for the current class of the object")
 }
 
 #' @import signal polynom
 #' @export
-sim.idpoly <- function(model,input,innov=NULL,sigma=0,seed=NULL){
-  n <- length(input)[1]
-  if(!is.null(innov)){
-    ek <- innov
-  } else{
-    if(!is.null(seed)) set.seed(seed)
-    ek <- rnorm(n,sd=sigma)
-  }
+sim.idpoly <- function(model,input,addNoise = F,innov=NULL,seed=NULL){
+  B <- c(rep(0,model$ioDelay),model$B)
+  Gden <- as.numeric(polynomial(model$A)*polynomial(model$F1))
+  G <- signal::Arma(b=B,a=Gden)
+  ufk <- signal::filter(G,input)
+  yk <- as.numeric(ufk)
   
-  if(model$type=="arx"){
-    sim_arx(model,input,ek)
-  } else{
-   
+  if(addNoise){
+    n <- ifelse(is.numeric(input),length(input),dim(input)[1])
+    if(!is.null(innov)){
+      ek <- innov
+    } else{
+      if(!is.null(seed)) set.seed(seed)
+      ek <- rnorm(n,sd=model$noiseVar)
+    }
     den1 <- as.numeric(polynomial(model$A)*polynomial(model$D))
     filt1 <- Arma(b=model$C,a=den1)
     vk <- signal::filter(filt1,ek)
     
-    B <- c(rep(0,model$ioDelay),model$B)
-    den2 <- as.numeric(polynomial(model$A)*polynomial(model$F1))
-    filt2 <- signal::Arma(b=B,a=den2)
-    ufk <- signal::filter(filt2,input)
-    
-    yk <- as.numeric(ufk) + as.numeric(vk)
-    
-    return(as.numeric(yk)) 
+    yk <- yk + as.numeric(vk)
   }
+  
+  return(yk) 
 }
 
-sim_arx <- function(model,input,ek){
-  na <- length(model$A) - 1; nk <- model$ioDelay; 
-  nb <- length(model$B) - 1; nb1 <- nb+nk
-  n <- max(na,nb1)
-  coef <- matrix(c(model$A[-1],model$B),nrow=na+(nb+1))
-  
-  if(class(input)=="idframe"){
-    uk <- input$input[,1,drop=T]
-  } else if(class(input) %in% c("matrix","data.frame")){
-    uk <- input[,1,drop=T]
-  } else if(is.numeric(input)){
-    uk <- input
-  }
-  
-  y <- rep(0,length(input)+n)
-  u <- c(rep(0,n),uk)
-  
-  for(i in n+1:length(uk)){
-    if(nk==0) v <- u[i-0:nb] else v <- u[i-nk:nb1]
-    reg <- matrix(c(-(y[i-1:na]),v),ncol=na+(nb+1))
-    y[i] <- reg%*%coef + ek[i]
-  }
-  return(y[n+1:length(uk)])
-}
+# sim_arx <- function(model,input,ek){
+#   na <- length(model$A) - 1; nk <- model$ioDelay; 
+#   nb <- length(model$B) - 1; nb1 <- nb+nk
+#   n <- max(na,nb1)
+#   coef <- matrix(c(model$A[-1],model$B),nrow=na+(nb+1))
+#   
+#   if(class(input)=="idframe"){
+#     uk <- input$input[,1,drop=T]
+#   } else if(class(input) %in% c("matrix","data.frame")){
+#     uk <- input[,1,drop=T]
+#   } else if(is.numeric(input)){
+#     uk <- input
+#   }
+#   
+#   y <- rep(0,length(input)+n)
+#   u <- c(rep(0,n),uk)
+#   
+#   for(i in n+1:length(uk)){
+#     if(nk==0) v <- u[i-0:nb] else v <- u[i-nk:nb1]
+#     reg <- matrix(c(-(y[i-1:na]),v),ncol=na+(nb+1))
+#     y[i] <- reg%*%coef + ek[i]
+#   }
+#   return(y[n+1:length(uk)])
+# }
