@@ -4,20 +4,25 @@
 \alias{idpoly}
 \title{Polynomial model with identifiable parameters}
 \usage{
-idpoly(A = 1, B = 1, C = 1, D = 1, F1 = 1, ioDelay = 0, Ts = 1)
+idpoly(A = 1, B = 1, C = 1, D = 1, F1 = 1, ioDelay = 0, Ts = 1,
+  noiseVar = 1, unit = c("seconds", "minutes", "hours", "days")[1])
 }
 \arguments{
-\item{A}{Autoregressive coefficients}
+\item{A}{autoregressive coefficients}
 
-\item{B, F1}{Coefficients of the numerator and denominator respectively
+\item{B, F1}{coefficients of the numerator and denominator respectively
 of the deterministic model between the input and output}
 
-\item{C, D}{Coefficients of the numerator and denominator respectively
+\item{C, D}{coefficients of the numerator and denominator respectively
 of the stochastic model}
 
 \item{ioDelay}{the delay in the input-output channel}
 
 \item{Ts}{sampling interval}
+
+\item{noiseVar}{variance of the white noise source (Default=\code{1})}
+
+\item{unit}{time unit (Default=\code{"seconds"})}
 }
 \description{
 Creates a polynomial model with identifiable coefficients
@@ -31,7 +36,8 @@ Discrete-time polynomials are of the form
 }
 \examples{
 # define output-error model
-mod_oe <- idpoly(B=c(0.6,-0.2),F1=c(1,-0.5),ioDelay = 2,Ts=0.1)
+mod_oe <- idpoly(B=c(0.6,-0.2),F1=c(1,-0.5),ioDelay = 2,Ts=0.1,
+noiseVar = 0.1)
 
 # define box-jenkins model
 B <- c(0.6,-0.2)

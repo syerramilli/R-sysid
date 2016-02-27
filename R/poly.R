@@ -2,13 +2,15 @@
 #' 
 #' Creates a polynomial model with identifiable coefficients
 #' 
-#' @param A Autoregressive coefficients
-#' @param B,F1 Coefficients of the numerator and denominator respectively
+#' @param A autoregressive coefficients
+#' @param B,F1 coefficients of the numerator and denominator respectively
 #' of the deterministic model between the input and output 
-#' @param C,D Coefficients of the numerator and denominator respectively
+#' @param C,D coefficients of the numerator and denominator respectively
 #' of the stochastic model 
 #' @param ioDelay the delay in the input-output channel
 #' @param Ts sampling interval
+#' @param noiseVar variance of the white noise source (Default=\code{1})
+#' @param unit time unit (Default=\code{"seconds"})
 #' 
 #' @details
 #' Discrete-time polynomials are of the form
@@ -19,7 +21,8 @@
 #' 
 #' @examples
 #' # define output-error model
-#' mod_oe <- idpoly(B=c(0.6,-0.2),F1=c(1,-0.5),ioDelay = 2,Ts=0.1)
+#' mod_oe <- idpoly(B=c(0.6,-0.2),F1=c(1,-0.5),ioDelay = 2,Ts=0.1,
+#' noiseVar = 0.1)
 #' 
 #' # define box-jenkins model
 #' B <- c(0.6,-0.2)
@@ -29,8 +32,11 @@
 #' mod_bj <- idpoly(1,B,C,D,F1,ioDelay=1)
 #' 
 #' @export
-idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1){
-  out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts)
+idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1,
+                   noiseVar=1,unit = c("seconds","minutes",
+                                       "hours","days")[1]){
+  out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts,
+              noiseVar=noiseVar,unit=unit)
   out$type <- typecheck(out)
   class(out) <- "idpoly"
   return(out)
