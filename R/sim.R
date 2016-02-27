@@ -1,16 +1,19 @@
-#' Simulate dynamic system
+#' Simulate response of dynamic system
 #' 
-#' Simulate the response of a system given the input
+#' Simulate the response of a system to a given input
 #' 
 #' @param model the linear system to simulate
 #' @param input a vector/matrix containing the input
-#' @param innov an optional times series of innovations. If not provided,
-#' innovations are generated using the \code{rnorm} function
-#' @param sigma standard deviation of the innovations (Default= \code{0})
-#' @param seed integer indicating the seed value of the random number generator
+#' @param addNoise logical variable indicating whether to add noise to the 
+#' response model. (Default: \code{FALSE})
+#' @param innov an optional times series of innovations. If not supplied (specified
+#' as \code{NULL}), gaussian white noise is generated, with the variance specified in 
+#' the model (Property: \code{noiseVar})
+#' @param seed integer indicating the seed value of the random number generator.
+#' Useful for reproducibility purposes.
 #' 
 #' @return
-#' a vector containing the output
+#' a vector containing the simulated output
 #' 
 #' @details
 #' The routine is currently built only for SISO systems. Future versions will
@@ -20,7 +23,7 @@
 #' # ARX Model
 #' u <- rnorm(200,sd=1)
 #' model <- idpoly(A=c(1,-1.5,0.7),B=c(0.8,-0.25),ioDelay=1)
-#' y <- sim(model,u,sigma=0.1)
+#' y <- sim(model,u,addNoise=T)
 #' 
 #' @export
 sim <- function(model,input,addNoise = F,innov=NULL,seed=NULL) UseMethod("sim")
