@@ -197,14 +197,16 @@ bjGrad <- function(theta,e,dots){
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(uout[v,],eout[i-1:nc,],wout[i-1:nd,],-zetaout[i-1:nf,]))
+    ereg <- if(nc==0) NULL else eout[i-1:nc,]
+    matrix(c(uout[v,],ereg,wout[i-1:nd,],-zetaout[i-1:nf,]))
   }
   
   X <- t(sapply(n+1:N,reg))
   l <- list(X=X,Y=y,e=e)
   
   if(!is.null(e)){
-    den <- as.numeric(polynom::polynomial(c(1,theta[nb+1:nc]))*
+    C_params <- if(nc==0) NULL else theta[nb+1:nc] 
+    den <- as.numeric(polynom::polynomial(c(1,C_params))*
                         polynom::polynomial(c(1,theta[nb+nc+nd+1:nf])))
     filt1 <- signal::Arma(b=c(1,theta[nb+nc+1:nd]),
                           a=den)
