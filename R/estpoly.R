@@ -445,30 +445,35 @@ bj <- function(z,order=c(1,1,1,1,0),
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   nb <- order[1];nc <- order[2]; nd <- order[3];
   nf <- order[4]; nk <- order[5];
-  nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf); df <- N-nb-nc-nd-nf
   
-  # Initial Guess
-  mod_oe <- oe(z,c(nb,nf,nk))
-  v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
-  mod_arma <- arima(v,order=c(nd,0,nc),include.mean = F)
-  theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nd+1:nc],
-                  -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
-  eps <- matrix(resid(mod_arma))
-  
-  leftPadZeros <- function(x,n) c(rep(0,n),x)
-  uout <- apply(u,2,leftPadZeros,n=n) 
-  
-  l <- levbmqdt(y,uout,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
-                opt=options)
-  theta <- l$params
-  e <- ts(l$residuals,start = start(y),deltat = deltat(y))
-  
-  model <- idpoly(B = theta[1:nb],C=c(1,theta[nb+1:nc]),
-                  D=c(1,theta[nb+nc+1:nd]),
-                  F1 = c(1,theta[nb+nc+nd+1:nf]),
-                  ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
-  
-  estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
-          fitted.values=y-e,residuals=e,call=match.call(),input=u,
-          options = options,termination = l$termination)
+  if(nc==0 && nd==0){
+    oe(z,c(nb,nf,nk))
+  } else{
+    nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf); df <- N-nb-nc-nd-nf
+    
+    # Initial Guess
+    mod_oe <- oe(z,c(nb,nf,nk))
+    v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
+    mod_arma <- arima(v,order=c(nd,0,nc),include.mean = F)
+    theta0 <- matrix(c(mod_oe$sys$B,coef(mod_arma)[nd+1:nc],
+                       -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
+    eps <- matrix(resid(mod_arma))
+    
+    leftPadZeros <- function(x,n) c(rep(0,n),x)
+    uout <- apply(u,2,leftPadZeros,n=n) 
+    
+    l <- levbmqdt(y,uout,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
+                  opt=options)
+    theta <- l$params
+    e <- ts(l$residuals,start = start(y),deltat = deltat(y))
+    
+    model <- idpoly(B = theta[1:nb],C=c(1,theta[nb+1:nc]),
+                    D=c(1,theta[nb+nc+1:nd]),
+                    F1 = c(1,theta[nb+nc+nd+1:nf]),
+                    ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
+    
+    estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
+            fitted.values=y-e,residuals=e,call=match.call(),input=u,
+            options = options,termination = l$termination) 
+  }
 }
