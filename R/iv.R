@@ -58,7 +58,7 @@ iv <- function(z,order=c(0,1,0),x=NULL){
   if(is.null(x)){
     # Initial Guess using ARX
     mod_arx <- arx(z,order)
-    x <- matrix(sim(mod_arx$sys,u,sigma=0))
+    x <- matrix(sim(mod_arx$sys,u))
   }
   
   ivcompute(y,u,x,na,nb,nk,n,N)
