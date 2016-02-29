@@ -468,7 +468,8 @@ bj <- function(z,order=c(1,1,1,1,0),
     theta <- l$params
     e <- ts(l$residuals,start = start(y),deltat = deltat(y))
     
-    model <- idpoly(B = theta[1:nb],C=c(1,theta[nb+1:nc]),
+    C_params <- if(nc==0) NULL else theta[nb+1:nc]
+    model <- idpoly(B = theta[1:nb],C=c(1,C_params),
                     D=c(1,theta[nb+nc+1:nd]),
                     F1 = c(1,theta[nb+nc+nd+1:nf]),
                     ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
