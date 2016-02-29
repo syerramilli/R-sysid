@@ -119,7 +119,7 @@ iv4 <- function(z,order=c(0,1,0)){
 #   w <- matrix(as.numeric(signal::filter(A,y)) - 
 #                 as.numeric(signal::filter(B,u)))
   w <- resid(mod_iv1)
-  mod_ar <- ar(w,aic = F,order=na+nb)
+  mod_ar <- ar(w,aic = F,order=10+na+nb)
   Lhat <- signal::Ma(c(1,-mod_ar$ar))
   
   # Step 4
