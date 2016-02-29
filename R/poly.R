@@ -45,7 +45,7 @@ idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1,
 typecheck <- function(x){
   y <- lapply(x[1:5],checkUnity)
   if(y$A){
-    out <- if(y$C && y$D) "oe" else "bj" 
+    out <- if(y$C && y$D) if(y$F1) "fir" else "oe" else "bj" 
   } else{
     if(y$D && y$F1){
       out <- if(y$C) "arx" else "armax"
@@ -64,6 +64,8 @@ print.idpoly <- function(mod,se=NULL,dig=3){
   
   if(mod$type=="arx"){
     cat("Discrete-time ARX model: A(z)y[k] = B(z)u[k] + e[k] \n\n")
+  } else if(mod$type=="fir"){
+    cat("Discrete-time FIR model: y[k] = B(z)u[k] + e[k] \n\n")
   } else if(mod$type=="armax"){
     cat("Discrete-time ARMAX model: A(z)y[k] = B(z)u[k] + C(z)e[k] \n\n")
   } else if(mod$type=="oe"){
