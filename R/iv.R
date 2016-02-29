@@ -61,10 +61,10 @@ iv <- function(z,order=c(0,1,0),x=NULL){
     x <- matrix(sim(mod_arx$sys,u))
   }
   
-  ivcompute(y,u,x,na,nb,nk,n,N)
+  ivcompute(y,u,x,na,nb,nk,n,N,z$unit)
 }
 
-ivcompute <- function(y,u,x,na,nb,nk,n,N){
+ivcompute <- function(y,u,x,na,nb,nk,n,N,unit){
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
@@ -96,8 +96,8 @@ ivcompute <- function(y,u,x,na,nb,nk,n,N){
   sigma2 <- norm(e,"2")^2/df
   vcov <- sigma2*solve(t(phi)%*%phi)
   
-  model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
-                  ioDelay = nk,Ts=deltat(z))
+  model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],ioDelay = nk,
+                  Ts=deltat(z),noiseVar = sqrt(sigma2),unit=unit)
   
   estpoly(sys = model,
           stats=list(vcov = vcov, sigma = sqrt(sigma2),df = df),
@@ -123,11 +123,11 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Step 4
   G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  x2 <- matrix(sim(mod_iv1$sys,u,sigma=0))
+  x2 <- matrix(sim(mod_iv1$sys,u))
   
   Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
   filtered <- lapply(list(y,u,x2),Lf,L=Lhat)
   yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
   
-  ivcompute(yf,uf,xf,na,nb,nk,n,N)
+  ivcompute(yf,uf,xf,na,nb,nk,n,N,z$unit)
 }
