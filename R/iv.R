@@ -112,17 +112,18 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Steps 1-2
   mod_iv1 <- iv(z,order)
-  A <- signal::Ma(mod_iv1$sys$A)
-  B <- signal::Ma(c(rep(0,nk),mod_iv1$sys$B))
+#   A <- signal::Ma(mod_iv1$sys$A)
+#   B <- signal::Ma(c(rep(0,nk),mod_iv1$sys$B))
   
   # Step 3 (AR Modeling)
-  w <- matrix(as.numeric(signal::filter(A,y)) - 
-                as.numeric(signal::filter(B,u)))
+#   w <- matrix(as.numeric(signal::filter(A,y)) - 
+#                 as.numeric(signal::filter(B,u)))
+  w <- resid(mod_iv1)
   mod_ar <- ar(w,aic = F,order=na+nb)
   Lhat <- signal::Ma(c(1,-mod_ar$ar))
   
   # Step 4
-  G2 <- signal::Arma(as.numeric(B),as.numeric(A))
+  # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
   x2 <- matrix(sim(mod_iv1$sys,u))
   
   Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
