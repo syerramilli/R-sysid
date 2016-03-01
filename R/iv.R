@@ -119,12 +119,13 @@ iv4 <- function(z,order=c(0,1,0)){
 #   w <- matrix(as.numeric(signal::filter(A,y)) - 
 #                 as.numeric(signal::filter(B,u)))
   w <- resid(mod_iv1)
-  mod_ar <- ar(w,aic = F,order=10+na+nb)
-  Lhat <- signal::Ma(c(1,-mod_ar$ar))
+  mod_ar <- ar(w,aic = F,order=na+nb)
+  Lhat <- signal::Arma(1,c(1,-mod_ar$ar))
   
   # Step 4
   # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  x2 <- matrix(sim(mod_iv1$sys,u))
+  # x2 <- matrix(sim(mod_iv1$sys,u))
+  x2 <- predict(mod_iv1)
   
   Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
   filtered <- lapply(list(y,u,x2),Lf,L=Lhat)
