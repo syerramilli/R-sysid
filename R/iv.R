@@ -111,24 +111,22 @@ iv4 <- function(z,order=c(0,1,0)){
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   
   # Steps 1-2
-  mod_iv1 <- iv(z,order)
-#   A <- signal::Ma(mod_iv1$sys$A)
-#   B <- signal::Ma(c(rep(0,nk),mod_iv1$sys$B))
+  mod_arx <- arx(z,order)
+  x <- matrix(sim(mod_arx$sys,u))
+  mod_iv <- ivcompute(y,u,x,na,nb,nk,n,N,z$unit)
   
-  # Step 3 (AR Modeling)
-#   w <- matrix(as.numeric(signal::filter(A,y)) - 
-#                 as.numeric(signal::filter(B,u)))
-  w <- resid(mod_iv1)
+  # Step 3
+  w <- resid(mod_iv)
   mod_ar <- ar(w,aic = F,order=na+nb)
-  Lhat <- signal::Arma(1,c(1,-mod_ar$ar))
+  Lhat <- mod_ar$ar
   
   # Step 4
   # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  # x2 <- matrix(sim(mod_iv1$sys,u))
-  x2 <- predict(mod_iv1)
+  # x2 <- predict(mod_iv1)
   
-  Lf <- function(x,L) matrix(as.numeric(signal::filter(L,x)))
-  filtered <- lapply(list(y,u,x2),Lf,L=Lhat)
+  Lf <- function(x,L,...) matrix(as.numeric(stats::filter(x,L,...)))
+  filtered <- lapply(list(y,u,x),Lf,L=Lhat,method="convolution",
+                     sides=1,circular = T)
   yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
   
   ivcompute(yf,uf,xf,na,nb,nk,n,N,z$unit)
