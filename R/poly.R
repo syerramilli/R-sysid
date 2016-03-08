@@ -35,6 +35,9 @@
 idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1,
                    noiseVar=1,unit = c("seconds","minutes",
                                        "hours","days")[1]){
+  Bindex <- which.max(B!=0)
+  ioDelay <- ifelse(Bindex==1,ioDelay,Bindex)
+  B <- B[Bindex:length(B)]
   out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts,
               noiseVar=noiseVar,unit=unit)
   out$type <- typecheck(out)
