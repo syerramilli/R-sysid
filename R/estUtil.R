@@ -69,7 +69,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
       break
     } 
   }
-  theta <- theta0
+  # theta <- theta0
   e <- e[1:N,]
   sigma2 <- sum(e^2)/df
   vcov <- 1/N*Hinv*sigma2
