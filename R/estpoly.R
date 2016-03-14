@@ -106,8 +106,8 @@ residplot <- function(model,newdata=NULL){
   e <- matrix(e)
   acorr <- acf(e[,],plot = F); ccorr <- ccf(u[,1],e[,],plot = F)
   par(mfrow=c(2,1),mar=c(3,4,3,2))
-  plot(acorr,main="ACF of residuals")
-  plot(ccorr,main="CCF between the input and residuals",ylab="CCF")
+  plot(acorr,ci=0.99,main="ACF of residuals")
+  plot(ccorr,ci=0.99,main="CCF between the input and residuals",ylab="CCF")
 }
 
 #' Estimate ARX Models
