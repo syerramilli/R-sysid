@@ -336,21 +336,35 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
 #' plot(mod_oe) # plot the predicted and actual responses
 #' 
 #' @export
-oe <- function(x,order=c(1,1,0),options=optimOptions()){
+oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
-  nb <- order[1];nf <- order[2]; nk <- order[3];
-  nb1 <- nb+nk-1 ; n <- max(nb1,nf); df <- N - nb - nf
-  
-  if(nf<1) 
-    stop("Not an OE model")
-  
-  # Initial Model
-  mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
-  wk <- resid(mod_arx)
-  e_init <- as.numeric(signal::filter(
-    signal::Arma(b=1,a=mod_arx$sys$A),wk))
-  ivs <- y-e_init
-  theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
+  if(!is.null(init_sys)){
+    checkInitSys(init_sys)
+    
+    # Extract orders from initial guess
+    nb <- length(init_sys$B); nf <- length(init_sys$F1) -1
+    nk <- init_sys$ioDelay;order <- c(nb,nf,nk)
+    
+    # Initial guess
+    theta0 <- matrix(params(init_sys))
+    ivs <- matrix(predict(init_sys,x))
+    e_init <- y-ivs
+  } else{
+    nb <- order[1];nf <- order[2]; nk <- order[3];
+    nb1 <- nb+nk-1 ; n <- max(nb1,nf);
+    
+    if(nf<1) 
+      stop("Not an OE model")
+    
+    # Initial Model
+    mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
+    wk <- resid(mod_arx)
+    e_init <- as.numeric(signal::filter(
+      signal::Arma(b=1,a=mod_arx$sys$A),wk))
+    ivs <- y-e_init
+    theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
+  }
+  nb1 <- nb+nk-1 ; n <- max(nb1,nf);df <- N - nb - nf
   
   leftPadZeros <- function(x,n) c(rep(0,n),x)
   uout <- apply(u,2,leftPadZeros,n=n)
