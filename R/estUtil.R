@@ -217,7 +217,10 @@ bjGrad <- function(theta,e,dots){
   return(l)
 }
 
-inv <- function(H){
-  chdecomp <- chol(H)
-  chol2inv(H)
+checkInitSys <- function(init_sys){
+  z <- strsplit(toString(sys.call(which=-1)),split = ",")[[1]][1]
+  if(init_sys$type!=z){
+    errMes <- paste("An idpoly model of",toupper(z),"structure expected for the",z,"command.")
+    stop(errMes)
+  }
 }
