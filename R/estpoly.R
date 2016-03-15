@@ -359,8 +359,10 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
     # Initial Model
     mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
     wk <- resid(mod_arx)
-    e_init <- as.numeric(signal::filter(
-      signal::Arma(b=1,a=mod_arx$sys$A),wk))
+#     e_init <- as.numeric(signal::filter(
+#       signal::Arma(b=1,a=mod_arx$sys$A),wk))
+    e_init <- as.numeric(stats::filter(wk,filter=-mod_arx$sys$A[-1],
+                                       method = "recursive"))
     ivs <- y-e_init
     theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
   }
