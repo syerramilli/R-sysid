@@ -174,14 +174,14 @@ oeGrad <- function(theta,e,dots){
 bjGrad <- function(theta,e,dots){
   y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   nb <- order[1];nc <- order[2]; nd <- order[3];
-  nf <- order[4]; nk <- order[5];
-  nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf);
+  nf <- order[4]; nk <- order[5];nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf);
   N <- dim(y)[1]
-  
+
+  l <- list()    
   if(is.null(e)){
     zeta <- dots[[4]]
     w <- y-zeta
-    e <- dots[[5]]
+    e <- dots[[5]]; l$e <- e
   } else{
     filt_ts <- signal::Arma(b=c(1,theta[nb+1:nc]),
                             a=c(1,theta[nb+nc+1:nd]))
