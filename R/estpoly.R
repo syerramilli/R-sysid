@@ -476,10 +476,7 @@ bj <- function(z,order=c(1,1,1,1,0),
                        -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
     eps <- matrix(resid(mod_arma))
     
-    leftPadZeros <- function(x,n) c(rep(0,n),x)
-    uout <- apply(u,2,leftPadZeros,n=n) 
-    
-    l <- levbmqdt(y,uout,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
+    l <- levbmqdt(y,u,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
                   opt=options)
     theta <- l$params
     e <- ts(l$residuals,start = start(y),deltat = deltat(y))

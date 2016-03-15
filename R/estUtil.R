@@ -172,7 +172,7 @@ oeGrad <- function(theta,e,dots){
 }
 
 bjGrad <- function(theta,e,dots){
-  y <- dots[[1]]; uout <- dots[[2]]; order <- dots[[3]];
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   nb <- order[1];nc <- order[2]; nd <- order[3];
   nf <- order[4]; nk <- order[5];
   nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf);
@@ -188,9 +188,11 @@ bjGrad <- function(theta,e,dots){
     w <- matrix(signal::filter(filt_ts,e))
     zeta <- y-w
   }
-  zetaout <- matrix(c(rep(0,n),zeta[,]))
-  wout <- matrix(c(rep(0,n),w[,]))
-  eout <- matrix(c(rep(0,n),e[,]))
+  
+  uout <- apply(u,2,leftPadZeros,n=n)
+  zetaout <- apply(zeta,2,leftPadZeros,n=n)
+  eout <- apply(e,2,leftPadZeros,n=n)
+  wout <- apply(w,2,leftPadZeros,n=n)
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
@@ -198,19 +200,19 @@ bjGrad <- function(theta,e,dots){
     matrix(c(uout[v,],ereg,wout[i-1:nd,],-zetaout[i-1:nf,]))
   }
   
+  # Compute new regressor matrix and residuals
   X <- t(sapply(n+1:N,reg))
-  l <- list(X=X,Y=y,e=e)
+  fn <- y-X%*%theta
   
-  if(!is.null(e)){
-    C_params <- if(nc==0) NULL else theta[nb+1:nc] 
-    den <- as.numeric(polynom::polynomial(c(1,C_params))*
+  # Computing gradient
+  C_params <- if(nc==0) NULL else theta[nb+1:nc] 
+  den <- as.numeric(polynom::polynomial(c(1,C_params))*
                         polynom::polynomial(c(1,theta[nb+nc+nd+1:nf])))
-    filt1 <- signal::Arma(b=c(1,theta[nb+nc+1:nd]),
+  filt1 <- signal::Arma(b=c(1,theta[nb+nc+1:nd]),
                           a=den)
-    grad <- apply(X,2,signal::filter,filt=filt1)
-    l$grad <- grad
-  }
+  grad <- apply(X,2,signal::filter,filt=filt1)
   
+  l$fn <- fn; l$grad <- grad
   return(l)
 }
 
