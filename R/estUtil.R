@@ -12,7 +12,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   i <- 0
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$e
-  sumsq0 <- sum(e^2)/N
+  sumsq0 <- sum(e^2)/df
   
   # variable to count the number of times objective function is called
   countObj <- 0
@@ -23,19 +23,19 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     # Update gradient
     l <- obj(theta0,e,dots)
     
-    g <- 1/N*t(l$grad)%*%e
+    g <- 1/df*t(l$grad)%*%e
     termPar <- norm(g,"2")
     
     repeat{
       # Update Parameters
-      H <- 1/N*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
+      H <- 1/df*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
       Hinv <- solve(H);
       
       theta <- theta0 + Hinv%*%g
       
       # Evaulate sum square error
       fn <- l$Y-l$X%*%theta
-      sumsq <- sum(fn^2)/N
+      sumsq <- sum(fn^2)/df
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
       
@@ -70,9 +70,9 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     } 
   }
   # theta <- theta0
-  e <- e[1:N,]
+  e <- fn[1:N,]
   sigma2 <- sum(e^2)/df
-  vcov <- 1/N*Hinv*sigma2
+  vcov <- 1/df*Hinv*sigma2
   
   list(params=theta,residuals=e,vcov=vcov,sigma = sqrt(sigma2),
        termination=list(WhyStop=WhyStop,iter=i,FcnCount = countObj,
