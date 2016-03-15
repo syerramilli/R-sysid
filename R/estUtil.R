@@ -112,32 +112,31 @@ getcov <- function(sys){
 armaxGrad <- function(theta,e,dots){
   y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc)
+  nb1 <- nb+nk-1 ; n <- max(na,nb1,nc);N <- dim(y)[1]
   
-  N <- dim(y)[1]-2*n
-  
+  l <- list()
   if(is.null(e)){
-    e <- matrix(c(dots[[4]][,],rep(0,n)))
-    eout <- matrix(c(rep(0,n),e[,]))
-  } else{
-    eout <- matrix(c(rep(0,n),e[,]))
-  }
+    e <- dots[[4]]; l$e <- e
+  } 
+  
+  yout <- apply(y,2,padZeros,n=n)
+  uout <- apply(u,2,padZeros,n=n)
+  eout <- apply(e,2,padZeros,n=n)
   
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(-y[i-1:na,],u[v,],eout[i-1:nc,]))
+    matrix(c(-yout[i-1:na,],uout[v,],eout[i-1:nc,]))
   }
   
   X <- t(sapply(n+1:(N+n),reg))
-  Y <- y[n+1:(N+n),,drop=F]
-  l <- list(X=X,Y=Y,e=e)
+  Y <- yout[n+1:(N+n),,drop=F]
+  fn <- Y-X%*%theta
   
-  if(!is.null(e)){
-    filt1 <- signal::Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
-    grad <- apply(X,2,signal::filter,filt=filt1) 
-    l$grad <- grad
-  }
+  # Compute Gradient
+  filt1 <- signal::Arma(b=1,a=c(1,theta[(na+nb+1:nc)]))
+  grad <- apply(X,2,signal::filter,filt=filt1) 
   
+  l$grad <- grad[1:N,,drop=F];l$fn <- fn[1:N,,drop=F]
   return(l)
 }
 
@@ -224,3 +223,4 @@ checkInitSys <- function(init_sys){
 }
 
 leftPadZeros <- function(x,n) c(rep(0,n),x)
+padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))

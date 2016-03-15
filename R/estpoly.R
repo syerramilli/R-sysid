@@ -255,9 +255,9 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   if(nc<1) 
     stop("Error: Not an ARMAX model")
   
-  padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
-  yout <- apply(y,2,padZeros,n=n)
-  uout <- apply(u,2,padZeros,n=n)
+#   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
+#   yout <- apply(y,2,padZeros,n=n)
+#   uout <- apply(u,2,padZeros,n=n)
   
   # Initial Parameter Estimates
   mod_arx <- iv(x,c(na,nb,nk)) # fitting ARX model
@@ -266,7 +266,7 @@ armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
   e_init <- matrix(mod_ma$residuals); e_init[is.na(e_init)] <- 0 
   theta0 <- matrix(c(mod_arx$sys$A[-1],mod_arx$sys$B,mod_ma$coef))
   
-  l <- levbmqdt(yout,uout,order,e_init,obj=armaxGrad,
+  l <- levbmqdt(y,u,order,e_init,obj=armaxGrad,
                 theta0=theta0,N=N,opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
