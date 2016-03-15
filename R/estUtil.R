@@ -11,8 +11,8 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   # Initialize Algorithm
   i <- 0
   l <- obj(theta=theta0,e=NULL,dots)
-  e <- l$e
-  sumsq0 <- sum(e^2)/df
+  e <- l$e; grad <- l$grad
+  sumsq0 <- sum(l$fn^2)/df
   
   # variable to count the number of times objective function is called
   countObj <- 0
@@ -20,22 +20,20 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   
   repeat{
     i=i+1
-    # Update gradient
-    l <- obj(theta0,e,dots)
     
-    g <- 1/df*t(l$grad)%*%e
+    g <- 1/df*t(grad)%*%e
     termPar <- norm(g,"2")
     
     repeat{
       # Update Parameters
-      H <- 1/df*t(l$grad)%*%l$grad + d*diag(dim(theta0)[1])
+      H <- 1/df*t(grad)%*%grad + d*diag(dim(theta0)[1])
       Hinv <- solve(H);
       
       theta <- theta0 + Hinv%*%g
       
       # Evaulate sum square error
-      fn <- l$Y-l$X%*%theta
-      sumsq <- sum(fn^2)/df
+      l <- obj(theta,e,dots)
+      sumsq <- sum(l$fn^2)/df
       sumSqDiff <- sumsq0-sumsq
       countObj <- countObj + 1
       
@@ -50,7 +48,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
         d <- d/mu
         theta0 <- theta
         sumsq0 <- sumsq
-        e <- fn
+        e <- l$fn; grad <- l$grad
         break
       } else{ # increase damping coefficient by a factor of mu
         d <- d*mu
@@ -70,7 +68,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     } 
   }
   # theta <- theta0
-  e <- fn[1:N,]
+  e <- l$fn
   sigma2 <- sum(e^2)/df
   vcov <- 1/df*Hinv*sigma2
   
@@ -144,33 +142,33 @@ armaxGrad <- function(theta,e,dots){
 }
 
 oeGrad <- function(theta,e,dots){
-  y <- dots[[1]]; uout <- dots[[2]]; order <- dots[[3]];
+  y <- dots[[1]]; u <- dots[[2]]; order <- dots[[3]];
   nb <- order[1];nf <- order[2]; nk <- order[3];
   nb1 <- nb+nk-1 ; n <- max(nb1,nf)
   N <- dim(y)[1]
-  
+  l <- list()
   if(is.null(e)){
     iv <- dots[[4]]
-    e <- y-iv
+    fn <- y-iv; l$e <- fn
   } else{
     iv <- y-e
   }
-  eout <- matrix(c(rep(0,n),iv[,]))
-
+  uout <- apply(u,2,leftPadZeros,n=n)
+  ivout <- apply(iv,2,leftPadZeros,n=n)
+  
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    matrix(c(uout[v,],-eout[i-1:nf,]))
+    matrix(c(uout[v,],-ivout[i-1:nf,]))
   }
-  
+  # Compute new regressor matrix and residuals
   X <- t(sapply(n+1:N,reg))
-  l <- list(X=X,Y=y,e=e)
+  fn <- y-X%*%theta
   
-  if(!is.null(e)){
-    filt1 <- signal::Arma(b=1,a=c(1,theta[nb+1:nf,]))
-    grad <- apply(X,2,signal::filter,filt=filt1)
-    l$grad <- grad
-  }
+  # Compute gradient
+  filt1 <- signal::Arma(b=1,a=c(1,theta[nb+1:nf,]))
+  grad <- apply(X,2,signal::filter,filt=filt1)
   
+  l$fn <- fn; l$grad<-grad
   return(l)
 }
 
@@ -224,3 +222,5 @@ checkInitSys <- function(init_sys){
     stop(errMes)
   }
 }
+
+leftPadZeros <- function(x,n) c(rep(0,n),x)
