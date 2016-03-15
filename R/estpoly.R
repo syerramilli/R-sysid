@@ -368,10 +368,10 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
   }
   nb1 <- nb+nk-1 ; n <- max(nb1,nf);df <- N - nb - nf
   
-  leftPadZeros <- function(x,n) c(rep(0,n),x)
-  uout <- apply(u,2,leftPadZeros,n=n)
+#   leftPadZeros <- function(x,n) c(rep(0,n),x)
+#   uout <- apply(u,2,leftPadZeros,n=n)
   
-  l <- levbmqdt(y,uout,order,ivs,obj=oeGrad,theta0=theta0,N=N,
+  l <- levbmqdt(y,u,order,ivs,obj=oeGrad,theta0=theta0,N=N,
                 opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
