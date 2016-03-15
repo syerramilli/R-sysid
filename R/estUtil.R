@@ -12,7 +12,7 @@ levbmqdt <- function(...,obj,theta0,N,opt){
   i <- 0
   l <- obj(theta=theta0,e=NULL,dots)
   e <- l$e; grad <- l$grad
-  sumsq0 <- sum(l$fn^2)/df
+  sumsq0 <- sum(e^2)/df
   
   # variable to count the number of times objective function is called
   countObj <- 0
@@ -68,7 +68,6 @@ levbmqdt <- function(...,obj,theta0,N,opt){
     } 
   }
   # theta <- theta0
-  e <- l$fn
   sigma2 <- sum(e^2)/df
   vcov <- 1/df*Hinv*sigma2
   
