@@ -11,18 +11,6 @@
 #' @param x instrument variable matrix. x must be of the same size as the output 
 #' data. (Default: \code{NULL})
 #' 
-#' @details
-#' SISO ARX models are of the form 
-#' \deqn{
-#'    y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
-#'    \ldots + b_{nk+nb} u[k-nk-nb] + e[k] 
-#' }
-#' The function estimates the coefficients using linear least squares (with
-#' regularization).
-#' \cr
-#' The data is expected to have no offsets or trends. They can be removed 
-#' using the \code{\link{detrend}} function. 
-#' 
 #' @return
 #' An object of class \code{estpoly} containing the following elements:
 #'  \item{sys}{an \code{idpoly} object containing the 
@@ -36,7 +24,6 @@
 #'      \code{sigma} - the standard deviation of the innovations\cr
 #'      \code{df} - the residual degrees of freedom}
 #' 
-#' 
 #' @references
 #' Arun K. Tangirala (2015), \emph{Principles of System Identification: 
 #' Theory and Practice}, CRC Press, Boca Raton. Sections 21.7.1, 21.7.2
@@ -48,7 +35,7 @@
 #' data(arxsim)
 #' mod_iv <- iv(z,c(2,1,1))
 #' 
-#' @seealso arx
+#' @seealso \code{\link{arx}}, \code{\link{iv4}}
 #' 
 #' @export
 iv <- function(z,order=c(0,1,0),x=NULL){
@@ -61,6 +48,7 @@ iv <- function(z,order=c(0,1,0),x=NULL){
   ivcompute(z,x,order)
 }
 
+#' @import signal
 ivcompute <- function(z,x,order,filt=NULL){
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
   na <- order[1];nb <- order[2]; nk <- order[3]
@@ -110,6 +98,48 @@ ivcompute <- function(z,x,order,filt=NULL){
           fitted.values=ypred,residuals=e,call=match.call(),input=u)
 }
 
+#' ARX model estimation using four-stage instrumental variable method
+#' 
+#' Estimates an ARX model of the specified order from input-output data using
+#' the instrument variable method. The estimation algorithm is insensitive to 
+#' the color of the noise term.
+#' 
+#' @param z an idframe object containing the data
+#' @param order Specification of the orders: the three integer components 
+#' (na,nb,nk) are the order of polynolnomial A, (order of polynomial B + 1) 
+#' and the input-output delay
+#' 
+#' @details 
+#' Estimation is performed in 4 stages. The first stage uses the arx function. The resulting model generates the 
+#' instruments for a second-stage IV estimate. The residuals obtained from this model are modeled using a sufficently
+#' high-order AR model. At the fourth stage, the input-output data is filtered through this AR model and then subjected 
+#' to the IV function with the same instrument filters as in the second stage.
+#' 
+#' @return
+#' An object of class \code{estpoly} containing the following elements:
+#'  \item{sys}{an \code{idpoly} object containing the 
+#'    fitted ARX coefficients}
+#'  \item{fitted.values}{the predicted response}
+#'  \item{residuals}{the residuals}
+#'  \item{input}{the input data used}
+#'  \item{call}{the matched call}
+#'  \item{stats}{A list containing the following fields: \cr
+#'      \code{vcov} - the covariance matrix of the fitted coefficients \cr
+#'      \code{sigma} - the standard deviation of the innovations\cr
+#'      \code{df} - the residual degrees of freedom}
+#' 
+#' @references
+#' Lennart Ljung (1999), \emph{System Identification: Theory for the User}, 
+#' 2nd Edition, Prentice Hall, New York. Section 15.3
+#' 
+#' @examples
+#' mod_dgp <- idpoly(A=c(1,-0.5),B=c(0.6,-.2),C=c(1,0.6),ioDelay = 2,noiseVar = 0.1)
+#' u <- idinput(400,"prbs")
+#' y <- sim(mod_dgp,u,T)
+#' z <- idframe(y,u)
+#' mod_iv4 <- iv4(z,c(1,2,2))
+#' 
+#' @seealso \code{\link{arx}}, \code{\link{iv4}}
 #' @export
 iv4 <- function(z,order=c(0,1,0)){
   na <- order[1]; nb <- order[2]
