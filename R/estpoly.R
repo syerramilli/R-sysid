@@ -267,7 +267,7 @@ armax <- function(x,order=c(0,1,1,0),init_sys=NULL,options=optimOptions()){
       stop("Error: Not an ARMAX model")
     
     # Initial Parameter Estimates
-    mod_arx <- iv(x,c(na,nb,nk)) # fitting ARX model
+    mod_arx <- iv4(x,c(na,nb,nk)) # fitting ARX model
     eps_init <- matrix(resid(mod_arx))
     mod_ma <- arima(eps_init,order=c(0,0,nc),include.mean = F)
     e_init <- matrix(mod_ma$residuals); e_init[is.na(e_init)] <- 0 
@@ -366,7 +366,7 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
       stop("Not an OE model")
     
     # Initial Model
-    mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
+    mod_arx <- iv4(x,c(nf,nb,nk)) # fitting ARX model
     wk <- resid(mod_arx)
     e_init <- as.numeric(stats::filter(wk,filter=-mod_arx$sys$A[-1],
                                        method = "recursive"))
