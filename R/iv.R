@@ -66,7 +66,6 @@ iv <- function(z,order=c(0,1,0),x=NULL){
 
 ivcompute <- function(y,u,x,na,nb,nk,n,N,unit){
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
-  padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
   xout <- apply(x,2,padZeros,n=n);
   uout <- apply(u,2,padZeros,n=n);
@@ -122,11 +121,10 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Step 4
   # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  # x2 <- predict(mod_iv1)
+  # x2 <- matrix(sim(mod_iv$sys,u))
   
-  Lf <- function(x,L,...) matrix(as.numeric(stats::filter(x,L,...)))
-  filtered <- lapply(list(y,u,x),Lf,L=Lhat,method="convolution",
-                     sides=1,circular = T)
+  Lf <- function(x,L) matrix(as.numeric(stats::filter(x,L,method="recursive")))
+  filtered <- lapply(list(y,u,x),Lf,L=Lhat)
   yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
   
   ivcompute(yf,uf,xf,na,nb,nk,n,N,z$unit)
