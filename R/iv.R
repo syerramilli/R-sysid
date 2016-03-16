@@ -121,9 +121,8 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Step 4
   # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  # x2 <- matrix(sim(mod_iv$sys,u))
-  
-  Lf <- function(x,L) matrix(as.numeric(stats::filter(x,L,method="recursive")))
+  x2 <- matrix(sim(mod_iv$sys,u))
+  Lf <- function(x,L) matrix(as.numeric(stats::filter(x,L,method="convolution",sides=1,circular = T)))
   filtered <- lapply(list(y,u,x),Lf,L=Lhat)
   yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
   
