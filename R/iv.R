@@ -52,19 +52,19 @@
 #' 
 #' @export
 iv <- function(z,order=c(0,1,0),x=NULL){
-  y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
-  na <- order[1];nb <- order[2]; nk <- order[3]
-  
   if(is.null(x)){
     # Initial Guess using ARX
     mod_arx <- arx(z,order)
-    x <- matrix(sim(mod_arx$sys,u))
+    x <- matrix(sim(mod_arx$sys,inputData(z)))
   }
   
-  ivcompute(y,u,x,na,nb,nk,n,N,z$unit)
+  ivcompute(z,x,order)
 }
 
-ivcompute <- function(y,u,x,na,nb,nk,n,N,unit){
+ivcompute <- function(z,x,order,filt=NULL){
+  y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
+  na <- order[1];nb <- order[2]; nk <- order[3]
+  
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   yout <- apply(y,2,padZeros,n=n);
   xout <- apply(x,2,padZeros,n=n);
@@ -85,9 +85,16 @@ ivcompute <- function(y,u,x,na,nb,nk,n,N,unit){
   }
   psi <- t(sapply(n+1:(N+n),ivx))
   
+  l <- list(phi,psi,Y)
+  if(!is.null(filt)){
+    appfilt <- function(x) apply(x,2,signal::filter,filt=filt)
+    l <- lapply(l, appfilt)
+  }
+  phif <- l[[1]]; psif <- l[[2]]; Yf <- l[[3]]
+  
   # Estimator
-  lhs <- t(psi)%*%phi; lhsinv <- solve(lhs)
-  theta <- lhsinv%*%t(psi)%*%Y
+  lhs <- t(psif)%*%phif; lhsinv <- solve(lhs)
+  theta <- lhsinv%*%t(psif)%*%Yf
   
   # Residuals
   ypred <- (phi%*%theta)[1:N,,drop=F] 
@@ -105,26 +112,16 @@ ivcompute <- function(y,u,x,na,nb,nk,n,N,unit){
 
 #' @export
 iv4 <- function(z,order=c(0,1,0)){
-  y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
-  na <- order[1];nb <- order[2]; nk <- order[3]
-  nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
-  
+  na <- order[1]; nb <- order[2]
   # Steps 1-2
-  mod_arx <- arx(z,order)
-  x <- matrix(sim(mod_arx$sys,u))
-  mod_iv <- ivcompute(y,u,x,na,nb,nk,n,N,z$unit)
+  mod_iv <- iv(z,order)
   
   # Step 3
   w <- resid(mod_iv)
   mod_ar <- ar(w,aic = F,order=na+nb)
-  Lhat <- mod_ar$ar
+  Lhat <- signal::Arma(b=c(1,-mod_ar$ar),a=1)
   
   # Step 4
-  # G2 <- signal::Arma(as.numeric(B),as.numeric(A))
-  x2 <- matrix(sim(mod_iv$sys,u))
-  Lf <- function(x,L) matrix(as.numeric(stats::filter(x,L,method="convolution",sides=1,circular = T)))
-  filtered <- lapply(list(y,u,x),Lf,L=Lhat)
-  yf <- filtered[[1]]; uf<- filtered[[2]]; xf <- filtered[[3]]
-  
-  ivcompute(yf,uf,xf,na,nb,nk,n,N,z$unit)
+  x2 <- matrix(sim(mod_iv$sys,inputData(z)))
+  ivcompute(z,x2,order,Lhat)
 }
