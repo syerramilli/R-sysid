@@ -34,18 +34,6 @@ Estimates an ARX model of the specified order from input-output data using
 the instrument variable method. If arbitrary instruments are not supplied 
 by the user, the instruments are generated using the arx routine
 }
-\details{
-SISO ARX models are of the form 
-\deqn{
-   y[k] + a_1 y[k-1] + \ldots + a_{na} y[k-na] = b_{nk} u[k-nk] + 
-   \ldots + b_{nk+nb} u[k-nk-nb] + e[k] 
-}
-The function estimates the coefficients using linear least squares (with
-regularization).
-\cr
-The data is expected to have no offsets or trends. They can be removed 
-using the \code{\link{detrend}} function.
-}
 \examples{
 data(arxsim)
 mod_iv <- iv(z,c(2,1,1))
@@ -59,6 +47,6 @@ Lennart Ljung (1999), \emph{System Identification: Theory for the User},
 2nd Edition, Prentice Hall, New York. Section 7.6
 }
 \seealso{
-arx
+\code{\link{arx}}, \code{\link{iv4}}
 }
 
