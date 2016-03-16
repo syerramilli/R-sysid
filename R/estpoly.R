@@ -246,26 +246,35 @@ arx <- function(x,order=c(0,1,0),lambda=0.1){
 #' mod_armax
 #' 
 #' @export
-armax <- function(x,order=c(0,1,1,0),options=optimOptions()){
-  require(signal)
+armax <- function(x,order=c(0,1,1,0),init_sys=NULL,options=optimOptions()){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
-  na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
+  if(!is.null(init_sys)){
+    checkInitSys(init_sys)
+    
+    # Extract orders from initial guess
+    na <- length(init_sys$A) -1;nb <- length(init_sys$B); 
+    nc <- length(init_sys$C) -1;nk <- init_sys$ioDelay
+    order <- c(na,nb,nc,nk)
+    
+    # Initial guess
+    theta0 <- matrix(params(init_sys))
+    ivs <- matrix(predict(init_sys,x))
+    e_init <- y-ivs
+  } else{
+    na <- order[1];nb <- order[2]; nc <- order[3]; nk <- order[4]
+    
+    if(nc<1) 
+      stop("Error: Not an ARMAX model")
+    
+    # Initial Parameter Estimates
+    mod_arx <- iv(x,c(na,nb,nk)) # fitting ARX model
+    eps_init <- matrix(resid(mod_arx))
+    mod_ma <- arima(eps_init,order=c(0,0,nc),include.mean = F)
+    e_init <- matrix(mod_ma$residuals); e_init[is.na(e_init)] <- 0 
+    theta0 <- matrix(c(mod_arx$sys$A[-1],mod_arx$sys$B,mod_ma$coef))
+  }
+  
   nb1 <- nb+nk-1 ; n <- max(na,nb1,nc); df <- N - na - nb - nc
-  
-  if(nc<1) 
-    stop("Error: Not an ARMAX model")
-  
-#   padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
-#   yout <- apply(y,2,padZeros,n=n)
-#   uout <- apply(u,2,padZeros,n=n)
-  
-  # Initial Parameter Estimates
-  mod_arx <- iv(x,c(na,nb,nk)) # fitting ARX model
-  eps_init <- matrix(resid(mod_arx))
-  mod_ma <- arima(eps_init,order=c(0,0,nc),include.mean = F)
-  e_init <- matrix(mod_ma$residuals); e_init[is.na(e_init)] <- 0 
-  theta0 <- matrix(c(mod_arx$sys$A[-1],mod_arx$sys$B,mod_ma$coef))
-  
   l <- levbmqdt(y,u,order,e_init,obj=armaxGrad,
                 theta0=theta0,N=N,opt=options)
   theta <- l$params
@@ -359,17 +368,12 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
     # Initial Model
     mod_arx <- iv(x,c(nf,nb,nk)) # fitting ARX model
     wk <- resid(mod_arx)
-#     e_init <- as.numeric(signal::filter(
-#       signal::Arma(b=1,a=mod_arx$sys$A),wk))
     e_init <- as.numeric(stats::filter(wk,filter=-mod_arx$sys$A[-1],
                                        method = "recursive"))
     ivs <- y-e_init
     theta0 <- matrix(c(mod_arx$sys$B,mod_arx$sys$A[-1]))
   }
   nb1 <- nb+nk-1 ; n <- max(nb1,nf);df <- N - nb - nf
-  
-#   leftPadZeros <- function(x,n) c(rep(0,n),x)
-#   uout <- apply(u,2,leftPadZeros,n=n)
   
   l <- levbmqdt(y,u,order,ivs,obj=oeGrad,theta0=theta0,N=N,
                 opt=options)
@@ -459,36 +463,49 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
 bj <- function(z,order=c(1,1,1,1,0),
                init_sys=NULL,options=optimOptions()){
   y <- outputData(z); u <- inputData(z); N <- dim(y)[1]
-  nb <- order[1];nc <- order[2]; nd <- order[3];
-  nf <- order[4]; nk <- order[5];
-  
-  if(nc==0 && nd==0){
-    oe(z,c(nb,nf,nk))
+  if(!is.null(init_sys)){
+    checkInitSys(init_sys)
+    
+    # Extract orders from initial guess
+    nb <- length(init_sys$B); nf <- length(init_sys$F1) -1
+    nc <- length(init_sys$C) -1;nd <- length(init_sys$d) -1
+    nk <- init_sys$ioDelay;order <- c(nb,nc,nd,nf,nk)
+    
+    # Initial guess
+    theta0 <- matrix(params(init_sys))
+    ivs <- matrix(predict(init_sys,x))
+    e_init <- y-ivs
   } else{
-    nb1 <- nb+nk-1 ; n <- max(nb1,nc,nd,nf); df <- N-nb-nc-nd-nf
+    nb <- order[1];nc <- order[2]; nd <- order[3];
+    nf <- order[4]; nk <- order[5];
     
-    # Initial Guess
-    mod_oe <- oe(z,c(nb,nf,nk))
-    v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
-    mod_arma <- arima(v,order=c(nd,0,nc),include.mean = F)
-    C_params <- if(nc==0) NULL else coef(mod_arma)[nd+1:nc]
-    theta0 <- matrix(c(mod_oe$sys$B,C_params,
-                       -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
-    eps <- matrix(resid(mod_arma))
-    
-    l <- levbmqdt(y,u,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
-                  opt=options)
-    theta <- l$params
-    e <- ts(l$residuals,start = start(y),deltat = deltat(y))
-    
-    C_params <- if(nc==0) NULL else theta[nb+1:nc]
-    model <- idpoly(B = theta[1:nb],C=c(1,C_params),
-                    D=c(1,theta[nb+nc+1:nd]),
-                    F1 = c(1,theta[nb+nc+nd+1:nf]),
-                    ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
-    
-    estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
-            fitted.values=y-e,residuals=e,call=match.call(),input=u,
-            options = options,termination = l$termination) 
+    if(nc==0 && nd==0){
+      oe(z,c(nb,nf,nk))
+    } else{
+      
+      # Initial Guess
+      mod_oe <- oe(z,c(nb,nf,nk))
+      v <- resid(mod_oe); zeta <- matrix(predict(mod_oe))
+      mod_arma <- arima(v,order=c(nd,0,nc),include.mean = F)
+      C_params <- if(nc==0) NULL else coef(mod_arma)[nd+1:nc]
+      theta0 <- matrix(c(mod_oe$sys$B,C_params,
+                         -coef(mod_arma)[1:nd],mod_oe$sys$F1[-1]))
+      eps <- matrix(resid(mod_arma))
+    }
   }
+  l <- levbmqdt(y,u,order,zeta,eps,obj=bjGrad,theta0=theta0,N=N,
+                opt=options)
+  theta <- l$params
+  e <- ts(l$residuals,start = start(y),deltat = deltat(y))
+  
+  C_params <- if(nc==0) NULL else theta[nb+1:nc]
+  model <- idpoly(B = theta[1:nb],C=c(1,C_params),
+                  D=c(1,theta[nb+nc+1:nd]),
+                  F1 = c(1,theta[nb+nc+nd+1:nf]),
+                  ioDelay = nk,Ts=deltat(z),noiseVar = l$sigma,unit=z$unit)
+  
+  estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
+          fitted.values=y-e,residuals=e,call=match.call(),input=u,
+          options = options,termination = l$termination) 
+
 }
