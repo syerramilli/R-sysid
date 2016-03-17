@@ -4,7 +4,7 @@
 \alias{oe}
 \title{Estimate Output-Error Models}
 \usage{
-oe(x, order = c(1, 1, 0), options = optimOptions())
+oe(x, order = c(1, 1, 0), init_sys = NULL, options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
@@ -12,6 +12,9 @@ oe(x, order = c(1, 1, 0), options = optimOptions())
 \item{order}{Specification of the orders: the four integer components 
 (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
 and the input-output delay respectively}
+
+\item{init_sys}{Linear polynomial model that configures the initial parameterization.
+Must be an OE model. Overrules the \code{order} argument}
 
 \item{options}{Estimation Options, setup using 
 \code{\link{optimOptions}}}

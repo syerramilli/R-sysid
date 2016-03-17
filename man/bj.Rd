@@ -14,6 +14,9 @@ bj(z, order = c(1, 1, 1, 1, 0), init_sys = NULL, options = optimOptions())
 order of the polynomial D, order of the polynomial F, and the 
 input-output delay respectively}
 
+\item{init_sys}{Linear polynomial model that configures the initial parameterization.
+Must be a BJ model. Overrules the \code{order} argument}
+
 \item{options}{Estimation Options, setup using 
 \code{\link{optimOptions}}}
 }

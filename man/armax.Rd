@@ -4,16 +4,19 @@
 \alias{armax}
 \title{Estimate ARMAX Models}
 \usage{
-armax(x, order = c(0, 1, 1, 0), options = optimOptions())
+armax(x, order = c(0, 1, 1, 0), init_sys = NULL, options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
 
-\item{options}{Estimation Options, setup using \code{\link{optimOptions}}}
-
-\item{order:}{Specification of the orders: the four integer components 
+\item{order}{Specification of the orders: the four integer components 
 (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
 + 1, order of the polynomial C,and the input-output delay respectively}
+
+\item{init_sys}{Linear polynomial model that configures the initial parameterization.
+Must be an ARMAX model. Overrules the \code{order} argument}
+
+\item{options}{Estimation Options, setup using \code{\link{optimOptions}}}
 }
 \value{
 An object of class \code{estpoly} containing the following elements:

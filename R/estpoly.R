@@ -197,9 +197,11 @@ arx <- function(x,order=c(0,1,0),lambda=0.1){
 #' Fit an ARMAX model of the specified order given the input-output data 
 #' 
 #' @param x an object of class \code{idframe}
-#' @param order: Specification of the orders: the four integer components 
+#' @param order Specification of the orders: the four integer components 
 #' (na,nb,nc,nk) are the order of polynolnomial A, order of polynomial B 
 #' + 1, order of the polynomial C,and the input-output delay respectively
+#' @param init_sys Linear polynomial model that configures the initial parameterization.
+#' Must be an ARMAX model. Overrules the \code{order} argument
 #' @param options Estimation Options, setup using \code{\link{optimOptions}}
 #' 
 #' @details
@@ -297,6 +299,8 @@ armax <- function(x,order=c(0,1,1,0),init_sys=NULL,options=optimOptions()){
 #' @param order Specification of the orders: the four integer components 
 #' (nb,nf,nk) are order of polynomial B + 1, order of the polynomial F,
 #' and the input-output delay respectively
+#' @param init_sys Linear polynomial model that configures the initial parameterization.
+#' Must be an OE model. Overrules the \code{order} argument
 #' @param options Estimation Options, setup using 
 #' \code{\link{optimOptions}}
 #' 
@@ -397,6 +401,8 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
 #' (nb,nc,nd,nf,nk) are order of polynomial B + 1, order of the polynomial C,
 #' order of the polynomial D, order of the polynomial F, and the 
 #' input-output delay respectively
+#' @param init_sys Linear polynomial model that configures the initial parameterization.
+#' Must be a BJ model. Overrules the \code{order} argument
 #' @param options Estimation Options, setup using 
 #' \code{\link{optimOptions}}
 #' 
