@@ -115,9 +115,12 @@ residplot <- function(model,newdata=NULL){
 #' Fit an ARX model of the specified order given the input-output data 
 #' 
 #' @param x an object of class \code{idframe}
-#' @param order: Specification of the orders: the three integer components 
+#' @param order Specification of the orders: the three integer components 
 #' (na,nb,nk) are the order of polynolnomial A, (order of polynomial B + 1) and 
 #' the input-output delay
+#' @param lambda Regularization parameter(Default=\code{0.1}) 
+#' @param intNoise Logical variable indicating whether to add integrators in
+#' the noise channel (Default=\code{FALSE})
 #' 
 #' @details
 #' SISO ARX models are of the form 
@@ -159,12 +162,15 @@ residplot <- function(model,newdata=NULL){
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
-arx <- function(x,order=c(0,1,0),lambda=0.1){
+arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE){
   y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
+  if(intNoise){
+    y <- apply(y,2,integfilter)
+    u <- apply(u,2,integfilter)
+  }
   na <- order[1];nb <- order[2]; nk <- order[3]
   nb1 <- nb+nk-1 ; n <- max(na,nb1); df <- N-na-nb
   
-  padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
   yout <- apply(y,2,padZeros,n=n);
   uout <- apply(u,2,padZeros,n=n);
   
@@ -183,13 +189,16 @@ arx <- function(x,order=c(0,1,0),lambda=0.1){
   
   sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
   vcov <- sigma2 * innerinv
+  fit <- (X%*%coef)[1:N,,drop=F]
+  if(intNoise) fit <- apply(fit,2,cumsum)
   
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
-               ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),unit=x$unit)
+               ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),
+               intNoise=intNoise,unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2),
-              df = df),fitted.values=(X%*%coef)[1:N,],
-              residuals=(Y-X%*%coef)[1:N,],call=match.call(),input=u)
+              df = df),fitted.values=fit,residuals=(Y-X%*%coef)[1:N,,drop=F],
+          call=match.call(),input=u)
 }
 
 #' Estimate ARMAX Models
