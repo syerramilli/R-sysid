@@ -4,14 +4,19 @@
 \alias{arx}
 \title{Estimate ARX Models}
 \usage{
-arx(x, order = c(0, 1, 0), lambda = 0.1)
+arx(x, order = c(1, 1, 1), lambda = 0.1, intNoise = FALSE)
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
 
-\item{order:}{Specification of the orders: the three integer components 
+\item{order}{Specification of the orders: the three integer components 
 (na,nb,nk) are the order of polynolnomial A, (order of polynomial B + 1) and 
 the input-output delay}
+
+\item{lambda}{Regularization parameter(Default=\code{0.1})}
+
+\item{intNoise}{Logical variable indicating whether to add integrators in
+the noise channel (Default=\code{FALSE})}
 }
 \value{
 An object of class \code{estpoly} containing the following elements:

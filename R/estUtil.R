@@ -225,3 +225,8 @@ checkInitSys <- function(init_sys){
 
 leftPadZeros <- function(x,n) c(rep(0,n),x)
 padZeros <- function(x,n) c(rep(0,n),x,rep(0,n))
+
+integfilter <- function(x){
+  as.numeric(stats::filter(x,filter=c(1,-1),"convolution",sides = 1,
+                           circular = T))
+}
