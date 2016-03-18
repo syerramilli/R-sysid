@@ -69,20 +69,26 @@ checkUnity <- function(x){
 
 #' @export
 print.idpoly <- function(mod,se=NULL,dig=3){
-  
-  if(mod$type=="arx"){
-    cat("Discrete-time ARX model: A(z)y[k] = B(z)u[k] + e[k] \n\n")
-  } else if(mod$type=="fir"){
-    cat("Discrete-time FIR model: y[k] = B(z)u[k] + e[k] \n\n")
-  } else if(mod$type=="armax"){
-    cat("Discrete-time ARMAX model: A(z)y[k] = B(z)u[k] + C(z)e[k] \n\n")
-  } else if(mod$type=="oe"){
-    cat("Discrete-time OE model: y[k] = B(z)/F(z) u[k] + e[k] \n\n")
-  } else if(mod$type=="bj"){
-    cat("Discrete-time BJ model: y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
+  main <- paste("Discrete-time",toupper(mod$type),"model:")
+  if(mod$type=="oe" || mod$type=="bj"){
+    main <- paste(main,"y[k] = B(z)/F(z) u[k] +")
+    if(mod$type=="bj"){
+      polyExp <- ifelse(!checkUnity(mod$C),"C(z)/D(z)","1/D(z)")
+      if(mod$intNoise==T) polyExp <- paste(polyExp,"1/(1-z^{-1})")
+      main <- paste(main,polyExp,"e[k] \n\n")
+    }
   } else{
-    cat("Discrete-time Polynomial model: A(z) y[k] = B(z)/F(z) u[k] + C(z)/D(z) e[k] \n\n")
+    main <- paste(main,"A(z)y[k] =")
+    if(!checkUnity(mod$B)) main <- paste(main,"B(z)u[k] +")
+    if(checkUnity(mod$C)){
+      Cexp <- ifelse(mod$intNoise==T,"","1/(1-z^{-1})")
+    }else{
+      Cexp <- "C(z)"
+      if(mod$intNoise==T) Cexp <- paste(Cexp,"/(1-z^{-1})",sep="")
+    }
+    main <- paste(main,Cexp,"e[k] \n\n")
   }
+  cat(main)
   
   # Printing Standard error sequence
   j=1
