@@ -56,11 +56,12 @@ typecheck <- function(x){
       } else{
         out <- if(y$C) "ar" else "arma"
       }
-      if(y$B) out <- paste(out,"x",sep="")
+      if(!y$B) out <- paste(out,"x",sep="")
     } else{
       out <- "polynomial"
     }
   }
+  out
 }
 
 checkUnity <- function(x){
