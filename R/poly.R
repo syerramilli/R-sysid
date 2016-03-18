@@ -33,13 +33,13 @@
 #' 
 #' @export
 idpoly <- function(A=1,B=1,C=1,D=1,F1=1,ioDelay=0,Ts=1,
-                   noiseVar=1,unit = c("seconds","minutes",
+                   noiseVar=1,intNoise = F,unit = c("seconds","minutes",
                                        "hours","days")[1]){
   Bindex <- which.max(B!=0)
   ioDelay <- ifelse(Bindex-1==0,ioDelay,Bindex-1)
   B <- B[Bindex:length(B)]
   out <- list(A= A,B=B,C=C,D=D,F1=F1,ioDelay = ioDelay,Ts=Ts,
-              noiseVar=noiseVar,unit=unit)
+              noiseVar=noiseVar,unit=unit,intNoise = intNoise)
   out$type <- typecheck(out)
   class(out) <- "idpoly"
   return(out)
@@ -51,7 +51,12 @@ typecheck <- function(x){
     out <- if(y$C && y$D) if(y$F1) "fir" else "oe" else "bj" 
   } else{
     if(y$D && y$F1){
-      out <- if(y$C) "arx" else "armax"
+      if(x$intNoise){
+        out <- if(y$C) "ari" else "arima"
+      } else{
+        out <- if(y$C) "ar" else "arma"
+      }
+      if(y$B) out <- paste(out,"x",sep="")
     } else{
       out <- "polynomial"
     }
