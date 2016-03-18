@@ -84,10 +84,10 @@ print.idpoly <- function(mod,se=NULL,dig=3){
     main <- paste(main,"A(z)y[k] =")
     if(!checkUnity(mod$B)) main <- paste(main,"B(z)u[k] +")
     if(checkUnity(mod$C)){
-      Cexp <- ifelse(mod$intNoise==T,"","1/(1-z^{-1})")
+      Cexp <- ifelse(!mod$intNoise,"","1/(1-z^{-1})")
     }else{
       Cexp <- "C(z)"
-      if(mod$intNoise==T) Cexp <- paste(Cexp,"/(1-z^{-1})",sep="")
+      if(mod$intNoise) Cexp <- paste(Cexp,"/(1-z^{-1})",sep="")
     }
     main <- paste(main,Cexp,"e[k] \n\n")
   }
