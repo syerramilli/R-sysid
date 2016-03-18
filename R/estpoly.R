@@ -212,6 +212,8 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE){
 #' + 1, order of the polynomial C,and the input-output delay respectively
 #' @param init_sys Linear polynomial model that configures the initial parameterization.
 #' Must be an ARMAX model. Overrules the \code{order} argument
+#' @param intNoise Logical variable indicating whether to add integrators in
+#' the noise channel (Default=\code{FALSE})
 #' @param options Estimation Options, setup using \code{\link{optimOptions}}
 #' 
 #' @details
@@ -258,8 +260,14 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE){
 #' mod_armax
 #' 
 #' @export
-armax <- function(x,order=c(0,1,1,0),init_sys=NULL,options=optimOptions()){
-  y <- outputData(x); u <- inputData(x); N <- dim(y)[1]
+armax <- function(x,order=c(0,1,1,0),init_sys=NULL,intNoise=FALSE,
+                  options=optimOptions()){
+  y <- outputData(x); u <- inputData(x)
+  if(intNoise){
+    y <- apply(y,2,diff)
+    u <- apply(u,2,diff)
+  }
+  N <- dim(y)[1]
   if(!is.null(init_sys)){
     checkInitSys(init_sys)
     
@@ -291,13 +299,15 @@ armax <- function(x,order=c(0,1,1,0),init_sys=NULL,options=optimOptions()){
                 theta0=theta0,N=N,opt=options)
   theta <- l$params
   e <- ts(l$residuals,start = start(y),deltat = deltat(y))
+  fit <- matrix(y-e)
+  if(intNoise) fit <- apply(fit,2,cumsum)
   
   model <- idpoly(A = c(1,theta[1:na]),B = theta[na+1:nb],
                   C = c(1,theta[na+nb+1:nc]),ioDelay = nk,Ts=deltat(x),
-                  noiseVar = l$sigma,unit=x$unit)
+                  noiseVar = l$sigma,intNoise=intNoise,unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = l$vcov, sigma = l$sigma),
-          fitted.values=y-e,residuals=e,call=match.call(),input=u,
+          fitted.values=fit,residuals=e,call=match.call(),input=u,
           options = options,termination = l$termination)
 }
 

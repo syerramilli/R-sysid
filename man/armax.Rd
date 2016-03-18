@@ -4,7 +4,8 @@
 \alias{armax}
 \title{Estimate ARMAX Models}
 \usage{
-armax(x, order = c(0, 1, 1, 0), init_sys = NULL, options = optimOptions())
+armax(x, order = c(0, 1, 1, 0), init_sys = NULL, intNoise = FALSE,
+  options = optimOptions())
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
@@ -15,6 +16,9 @@ armax(x, order = c(0, 1, 1, 0), init_sys = NULL, options = optimOptions())
 
 \item{init_sys}{Linear polynomial model that configures the initial parameterization.
 Must be an ARMAX model. Overrules the \code{order} argument}
+
+\item{intNoise}{Logical variable indicating whether to add integrators in
+the noise channel (Default=\code{FALSE})}
 
 \item{options}{Estimation Options, setup using \code{\link{optimOptions}}}
 }
