@@ -10,6 +10,8 @@
 #' @param ioDelay the delay in the input-output channel
 #' @param Ts sampling interval
 #' @param noiseVar variance of the white noise source (Default=\code{1})
+#' @param intNoise Logical variable indicating presence or absence of integrator
+#' in the noise channel (Default=\code{FALSE})
 #' @param unit time unit (Default=\code{"seconds"})
 #' 
 #' @details
