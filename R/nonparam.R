@@ -201,7 +201,7 @@ spa <- function(x,winsize=NULL,freq=NULL){
       phi_yu <- sapply(freq,cov2spec,Ryu[i,j,],M)
       phi_u <- sapply(freq,cov2spec,Ruu[j,j,],M)
       G[i,j,] <- phi_yu/phi_u
-      temp <- phi_y - phi_yu*Conj(phi_yu)/phi_u
+      temp <- temp - phi_yu*Conj(phi_yu)/phi_u
     }
     spec[i,i,] <- temp
   }
