@@ -193,7 +193,7 @@ spa <- function(x,winsize=NULL,freq=NULL){
   }
   
   G <- array(0,c(nout,nin,length(freq)))
-  spec <- array(0,c(nout,nout,length(freq)))
+  spec <- array(0,c(nout,1,length(freq)))
   for(i in 1:nout){
     phi_y <- sapply(freq,cov2spec,Ryy[i,i,],M)
     temp <- phi_y
@@ -203,7 +203,7 @@ spa <- function(x,winsize=NULL,freq=NULL){
       G[i,j,] <- phi_yu/phi_u
       temp <- temp - phi_yu*Conj(phi_yu)/phi_u
     }
-    spec[i,i,] <- temp
+    spec[i,1,] <- temp
   }
   out <- idfrd(G,matrix(freq),deltat(x),spec)
   return(out)
