@@ -162,7 +162,8 @@ residplot <- function(model,newdata=NULL){
 #' plot(model) # plot the predicted and actual responses
 #' 
 #' @export
-arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE){
+arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
+                fixed=list(A=rep(NA,order[1]),B=rep(NA,order[2]))){
   y <- outputData(x); u <- inputData(x)
   if(intNoise){
     y <- apply(y,2,diff)
@@ -175,6 +176,8 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE){
   yout <- apply(y,2,padZeros,n=n);
   uout <- apply(u,2,padZeros,n=n);
   
+  fixedpos_A <- which(!is.na(fixed[[1]]))
+  fixedpos_B <- which(!is.na(fixed[[2]]))
   reg <- function(i) {
     if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
     c(-yout[i-1:na,,drop=T],uout[v,,drop=T])
