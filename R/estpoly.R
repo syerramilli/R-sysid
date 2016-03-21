@@ -163,7 +163,7 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' @export
 arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
-                fixed=list(A=rep(NA,order[1]),B=rep(NA,order[2]))){
+                fixed=NULL){
   y <- outputData(x); u <- inputData(x)
   if(intNoise){
     y <- apply(y,2,diff)
@@ -176,14 +176,51 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   yout <- apply(y,2,padZeros,n=n);
   uout <- apply(u,2,padZeros,n=n);
   
-  fixedpos_A <- which(!is.na(fixed[[1]]))
-  fixedpos_B <- which(!is.na(fixed[[2]]))
-  reg <- function(i) {
-    if(nk==0) v <- i-0:(nb-1) else v <- i-nk:nb1
-    c(-yout[i-1:na,,drop=T],uout[v,,drop=T])
+  fixedflag = is.null(fixed)
+  uindex <- nk:nb1
+  if(na!=0) yindex <- 1:na
+
+  if(!fixedflag){
+    # checking for correct specification of fixed parameters
+    g(fixedA,fixedB) %=% lapply(fixed,length)
+    if(fixedA != na && fixedB != nb)
+      stop("Number of parameters incorrectly specified in 'fixed'")
+    
+    fixedpars <- unlist(fixed)
+    fixedpars <- fixedpars[!is.na(fixedpars)]
+    df <- df + length(fixedpars)
+    
+    fixedpos_B <- which(!is.na(fixed[[2]]))
+    uindex <- uindex[!uindex %in% (nk+fixedpos_B)]
+    if(na!=0){
+      fixedpos_A <- which(!is.na(fixed[[1]]))
+      yindex <- yindex[!yindex %in% fixedpos_A]
+    }
   }
-  X <- t(sapply(n+1:(N+n),reg))
+  
+  reg <- function(i) {
+    phi <- t(c(-yout[i-yindex,],uout[i-uindex,]))
+    l <- list(phi=phi)
+    if(!fixedflag){
+      temp <- numeric(0)
+      if(length(fixedpos_A)!=0){
+        temp <- c(temp,-yout[i-fixedpos_A,])
+      } 
+      if(length(fixedpos_B)!=0){
+        temp <- c(temp,uout[i-(nk+fixedpos_B),])
+      }
+      l$fixed <- t(temp)
+    }
+    return(l)
+  }
+  
+  temp <- lapply(n+1:(N+n),reg)
+  X <- do.call(rbind,lapply(temp, function(x) x[[1]]))
   Y <- yout[n+1:(N+n),,drop=F]
+  if(!fixedflag){
+    fixedreg <- do.call(rbind,lapply(temp, function(x) x[[2]]))
+    Y <- Y - fixedreg%*%fixedpars
+  }
   
   # lambda <- 0.1
   inner <- t(X)%*%X + lambda*diag(dim(X)[2])
