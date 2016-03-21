@@ -191,7 +191,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
     df <- df + length(fixedpars)
     
     fixedpos_B <- which(!is.na(fixed[[2]]))
-    uindex <- uindex[!uindex %in% (nk+fixedpos_B)]
+    uindex <- uindex[!uindex %in% (nk+fixedpos_B-1)]
     if(na!=0){
       fixedpos_A <- which(!is.na(fixed[[1]]))
       yindex <- yindex[!yindex %in% fixedpos_A]
@@ -230,7 +230,8 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   pinv <- innerinv%*% t(X)
   coef <- pinv%*%Y
   
-  sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
+  eps <- X%*%coef
+  sigma2 <- sum(eps^2)/(df+n)
   vcov <- sigma2 * innerinv
   fit <- (X%*%coef+fixedY)[1:N,,drop=F]
   if(intNoise) fit <- apply(fit,2,cumsum)
@@ -250,7 +251,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
                intNoise=intNoise,unit=x$unit)
   
   estpoly(sys = model,stats=list(vcov = vcov, sigma = sqrt(sigma2),
-              df = df),fitted.values=fit,residuals=(Y-X%*%coef)[1:N,,drop=F],
+              df = df),fitted.values=fit,residuals=eps[1:N,,drop=F],
           call=match.call(),input=u)
 }
 
