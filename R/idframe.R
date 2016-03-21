@@ -151,7 +151,7 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
   # For SISO systems
   if(is.vector(respData)){
     dim(respData) <- c(1,1,nrow(freq))
-    dim(spec) <- c(1,1,nrow(freq))
+    if(!is.null(spec)) dim(spec) <- c(1,1,nrow(freq))
   }
   
   out <- list(response=respData,freq=freq,Ts=Ts,spec=spec,covData=
