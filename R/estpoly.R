@@ -183,7 +183,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   if(!fixedflag){
     # checking for correct specification of fixed parameters
     g(fixedA,fixedB) %=% lapply(fixed,length)
-    if(fixedA != na && fixedB != nb)
+    if(fixedA != na || fixedB != nb)
       stop("Number of parameters incorrectly specified in 'fixed'")
     
     fixedpars <- unlist(fixed)
@@ -217,9 +217,11 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   temp <- lapply(n+1:(N+n),reg)
   X <- do.call(rbind,lapply(temp, function(x) x[[1]]))
   Y <- yout[n+1:(N+n),,drop=F]
+  fixedY <- matrix(rep(0,nrow(Y)))
   if(!fixedflag){
     fixedreg <- do.call(rbind,lapply(temp, function(x) x[[2]]))
-    Y <- Y - fixedreg%*%fixedpars
+    fixedY <- fixedreg%*%fixedpars
+    Y <- Y - fixedY
   }
   
   # lambda <- 0.1
@@ -230,8 +232,18 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   
   sigma2 <- sum((Y-X%*%coef)^2)/(df+n)
   vcov <- sigma2 * innerinv
-  fit <- (X%*%coef)[1:N,,drop=F]
+  fit <- (X%*%coef+fixedY)[1:N,,drop=F]
   if(intNoise) fit <- apply(fit,2,cumsum)
+  
+  if(!fixedflag){
+    findex <- which(!is.na(unlist(fixed)))
+    eindex <- 1:(na+nb)
+    eindex <- eindex[!eindex %in% findex]
+    temp <- rep(0,na+nb); temp2 <- matrix(0,nrow=na+nb,ncol=na+nb)
+
+    temp[eindex] <- coef; temp[findex] <- fixedpars; coef <- temp
+    temp2[eindex,eindex] <- vcov; vcov <- temp2
+  } 
   
   model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),
