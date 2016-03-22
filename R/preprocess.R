@@ -27,29 +27,29 @@
 detrend <- function(x,type=0){ 
   z <- x 
   reg <- time(x)
-  if(class(type)=="trendInfo"){
+  if(class(type)=="trendInfo"){ # remove custom trend
     if(nOutputSeries(x)!=0){
-      fit <- type$OutputOffset + type$OutputSlope*
-        matrix(rep(reg,nOutputSeries(x)),ncol=nOutputSeries(x))
+      fit <- sweep(sweep(matrix(rep(reg,nOutputSeries(x)),ncol=nOutputSeries(x)),
+                         2,type$OutputSlope,"*"),2,type$OutputOffset,"+")
       z$output <- x$output-fit
     }
     if(nInputSeries(x)!=0){
-      fit <- type$InputOffset + type$InputSlope*
-        matrix(rep(reg,nInputSeries(x)),ncol=nInputSeries(x))
+      fit <- sweep(sweep(matrix(rep(reg,nInputSeries(x)),ncol=nInputSeries(x)),
+                         2,type$InputSlope,"*"),2,type$InputOffset,"+")
       z$input <- x$input-fit
     }
     tinfo <- type
-  } else if(type == 0){
+  } else if(type == 0){ # remove means
     tinfo <- trendInfo()
     if(nOutputSeries(x)!=0){
       outputData(z) <- apply(outputData(x),2,scale,T,F)
-      tinfo$OutputOffset <- colMeans(z$output)
+      tinfo$OutputOffset <- colMeans(x$output)
       tinfo$OutputSlope <- rep(0,nOutputSeries(x))
     }
     
     if(nInputSeries(x)!=0){
       inputData(z) <- apply(inputData(x),2,scale,T,F)
-      tinfo$InputOffset <- colMeans(z$input)
+      tinfo$InputOffset <- colMeans(x$input)
       tinfo$InputSlope <- rep(0,nInputSeries(x))
     }
   } else if(type==1){
@@ -83,7 +83,7 @@ detrend <- function(x,type=0){
   } else{
     stop("Error: Invalid trend type")
   }
-  list(Z,tinfo)
+  list(z,tinfo)
 }
 
 #' @export
