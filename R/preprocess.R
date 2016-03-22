@@ -24,95 +24,63 @@
 #' 
 #' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
-detrend <- function(x,type=c("constant","linear")[1]){ 
+detrend <- function(x,type=0){ 
   
-  if(!(type %in% c("constant","linear"))){
+  z <- x 
+  reg <- time(x)
+  if(class(type)=="trendInfo"){
+    
+    tinfo = type
+  } else if(type == 0){
+    tinfo <- trendInfo()
+    if(nOutputSeries(x)!=0){
+      
+    }
+    
+    if(nInputSeries(x)!=0){
+      
+    }
+  } else if(type==1){
+    formula <- X ~ reg
+    
+    # Function which performs linear regression across every column
+    multilm <- function(x,formula,time){
+      l <- lapply(as.list(x),function(x) data.frame(X=x,reg=time))
+      trend <- lapply(l,function(x) lm(formula,data=x))
+      trend
+    }
+    
+    tinfo <- trendInfo()
+    if(nOutputSeries(x)!=0){
+      output_trend <- multilm(outputData(x),formula,reg)
+      outputData(z) <- ts(sapply(output_trend,resid),start=reg[1],
+                          end=tail(reg,n=1),deltat=deltat(x))
+      out_coefs <- sapply(output_trend,coef)
+      tinfo$OutputOffset <- out_coefs[1,,drop=F]
+      tinfo$OutputSlope <- out_coefs[2,,drop=F]
+    }
+    
+    if(nInputSeries(x)!=0){
+      input_trend <- multilm(inputData(x),formula,reg)
+      inputData(z) <- ts(sapply(input_trend,resid),start=reg[1],
+                         end=tail(reg,n=1),deltat=deltat(x))
+      in_coefs <- sapply(input_trend,coef)
+      tinfo$InputOffset <- in_coefs[1,,drop=F]
+      tinfo$InputSlope <- in_coefs[2,,drop=F]
+    }
+  } else{
     stop("Error: Invalid trend type")
   }
-  
-  reg <- time(x)
-  
-  if(type=="linear"){
-    formula <- X ~ reg
-  } else {
-    formula <- X ~ 1 + offset(0*reg)  
-  }
-  
-  # Return Variables
-  Z <- x # Detrended object
-  output_trend <- NULL # object containing the output trend fits/offsets
-  input_trend <- NULL # object containing the input trend fits/offsets
-  
-  # Function which performs linear regression across every column
-  multilm <- function(x,formula,reg){
-    l <- lapply(as.list(x),function(x) data.frame(X=x,reg=reg))
-    trend <- lapply(l,function(x) lm(formula,data=x))
-    trend
-  }
-  
-  if(nOutputSeries(x)!=0){
-    output_trend <- multilm(outputData(x),formula,reg)
-    outputData(Z) <- ts(sapply(output_trend,resid),start=reg[1],
-                        end=tail(reg,n=1),deltat=deltat(x))
-  }
-  
-  if(nInputSeries(x)!=0){
-    input_trend <- multilm(inputData(x),formula,reg)
-    inputData(Z) <- ts(sapply(input_trend,resid),start=reg[1],
-                        end=tail(reg,n=1),deltat=deltat(x))
-  }
-  
-  est <- list(fitted.values=Z,output_trend = output_trend,
-              input_trend = input_trend)
-  
-  class(est) <- "detrend"
-  return(est)
+  list(Z,tinfo)
 }
 
-#' Detrend data based on linear trend fits
-#' 
-#' Returns detrended \code{idframe} object based on linear trend fit
-#' 
-#' @param model an object of class \code{detrend}
-#' @param newdata An optional idframe object in which to look for variables with 
-#' which to predict. If ommited, the original detrended idframe object is used
-#' 
-#' @return an \code{idframe} object
-#' 
-#' @examples
-#' data(cstr)
-#' train <- dataSlice(cstr,end=5000)
-#' test <- dataSlice(cstr,start=6001)
-#' fit <- detrend(train)
-#' Ztrain <- predict(fit)
-#' Ztest <- predict(fit,test)
-#' 
 #' @export
-predict.detrend <- function(model,newdata=NULL,...){
-  
-  if(is.null(newdata)){
-    x <- fitted(model)
-  } else{
-    x <- newdata; reg <- time(x)
-    
-    # checking if the original data has outputs
-    if(!is.null(model$output_trend)){
-      y <- ts(sapply(model$output_trend,predict,
-                     newdata=data.frame(reg=reg)),
-              start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
-      outputData(x) <- outputData(x) - y
-      outputNames(x) <- outputNames(newdata)
-    }
-    
-    if(!is.null(model$input_trend)){
-      y <- ts(sapply(model$input_trend,predict,
-                     newdata=data.frame(reg=reg)),
-              start=reg[1],end=tail(reg,n=1),deltat = deltat(x))
-      inputData(x) <- inputData(x) - y
-      inputNames(x) <- inputNames(newdata)
-    }
-  }
-  return(x)
+trendInfo <- function(InputOffset=numeric(0),OutputOffset=numeric(0),
+                      InputSlope=numeric(0),OutputSlope=numeric(0)){
+  l <- list(InputOffset=InputOffset,OutputOffset=OutputOffset,
+            InputSlope=InputSlope,OutputSlope=OutputSlope)
+  class(l) <- "trendInfo"
+  l
 }
 
 #' Replace Missing Data by Interpolation
