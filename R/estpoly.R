@@ -136,6 +136,9 @@ residplot <- function(model,newdata=NULL){
 #' \cr
 #' The data is expected to have no offsets or trends. They can be removed 
 #' using the \code{\link{detrend}} function. 
+#' \cr
+#' To estimate finite impulse response(\code{FIR}) models, specify the first
+#' order to be zero.
 #' 
 #' @return
 #' An object of class \code{estpoly} containing the following elements:

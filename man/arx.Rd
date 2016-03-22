@@ -48,7 +48,10 @@ The function estimates the coefficients using linear least squares (with
 regularization).
 \cr
 The data is expected to have no offsets or trends. They can be removed 
-using the \code{\link{detrend}} function.
+using the \code{\link{detrend}} function. 
+\cr
+To estimate finite impulse response(\code{FIR}) models, specify the first
+order to be zero.
 }
 \examples{
 data(arxsim)
