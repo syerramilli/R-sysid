@@ -25,24 +25,32 @@
 #' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
 #' @export
 detrend <- function(x,type=0){ 
-  
   z <- x 
   reg <- time(x)
   if(class(type)=="trendInfo"){
-    
+    if(nOutputSeries(x)!=0){
+      fit <- type$OutputOffset + type$OutputSlope*
+        matrix(rep(reg,nOutputSeries(x)),ncol=nOutputSeries(x))
+      z$output <- x$output-fit
+    }
+    if(nInputSeries(x)!=0){
+      fit <- type$InputOffset + type$InputSlope*
+        matrix(rep(reg,nInputSeries(x)),ncol=nInputSeries(x))
+      z$input <- x$input-fit
+    }
     tinfo <- type
   } else if(type == 0){
     tinfo <- trendInfo()
     if(nOutputSeries(x)!=0){
       outputData(z) <- apply(outputData(x),2,scale,T,F)
       tinfo$OutputOffset <- colMeans(z$output)
-      tinfo$OutputSlope <- t(rep(0,nOutputSeries(x)))
+      tinfo$OutputSlope <- rep(0,nOutputSeries(x))
     }
     
     if(nInputSeries(x)!=0){
       inputData(z) <- apply(inputData(x),2,scale,T,F)
       tinfo$InputOffset <- colMeans(z$input)
-      tinfo$InputSlope <- t(rep(0,nInputSeries(x)))
+      tinfo$InputSlope <- rep(0,nInputSeries(x))
     }
   } else if(type==1){
     formula <- X ~ reg
@@ -60,8 +68,8 @@ detrend <- function(x,type=0){
       outputData(z) <- ts(sapply(output_trend,resid),start=reg[1],
                           end=tail(reg,n=1),deltat=deltat(x))
       out_coefs <- sapply(output_trend,coef)
-      tinfo$OutputOffset <- out_coefs[1,,drop=F]
-      tinfo$OutputSlope <- out_coefs[2,,drop=F]
+      tinfo$OutputOffset <- out_coefs[1,]
+      tinfo$OutputSlope <- out_coefs[2,]
     }
     
     if(nInputSeries(x)!=0){
@@ -69,8 +77,8 @@ detrend <- function(x,type=0){
       inputData(z) <- ts(sapply(input_trend,resid),start=reg[1],
                          end=tail(reg,n=1),deltat=deltat(x))
       in_coefs <- sapply(input_trend,coef)
-      tinfo$InputOffset <- in_coefs[1,,drop=F]
-      tinfo$InputSlope <- in_coefs[2,,drop=F]
+      tinfo$InputOffset <- in_coefs[1,]
+      tinfo$InputSlope <- in_coefs[2,]
     }
   } else{
     stop("Error: Invalid trend type")
