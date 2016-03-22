@@ -30,15 +30,19 @@ detrend <- function(x,type=0){
   reg <- time(x)
   if(class(type)=="trendInfo"){
     
-    tinfo = type
+    tinfo <- type
   } else if(type == 0){
     tinfo <- trendInfo()
     if(nOutputSeries(x)!=0){
-      
+      outputData(z) <- apply(outputData(x),2,scale,T,F)
+      tinfo$OutputOffset <- colMeans(z$output)
+      tinfo$OutputSlope <- t(rep(0,nOutputSeries(x)))
     }
     
     if(nInputSeries(x)!=0){
-      
+      inputData(z) <- apply(inputData(x),2,scale,T,F)
+      tinfo$InputOffset <- colMeans(z$input)
+      tinfo$InputSlope <- t(rep(0,nInputSeries(x)))
     }
   } else if(type==1){
     formula <- X ~ reg
