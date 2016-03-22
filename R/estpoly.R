@@ -195,6 +195,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
     
     fixedpos_B <- which(!is.na(fixed[[2]]))
     uindex <- uindex[!uindex %in% (nk+fixedpos_B-1)]
+    fixedpos_A <- numeric(0)
     if(na!=0){
       fixedpos_A <- which(!is.na(fixed[[1]]))
       yindex <- yindex[!yindex %in% fixedpos_A]
@@ -202,8 +203,12 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   }
   
   reg <- function(i) {
-    phi <- t(c(-yout[i-yindex,],uout[i-uindex,]))
+    # regressor
+    temp <- numeric(0)
+    if(na!=0) temp <- c(temp,-yout[i-yindex,])
+    phi <- t(c(temp,uout[i-uindex,]))
     l <- list(phi=phi)
+    # fixed regressors
     if(!fixedflag){
       temp <- numeric(0)
       if(length(fixedpos_A)!=0){
@@ -249,7 +254,8 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
     temp2[eindex,eindex] <- vcov; vcov <- temp2
   } 
   
-  model <- idpoly(A = c(1,coef[1:na]),B = coef[na+1:nb],
+  A = ifelse(na==0,1,coef[1:na])
+  model <- idpoly(A = A,B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),
                intNoise=intNoise,unit=x$unit)
   
