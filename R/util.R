@@ -1,12 +1,14 @@
 # Generic form
+#' @export
 '%=%' = function(l, r, ...) UseMethod('%=%')
 
 # Binary Operator
+#' @export
 '%=%.lbunch' = function(l, r, ...) {
   Envir = as.environment(-1)
   
-  if (length(r) > length(l))
-    warning("RHS has more args than LHS. Only first", length(l), "used.")
+#   if (length(r) > length(l))
+#     warning("RHS has more args than LHS. Only first", length(l), "used.")
   
   if (length(l) > length(r))  {
     warning("LHS has more args than RHS. RHS will be repeated.")
@@ -35,6 +37,7 @@ extendToMatch <- function(source, destin) {
 }
 
 # Grouping the left hand side
+#' @export
 g = function(...) {
   List = as.list(substitute(list(...)))[-1L]
   class(List) = 'lbunch'
