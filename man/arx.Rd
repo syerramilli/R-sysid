@@ -4,7 +4,7 @@
 \alias{arx}
 \title{Estimate ARX Models}
 \usage{
-arx(x, order = c(1, 1, 1), lambda = 0.1, intNoise = FALSE)
+arx(x, order = c(1, 1, 1), lambda = 0.1, intNoise = FALSE, fixed = NULL)
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
@@ -17,6 +17,10 @@ the input-output delay}
 
 \item{intNoise}{Logical variable indicating whether to add integrators in
 the noise channel (Default=\code{FALSE})}
+
+\item{fixed}{list containing fixed parameters. If supplied, only \code{NA} entries 
+will be varied. Specified as a list of two vectors, each containing the parameters
+of polynomials A and B respectively.}
 }
 \value{
 An object of class \code{estpoly} containing the following elements:

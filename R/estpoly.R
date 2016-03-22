@@ -121,6 +121,9 @@ residplot <- function(model,newdata=NULL){
 #' @param lambda Regularization parameter(Default=\code{0.1}) 
 #' @param intNoise Logical variable indicating whether to add integrators in
 #' the noise channel (Default=\code{FALSE})
+#' @param fixed list containing fixed parameters. If supplied, only \code{NA} entries 
+#' will be varied. Specified as a list of two vectors, each containing the parameters
+#' of polynomials A and B respectively.
 #' 
 #' @details
 #' SISO ARX models are of the form 
