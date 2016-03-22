@@ -1,33 +1,35 @@
 #' Remove offsets and linear trends
 #' 
-#' Removes the offsets or linear trends in each of the input and output matrices. 
-#' 
+#' Removes offsets or trends from data
 #' @param x an object of class \code{idframe}
-#' @param type trend type - "constant" or "linear". (Default: \code{"constant"})
+#' @param type argument indicating the type of trend to be removed (Default=\code{0})
+#'  \itemize{
+#'    \item type=\code{0}: Subtracts mean value from each signal
+#'    \item type=\code{1}: Subtracts a linear trend (least-squres fit)
+#'    \item type=\code{trInfo} object: Subtracts a trend specified by the object
+#'  }
 #' 
 #' @return 
-#' A list containing the following elements
-#' \item{fitted.values}{\code{idframe} object with detrended variables}
-#' \item{output_trend}{\code{list} containing trend fits for each output 
-#'    variable}
-#' \item{input_trend}{\code{list} containing trend fits for each input 
-#'    variable}
-#'
+#' A list containing two objects: the detrended data and the trend information
+#' 
+#' @details 
+#' \code{R} by default doesn't allow return of multiple objects. The \code{\%=\%}
+#' operator and \code{g} function in this package facillitate this behaviour. See 
+#' the examples section for more information.
 #' 
 #' @examples
 #' data(cstr)
-#' fit <- detrend(cstr,type="linear") # remove linear trends 
-#' Zdetrend <- predict(fit) # get the detrended data
+#' datatrain <- dataSlice(cstr,end=4500)
+#' datatest <- dataSlice(cstr,4501)
+#' g(Ztrain,tr) %=% detrend(datatrain) # Remove means
+#' g(Ztest) %=% detrend(datatest,tr)
 #' 
-#' demean <- detrend(cstr) # remove offsets
-#' Zcent <- predict(demean) # get the centered data
-#' 
-#' @seealso \code{\link{predict.detrend}}, \code{\link[stats]{lm}}
+#' @seealso \code{\link[stats]{lm}}
 #' @export
 detrend <- function(x,type=0){ 
   z <- x 
   reg <- time(x)
-  if(class(type)=="trendInfo"){ # remove custom trend
+  if(class(type)=="trInfo"){ # remove custom trend
     if(nOutputSeries(x)!=0){
       fit <- sweep(sweep(matrix(rep(reg,nOutputSeries(x)),ncol=nOutputSeries(x)),
                          2,type$OutputSlope,"*"),2,type$OutputOffset,"+")
@@ -40,7 +42,7 @@ detrend <- function(x,type=0){
     }
     tinfo <- type
   } else if(type == 0){ # remove means
-    tinfo <- trendInfo()
+    tinfo <- trInfo()
     if(nOutputSeries(x)!=0){
       outputData(z) <- apply(outputData(x),2,scale,T,F)
       tinfo$OutputOffset <- colMeans(x$output)
@@ -62,7 +64,7 @@ detrend <- function(x,type=0){
       trend
     }
     
-    tinfo <- trendInfo()
+    tinfo <- trInfo()
     if(nOutputSeries(x)!=0){
       output_trend <- multilm(outputData(x),formula,reg)
       outputData(z) <- ts(sapply(output_trend,resid),start=reg[1],
@@ -87,11 +89,11 @@ detrend <- function(x,type=0){
 }
 
 #' @export
-trendInfo <- function(InputOffset=numeric(0),OutputOffset=numeric(0),
+trInfo <- function(InputOffset=numeric(0),OutputOffset=numeric(0),
                       InputSlope=numeric(0),OutputSlope=numeric(0)){
   l <- list(InputOffset=InputOffset,OutputOffset=OutputOffset,
             InputSlope=InputSlope,OutputSlope=OutputSlope)
-  class(l) <- "trendInfo"
+  class(l) <- "trInfo"
   l
 }
 

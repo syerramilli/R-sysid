@@ -4,34 +4,38 @@
 \alias{detrend}
 \title{Remove offsets and linear trends}
 \usage{
-detrend(x, type = c("constant", "linear")[1])
+detrend(x, type = 0)
 }
 \arguments{
 \item{x}{an object of class \code{idframe}}
 
-\item{type}{trend type - "constant" or "linear". (Default: \code{"constant"})}
+\item{type}{argument indicating the type of trend to be removed (Default=\code{0})
+\itemize{
+  \item type=\code{0}: Subtracts mean value from each signal
+  \item type=\code{1}: Subtracts a linear trend (least-squres fit)
+  \item type=\code{trInfo} object: Subtracts a trend specified by the object
+}}
 }
 \value{
-A list containing the following elements
-\item{fitted.values}{\code{idframe} object with detrended variables}
-\item{output_trend}{\code{list} containing trend fits for each output 
-   variable}
-\item{input_trend}{\code{list} containing trend fits for each input 
-   variable}
+A list containing two objects: the detrended data and the trend information
 }
 \description{
-Removes the offsets or linear trends in each of the input and output matrices.
+Removes offsets or trends from data
+}
+\details{
+\code{R} by default doesn't allow return of multiple objects. The \code{\%=\%}
+operator and \code{g} function in this package facillitate this behaviour. See 
+the examples section for more information.
 }
 \examples{
 data(cstr)
-fit <- detrend(cstr,type="linear") # remove linear trends 
-Zdetrend <- predict(fit) # get the detrended data
-
-demean <- detrend(cstr) # remove offsets
-Zcent <- predict(demean) # get the centered data
+datatrain <- dataSlice(cstr,end=4500)
+datatest <- dataSlice(cstr,4501)
+g(Ztrain,tr) \%=\% detrend(datatrain) # Remove means
+g(Ztest) \%=\% detrend(datatest,tr)
 
 }
 \seealso{
-\code{\link{predict.detrend}}, \code{\link[stats]{lm}}
+\code{\link[stats]{lm}}
 }
 
