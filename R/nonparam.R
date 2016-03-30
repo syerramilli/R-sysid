@@ -246,20 +246,43 @@ mult_ccf <- function(X,Y=NULL,lag.max=30){
 #' frf <- etfe(data)
 #' 
 #' @export
-etfe <- function(data){
-  temp <- cbind(data$output,data$input)
-  tempfft <- mvfft(temp)/dim(temp)[1]
-  freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
-              by=1)/ceiling(dim(tempfft)[1]/2)*pi/deltat(data)
-  resp <- comdiv(tempfft[,1],tempfft[,2])
-  out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
+# etfe <- function(data){
+#   temp <- cbind(data$output,data$input)
+#   tempfft <- mvfft(temp)/dim(temp)[1]
+#   freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
+#               by=1)/ceiling(dim(tempfft)[1]/2)*pi/deltat(data)
+#   resp <- comdiv(tempfft[,1],tempfft[,2])
+#   out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
+#                Ts=data$Ts)
+#   return(out)
+# }
+# 
+# comdiv <- function(z1,z2){
+#   mag1 <- Mod(z1);mag2 <- Mod(z2)
+#   phi1 <- Arg(z1); phi2 <- Arg(z2)
+#   
+#   complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
+# }
+etfe <- function(data,n=128){
+  y <- data$output
+  u <- data$input
+  N <- dim(data$output)[1]
+  if(N < n){
+    n=N
+  }
+  v=seq(1,N,length.out = n)
+  y_v=y[v]
+  y_w <- (1/n)*fft(y_v)
+  if(!is.null(u)){
+    u_w <- (1/n)*fft(u[v])
+  }
+  mod_y = Mod(y_w)
+  mod_u = Mod(u_w)
+  arg_y = Arg(y_w)
+  arg_u = Arg(u_w)
+  G = complex(modulus = mod_y/mod_u, argument = arg_y - arg_u)
+  frequency <- matrix(seq( 1 , ceiling(n/2) ) * pi / floor(n/2) / samp_period)
+  out <- idfrd(respData = G[1:ceiling(length(G)/2)],freq=frequency,
                Ts=data$Ts)
   return(out)
-}
-
-comdiv <- function(z1,z2){
-  mag1 <- Mod(z1);mag2 <- Mod(z2)
-  phi1 <- Arg(z1); phi2 <- Arg(z2)
-  
-  complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
 }
