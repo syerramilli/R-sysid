@@ -84,19 +84,19 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' at each lag. 
 #' 
 #' @param model an object of class \code{impulseest}
-#' @param sig Significance Limits (Default: \code{0.975})
+#' @param sd standard deviation of the confidence region (Default: \code{2})
 #' 
 #' @seealso \code{\link{impulseest}},\code{\link{step}}
 #' @import ggplot2
 #' 
 #' @export
-plot.impulseest <- function(model,sig=0.975){
+plot.impulseest <- function(model,sig=2){
   plotseq <- seq(model$noutputs*model$ninputs)
   g <- vector("list",model$nin*model$nout)
   
   for(i in plotseq){
     z <- model[[i]]
-    lim <- z$se*qnorm(sig)
+    lim <- z$se*2
     yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
     df <- data.frame(x=z$lags,y=coef(z),lim=lim)
     g[[i]] <- ggplot(df,aes(x,y))+ 
@@ -246,23 +246,6 @@ mult_ccf <- function(X,Y=NULL,lag.max=30){
 #' frf <- etfe(data)
 #' 
 #' @export
-# etfe <- function(data){
-#   temp <- cbind(data$output,data$input)
-#   tempfft <- mvfft(temp)/dim(temp)[1]
-#   freq <- seq(from=1,to=ceiling(dim(tempfft)[1]/2),
-#               by=1)/ceiling(dim(tempfft)[1]/2)*pi/deltat(data)
-#   resp <- comdiv(tempfft[,1],tempfft[,2])
-#   out <- idfrd(response=resp[1:ceiling(length(resp)/2)],freq=freq,
-#                Ts=data$Ts)
-#   return(out)
-# }
-# 
-# comdiv <- function(z1,z2){
-#   mag1 <- Mod(z1);mag2 <- Mod(z2)
-#   phi1 <- Arg(z1); phi2 <- Arg(z2)
-#   
-#   complex(modulus=mag1/mag2,argument=signal::unwrap(phi1-phi2))
-# }
 etfe <- function(data,n=128){
   y <- data$output
   u <- data$input

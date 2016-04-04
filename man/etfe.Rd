@@ -4,7 +4,7 @@
 \alias{etfe}
 \title{Estimate empirical transfer function}
 \usage{
-etfe(data)
+etfe(data, n = 128)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}

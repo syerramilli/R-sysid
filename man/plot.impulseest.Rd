@@ -4,12 +4,12 @@
 \alias{plot.impulseest}
 \title{Impulse Response Plots}
 \usage{
-\method{plot}{impulseest}(model, sig = 0.975)
+\method{plot}{impulseest}(model, sig = 2)
 }
 \arguments{
 \item{model}{an object of class \code{impulseest}}
 
-\item{sig}{Significance Limits (Default: \code{0.975})}
+\item{sd}{standard deviation of the confidence region (Default: \code{2})}
 }
 \description{
 Plots the estimated IR coefficients along with the significance limits
