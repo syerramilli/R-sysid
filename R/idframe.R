@@ -196,12 +196,12 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     yindex <- (i-1)%/%nin + 1;uindex <- i-nin*(yindex-1)
     subtitle <- paste("From: u",uindex," to y",yindex,sep="")
     g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
-      geom_line(size=lwd,color=col) + scale_x_log10() + 
+      geom_line(size=lwd,color=col) + scale_x_log10(expand = c(0.01,0.01)) + 
       facet_grid(variable ~ .,scale="free_y") +
       theme_bw(14) + ylab("") + ggtitle(subtitle) +
       xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
-            title=element_text(size=12,color = "black",face="bold")) + 
+            title=element_text(size=9,color = "black",face="bold")) + 
       geom_vline(xintercept=max(x$freq),size=1)
   }
   
