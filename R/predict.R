@@ -18,7 +18,7 @@ predict.idpoly <- function(x,data,nahead=1){
     ypred <- as.numeric(y) - filtered
   }
   
-  ts(ypred,start=start(data),deltat=deltat(data))
+  matrix(ts(ypred,start=start(data),deltat=deltat(data)))
 }
 
 polyinv <- function(x,k){
@@ -63,7 +63,7 @@ polyinv <- function(x,k){
 #' @export
 predict.estpoly <- function(x,newdata=NULL,nahead=1){
   if(is.null(newdata)&& nahead==1){
-    return(fitted(x))
+    return(matrix(fitted(x)))
   } else{
     model <- x$sys
     if(is.null(newdata)){
