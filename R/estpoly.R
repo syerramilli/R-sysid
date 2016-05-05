@@ -257,7 +257,11 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
     temp2[eindex,eindex] <- vcov; vcov <- temp2
   } 
   
-  A = ifelse(na==0,1,coef[1:na])
+  if(na==0){
+    A <- 1
+  } else {
+    A <- c(1,coef[1:na])
+  }
   model <- idpoly(A = A,B = coef[na+1:nb],
                ioDelay = nk,Ts=deltat(x),noiseVar = sqrt(sigma2),
                intNoise=intNoise,unit=x$unit)
