@@ -201,7 +201,7 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
       theme_bw(14) + ylab("") + ggtitle(subtitle) +
       xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
-            title=element_text(size=9,color = "gray",face="bold")) + 
+            title=element_text(size=12,color = "black",face="bold")) + 
       geom_vline(xintercept=max(x$freq),size=1)
   }
   

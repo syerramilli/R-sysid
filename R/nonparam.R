@@ -108,7 +108,7 @@ plot.impulseest <- function(model,sig=2){
       theme_bw(14) + ylab(ifelse(uindex==1,"IR Coefficients","")) +
       xlab(ifelse(yindex==model$nout,"Lags","")) + 
       theme(axis.title=element_text(size=12,color = "black",face = "plain"),
-            title=element_text(size=9,,color = "gray",face="bold"))
+            title=element_text(size=12,,color = "black",face="bold"))
   }
   multiplot(plotlist=g,layout=plotseq)
 }
