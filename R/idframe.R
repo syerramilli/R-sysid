@@ -109,19 +109,19 @@ print.summary.idframe <- function(x,...){
 }
 
 #' @export
-time.idframe <- function(data){
-  time(data$output)
+time.idframe <- function(x){
+  time(x$output)
 }
 
 #' @export
-frequency.idframe <- function(data){
-  frequency(data$output)
+frequency.idframe <- function(x){
+  frequency(x$output)
 }
 
-#' @export
-deltat.idframe <- function(data){
-  deltat(data$output)
-}
+# #' @export
+# deltat.idframe <- function(data){
+#   deltat(data$output)
+# }
 
 #' S3 class constructor for storing frequency response data
 #' 
