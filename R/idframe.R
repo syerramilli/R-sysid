@@ -110,17 +110,29 @@ print.summary.idframe <- function(x,...){
 
 #' @export
 time <- function(x){
-  stats::time(x$output)
+  if(class(x)[1]!="idframe"){
+    stats::time(x)
+  } else{
+    stats::time(x$output)
+  }
 }
 
 #' @export
 frequency <- function(x){
-  stats::frequency(x$output)
+  if(class(x)[1]!="idframe"){
+    stats::frequency(x)
+  } else{
+    stats::frequency(x$output)
+  }
 }
 
 #' @export
 deltat <- function(x){
-  stats::deltat(x$output)
+  if(class(x)[1]!="idframe"){
+    stats::deltat(x)
+  } else{
+    stats::deltat(x$output)
+  }
 }
 
 #' S3 class constructor for storing frequency response data
