@@ -4,7 +4,7 @@
 \alias{plot.impulseest}
 \title{Impulse Response Plots}
 \usage{
-\method{plot}{impulseest}(model, sig = 2)
+\method{plot}{impulseest}(model, sd = 2)
 }
 \arguments{
 \item{model}{an object of class \code{impulseest}}

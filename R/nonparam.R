@@ -90,13 +90,13 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' @import ggplot2
 #' 
 #' @export
-plot.impulseest <- function(model,sig=2){
+plot.impulseest <- function(model,sd=2){
   plotseq <- seq(model$noutputs*model$ninputs)
   g <- vector("list",model$nin*model$nout)
   
   for(i in plotseq){
     z <- model[[i]]
-    lim <- z$se*2
+    lim <- z$se*sd
     yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
     df <- data.frame(x=z$lags,y=coef(z),lim=lim)
     g[[i]] <- ggplot(df,aes(x,y))+ 
@@ -157,7 +157,7 @@ step <- function(model){
 #' fixed resolution using spectral analysis
 #' 
 #' @param x an \code{idframe} object
-#' @param W lag size of the Hanning window (Default: \code{min
+#' @param winsize lag size of the Hanning window (Default: \code{min
 #' (length(x)/10,30)})
 #' @param freq frequency points at which the response is evaluated
 #' (Default: \code{seq(1,128)/128*pi/Ts})
@@ -171,8 +171,8 @@ step <- function(model){
 #' Theory and Practice}, CRC Press, Boca Raton. Sections 16.5 and 20.4
 #' 
 #' @examples
-#' data(frf)
-#' frf <- spa(data)
+#' data(arxsim)
+#' frf <- spa(arxsim)
 #' 
 #' @import signal
 #' @export

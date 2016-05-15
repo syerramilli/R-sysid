@@ -9,11 +9,11 @@ spa(x, winsize = NULL, freq = NULL)
 \arguments{
 \item{x}{an \code{idframe} object}
 
+\item{winsize}{lag size of the Hanning window (Default: \code{min
+(length(x)/10,30)})}
+
 \item{freq}{frequency points at which the response is evaluated
 (Default: \code{seq(1,128)/128*pi/Ts})}
-
-\item{W}{lag size of the Hanning window (Default: \code{min
-(length(x)/10,30)})}
 }
 \value{
 an \code{idfrd} object containing the estimated frequency response 
@@ -24,8 +24,8 @@ Estimates frequency response and noise spectrum from data with
 fixed resolution using spectral analysis
 }
 \examples{
-data(frf)
-frf <- spa(data)
+data(arxsim)
+frf <- spa(arxsim)
 
 }
 \references{
