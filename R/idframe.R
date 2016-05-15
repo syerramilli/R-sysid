@@ -141,6 +141,7 @@ deltat.idframe <- function(x){
   deltat(x$output)
 }
 
+
 #' S3 class constructor for storing frequency response data
 #' 
 #' @param respData frequency response data. For SISO systems, supply a 
