@@ -14,9 +14,8 @@ Generates the bode plot of the given frequency response data. It uses the
 ggplot2 plotting engine
 }
 \examples{
-data(frf)
-frf <- spa(data) # Estimates the frequency response from data
-plot(frf)
+data(frd)
+plot(frd)
 
 }
 \seealso{

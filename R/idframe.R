@@ -182,9 +182,8 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
 #' @seealso \code{\link[ggplot2]{ggplot}}
 #' 
 #' @examples
-#' data(frf)
-#' frf <- spa(data) # Estimates the frequency response from data
-#' plot(frf)
+#' data(frd)
+#' plot(frd)
 #' 
 #' @import ggplot2 reshape2 signal
 #' 
