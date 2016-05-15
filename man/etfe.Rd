@@ -8,6 +8,8 @@ etfe(data, n = 128)
 }
 \arguments{
 \item{data}{an object of class \code{idframe}}
+
+\item{n}{frequency spacing (Default: \code{128})}
 }
 \value{
 an \code{idfrd} object containing the estimated frequency response
@@ -17,8 +19,8 @@ Estimates the emperical transfer function from the data by taking the
 ratio of the fourier transforms of the output and the input variables
 }
 \examples{
-data(frf)
-frf <- etfe(data)
+data(arxsim)
+frf <- etfe(arxsim)
 
 }
 \references{

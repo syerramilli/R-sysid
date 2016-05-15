@@ -232,6 +232,7 @@ mult_ccf <- function(X,Y=NULL,lag.max=30){
 #' ratio of the fourier transforms of the output and the input variables
 #' 
 #' @param data an object of class \code{idframe}
+#' @param n frequency spacing (Default: \code{128})
 #' 
 #' @return
 #' an \code{idfrd} object containing the estimated frequency response
@@ -243,8 +244,8 @@ mult_ccf <- function(X,Y=NULL,lag.max=30){
 #' @seealso \code{\link[stats]{fft}}
 #' 
 #' @examples
-#' data(frf)
-#' frf <- etfe(data)
+#' data(arxsim)
+#' frf <- etfe(arxsim)
 #' 
 #' @export
 etfe <- function(data,n=128){
