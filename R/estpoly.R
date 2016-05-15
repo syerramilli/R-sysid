@@ -163,9 +163,9 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' @examples
 #' data(arxsim)
-#' model <- arx(arxsim,c(2,1,1))
-#' model
-#' plot(model) # plot the predicted and actual responses
+#' mod_arx <- arx(arxsim,c(1,2,2))
+#' mod_arx
+#' plot(mod_arx) # plot the predicted and actual responses
 #' 
 #' @export
 arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,

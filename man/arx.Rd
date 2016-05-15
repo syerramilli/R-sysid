@@ -55,9 +55,9 @@ order to be zero.
 }
 \examples{
 data(arxsim)
-model <- arx(arxsim,c(2,1,1))
-model
-plot(model) # plot the predicted and actual responses
+mod_arx <- arx(arxsim,c(1,2,2))
+mod_arx
+plot(mod_arx) # plot the predicted and actual responses
 
 }
 \references{
