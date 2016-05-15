@@ -33,7 +33,7 @@
 #' 
 #' @examples
 #' data(arxsim)
-#' mod_iv <- iv(z,c(2,1,1))
+#' mod_iv <- iv(arxsim,c(2,1,1))
 #' 
 #' @seealso \code{\link{arx}}, \code{\link{iv4}}
 #' 

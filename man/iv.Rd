@@ -36,7 +36,7 @@ by the user, the instruments are generated using the arx routine
 }
 \examples{
 data(arxsim)
-mod_iv <- iv(z,c(2,1,1))
+mod_iv <- iv(arxsim,c(2,1,1))
 
 }
 \references{
