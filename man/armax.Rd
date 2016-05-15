@@ -59,7 +59,7 @@ using the \code{\link{detrend}} function.
 }
 \examples{
 data(armaxsim)
-z <- dataSlice(data,end=1533) # training set
+z <- dataSlice(armaxsim,end=1533) # training set
 mod_armax <- armax(z,c(1,2,1,2))
 mod_armax
 

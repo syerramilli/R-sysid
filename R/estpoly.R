@@ -163,7 +163,7 @@ residplot <- function(model,newdata=NULL){
 #' 
 #' @examples
 #' data(arxsim)
-#' model <- arx(data,c(2,1,1))
+#' model <- arx(arxsim,c(2,1,1))
 #' model
 #' plot(model) # plot the predicted and actual responses
 #' 
@@ -324,7 +324,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
 #' 
 #' @examples
 #' data(armaxsim)
-#' z <- dataSlice(data,end=1533) # training set
+#' z <- dataSlice(armaxsim,end=1533) # training set
 #' mod_armax <- armax(z,c(1,2,1,2))
 #' mod_armax
 #' 
@@ -432,7 +432,7 @@ armax <- function(x,order=c(0,1,1,0),init_sys=NULL,intNoise=FALSE,
 #' 
 #' @examples
 #' data(oesim)
-#' z <- dataSlice(data,end=1533) # training set
+#' z <- dataSlice(oesim,end=1533) # training set
 #' mod_oe <- oe(z,c(2,1,2))
 #' mod_oe 
 #' plot(mod_oe) # plot the predicted and actual responses
@@ -549,7 +549,7 @@ oe <- function(x,order=c(1,1,0),init_sys=NULL,options=optimOptions()){
 #' 
 #' @examples
 #' data(bjsim)
-#' z <- dataSlice(data,end=1500) # training set
+#' z <- dataSlice(bjsim,end=1500) # training set
 #' mod_bj <- bj(z,c(2,1,1,1,2))
 #' mod_bj 
 #' residplot(mod_bj) # residual plots

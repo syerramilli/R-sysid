@@ -72,7 +72,7 @@ using the \code{\link{detrend}} function.
 }
 \examples{
 data(bjsim)
-z <- dataSlice(data,end=1500) # training set
+z <- dataSlice(bjsim,end=1500) # training set
 mod_bj <- bj(z,c(2,1,1,1,2))
 mod_bj 
 residplot(mod_bj) # residual plots
