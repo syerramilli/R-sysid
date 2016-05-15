@@ -109,18 +109,36 @@ print.summary.idframe <- function(x,...){
 }
 
 #' @export
-time.idframe <- function(data){
-  time(data$output)
+time <- function(x) UseMethod("time")
+
+#' @export
+time.default <- function(x) stats::time(x)
+
+#' @export
+time.idframe <- function(x){
+  time(x$output)
 }
 
 #' @export
-frequency.idframe <- function(data){
-  frequency(data$output)
+frequency <- function(x) UseMethod("frequency")
+
+#' @export
+frequency.default <- function(x) stats::frequency(x)
+
+#' @export
+frequency.idframe <- function(x){
+  frequency(x$output)
 }
 
 #' @export
-deltat.idframe <- function(data){
-  deltat(data$output)
+deltat <- function(x) UseMethod("deltat")
+
+#' @export
+deltat.default <- function(x) stats::deltat(x)
+
+#' @export
+deltat.idframe <- function(x){
+  deltat(x$output)
 }
 
 #' S3 class constructor for storing frequency response data
