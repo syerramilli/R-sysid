@@ -10,7 +10,7 @@
 #' 
 #' @return an idframe object
 #' @examples
-#' data(cstr)
+#' data(cstrData)
 #' data <- read.idframe(cstrData,ninputs=1,Ts= 1,unit="minutes")
 #' 
 #' @export 

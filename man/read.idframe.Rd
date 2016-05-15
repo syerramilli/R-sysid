@@ -23,7 +23,7 @@ an idframe object
 Read the contents of a data.frame/matrix into a \code{idframe} object.
 }
 \examples{
-data(cstr)
+data(cstrData)
 data <- read.idframe(cstrData,ninputs=1,Ts= 1,unit="minutes")
 
 }
