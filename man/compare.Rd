@@ -20,7 +20,9 @@ data, for comparison.
 }
 \examples{
 data(arxsim)
-compare(data,nahead=Inf,mod1,mod2,mod3)
+mod1 <- arx(arxsim,c(1,2,2))
+mod2 <- oe(arxsim,c(2,1,1))
+compare(arxsim,nahead=Inf,mod1,mod2)
 
 }
 \seealso{

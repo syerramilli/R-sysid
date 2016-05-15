@@ -52,9 +52,10 @@ polyinv <- function(x,k){
 #' 
 #' @examples 
 #' data(arxsim)
-#' Yhat <- predict(mod1,data) #  1-step ahead predictions 
-#' Yhat_2 <- predict(mod1,data,nahead=2) # 2-step ahead predictions
-#' Yhat_inf <- predict(mod1,data,nahead=Inf) # Infinite-step ahead predictions
+#' mod1 <- oe(arxsim,c(2,1,1))
+#' Yhat <- predict(mod1,arxsim) #  1-step ahead predictions 
+#' Yhat_2 <- predict(mod1,arxsim,nahead=2) # 2-step ahead predictions
+#' Yhat_inf <- predict(mod1,arxsim,nahead=Inf) # Infinite-step ahead predictions
 #' 
 #' @references 
 #' Arun K. Tangirala (2015), \emph{Principles of System Identification: Theory 
@@ -89,7 +90,9 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' 
 #' @examples 
 #' data(arxsim)
-#' compare(data,nahead=Inf,mod1,mod2,mod3)
+#' mod1 <- arx(arxsim,c(1,2,2))
+#' mod2 <- oe(arxsim,c(2,1,1))
+#' compare(arxsim,nahead=Inf,mod1,mod2)
 #' 
 #' @seealso \code{\link{predict.estpoly}} for obtaining model predictions
 #' @import ggplot2 reshape2
