@@ -114,16 +114,19 @@ trInfo <- function(InputOffset=numeric(0),OutputOffset=numeric(0),
 #' summary(cstr_mis) # finding out the number of NAs
 #' cstr <- misdata(cstr_mis)
 #' 
-#' @importFrom zoo na.approx
 #' @export
 misdata <- function(data){
+  if (!requireNamespace("zoo", quietly = TRUE)) {
+    stop("Package zoo needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
   
   f <- function(var,start,end,Ts){
     time_range <- range(time(var))
     start <- time_range[1];end <- time_range[2]
-    Ts <- deltat(var)
+    Ts <- stats::deltat(var)
     var <- ts(data=var,start=start,end=end,deltat=Ts)
-    out <- na.approx(var,na.rm=F)
+    out <- zoo::na.approx(var,na.rm=F)
     return(as.numeric(out))
   }
   

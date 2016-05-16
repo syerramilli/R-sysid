@@ -12,5 +12,6 @@ Description: The sysid package provides functions for constructing mathematical
 License: GPL-3
 Depends: R (>= 3.1)
 Imports:
-    signal,tframe, zoo, ggplot2 (>= 2.1.0), reshape2, polynom, bitops
+    signal,tframe, ggplot2 (>= 2.1.0), reshape2, polynom, bitops
 RoxygenNote: 5.0.1
+Suggests: zoo
