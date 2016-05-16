@@ -33,7 +33,6 @@ data <- idframe(output=dataMatrix[,3:5],input=dataMatrix[,1:2],Ts=1)
 
 }
 \seealso{
-\code{\link{plot.idframe}}, the plot method for idframe objects, 
-\code{\link{summary.idframe}}, the summary method for idrame objects
+\code{\link{plot.idframe}}, the plot method for idframe objects
 }
 

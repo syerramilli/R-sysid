@@ -11,8 +11,7 @@
 #'
 #' @return an idframe object
 #' 
-#' @seealso  \code{\link{plot.idframe}}, the plot method for idframe objects, 
-#' \code{\link{summary.idframe}}, the summary method for idrame objects
+#' @seealso  \code{\link{plot.idframe}}, the plot method for idframe objects
 #' 
 #' @examples
 #' 

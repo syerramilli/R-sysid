@@ -8,6 +8,11 @@
 }
 \arguments{
 \item{x}{An object of class \code{idframe}}
+
+\item{col}{a specification for the line colour (Default : \code{"
+steelblue"})}
+
+\item{lwd}{the line width, a positive number, defaulting to 1}
 }
 \description{
 Generates the bode plot of the given frequency response data. It uses the
