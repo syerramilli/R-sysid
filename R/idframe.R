@@ -75,7 +75,7 @@ plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
     }
     ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
           aes(time, value)) + geom_line(size=lwd,color=col) +
-      facet_grid(variable ~ .,scale="free") + theme_bw(size) + 
+      facet_grid(variable ~ .,scales="free") + theme_bw(size) + 
       ylab("Amplitude") + ggtitle(main) + 
       xlab(paste("Time (",x$unit,")",sep=""))
       #theme(axis.title.x=element_text(size=11)) + ggtitle(main)
@@ -178,6 +178,9 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
 #' ggplot2 plotting engine
 #' 
 #' @param x An object of class \code{idframe}
+#' @param col a specification for the line colour (Default : \code{"
+#' steelblue"})
+#' @param lwd the line width, a positive number, defaulting to 1
 #' 
 #' @seealso \code{\link[ggplot2]{ggplot}}
 #' 
@@ -208,7 +211,7 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     subtitle <- paste("From: u",uindex," to y",yindex,sep="")
     g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
       geom_line(size=lwd,color=col) + scale_x_log10(expand = c(0.01,0.01)) + 
-      facet_grid(variable ~ .,scale="free_y") +
+      facet_grid(variable ~ .,scales="free_y") +
       theme_bw(14) + ylab("") + ggtitle(subtitle) +
       xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
