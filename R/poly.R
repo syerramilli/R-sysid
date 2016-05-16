@@ -71,23 +71,23 @@ checkUnity <- function(x){
 }
 
 #' @export
-print.idpoly <- function(mod,se=NULL,dig=3){
-  main <- paste("Discrete-time",toupper(mod$type),"model:")
-  if(mod$type=="oe" || mod$type=="bj"){
+print.idpoly <- function(x,se=NULL,dig=3){
+  main <- paste("Discrete-time",toupper(x$type),"model:")
+  if(x$type=="oe" || x$type=="bj"){
     main <- paste(main,"y[k] = B(z)/F(z) u[k] +")
-    if(mod$type=="bj"){
-      polyExp <- ifelse(!checkUnity(mod$C),"C(z)/D(z)","1/D(z)")
-      if(mod$intNoise==T) polyExp <- paste(polyExp,"1/(1-z^{-1})")
+    if(x$type=="bj"){
+      polyExp <- if(!checkUnity(x$C)) "C(z)/D(z)" else "1/D(z)"
+      if(x$intNoise==T) polyExp <- paste(polyExp,"1/(1-z^{-1})")
       main <- paste(main,polyExp,"e[k] \n\n")
     }
   } else{
     main <- paste(main,"A(z)y[k] =")
-    if(!checkUnity(mod$B)) main <- paste(main,"B(z)u[k] +")
-    if(checkUnity(mod$C)){
-      Cexp <- ifelse(!mod$intNoise,"","1/(1-z^{-1})")
+    if(!checkUnity(x$B)) main <- paste(main,"B(z)u[k] +")
+    if(checkUnity(x$C)){
+      Cexp <- if(!x$intNoise) "" else "1/(1-z^{-1})"
     }else{
       Cexp <- "C(z)"
-      if(mod$intNoise) Cexp <- paste(Cexp,"/(1-z^{-1})",sep="")
+      if(x$intNoise) Cexp <- paste(Cexp,"/(1-z^{-1})",sep="")
     }
     main <- paste(main,Cexp,"e[k] \n\n")
   }
@@ -102,15 +102,15 @@ print.idpoly <- function(mod,se=NULL,dig=3){
     }
   }
   
-  if(length(mod$A)>1){
+  if(length(x$A)>1){
     cat("A(q^{-1}) = ")
-    for(i in seq_along(mod$A)){
+    for(i in seq_along(x$A)){
       if(i-1==0){
-        cat(round(mod$A[i],dig))
+        cat(round(x$A[i],dig))
       } else{
-        if(mod$A[i]>0) cat(" + ") else cat("- ")
+        if(x$A[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$A[i])==1)) cat(abs(round(mod$A[i],dig)))
+        if(!(abs(x$A[i])==1)) cat(abs(round(x$A[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -120,34 +120,34 @@ print.idpoly <- function(mod,se=NULL,dig=3){
   }
   
   cat("B(q^{-1}) = ")
-  for(i in seq_along(mod$B)){
-    if(i+mod$ioDelay-1==0){
-      cat(round(mod$B[i],dig))
+  for(i in seq_along(x$B)){
+    if(i+x$ioDelay-1==0){
+      cat(round(x$B[i],dig))
     } else{
       
-      if(!((mod$ioDelay!=0) && (i==1))){
-        if(mod$B[i]>0) cat(" + ") else cat("- ")
+      if(!((x$ioDelay!=0) && (i==1))){
+        if(x$B[i]>0) cat(" + ") else cat("- ")
       } else{
-        if(mod$B[i]<0) cat("-")
+        if(x$B[i]<0) cat("-")
       }
       
-      if(!(abs(mod$B[i])==1)) cat(abs(round(mod$B[i],dig)))
+      if(!(abs(x$B[i])==1)) cat(abs(round(x$B[i],dig)))
       print_se(se)
-      cat("q^{-",i+mod$ioDelay-1,"}",sep="")
+      cat("q^{-",i+x$ioDelay-1,"}",sep="")
     }
     cat("\t")
   }
   cat("\n")
   
-  if(length(mod$C)>1){
+  if(length(x$C)>1){
     cat("C(q^{-1}) = ")
-    for(i in seq_along(mod$C)){
+    for(i in seq_along(x$C)){
       if(i-1==0){
-        cat(round(mod$C[i],dig))
+        cat(round(x$C[i],dig))
       } else{
-        if(mod$C[i]>0) cat(" + ") else cat("- ")
+        if(x$C[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$C[i])==1)) cat(abs(round(mod$C[i],dig)))
+        if(!(abs(x$C[i])==1)) cat(abs(round(x$C[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -156,15 +156,15 @@ print.idpoly <- function(mod,se=NULL,dig=3){
     cat("\n")
   }
   
-  if(length(mod$D)>1){
+  if(length(x$D)>1){
     cat("D(q^{-1}) = ")
-    for(i in seq_along(mod$D)){
+    for(i in seq_along(x$D)){
       if(i-1==0){
-        cat(round(mod$D[i],dig))
+        cat(round(x$D[i],dig))
       } else{
-        if(mod$D[i]>0) cat(" + ") else cat("- ")
+        if(x$D[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$D[i])==1)) cat(abs(round(mod$D[i],dig)))
+        if(!(abs(x$D[i])==1)) cat(abs(round(x$D[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
@@ -173,15 +173,15 @@ print.idpoly <- function(mod,se=NULL,dig=3){
     cat("\n")
   }
   
-  if(length(mod$F1)>1){
+  if(length(x$F1)>1){
     cat("F(q^{-1}) = ")
-    for(i in seq_along(mod$F1)){
+    for(i in seq_along(x$F1)){
       if(i-1==0){
-        cat(round(mod$F1[i],dig))
+        cat(round(x$F1[i],dig))
       } else{
-        if(mod$F1[i]>0) cat(" + ") else cat("- ")
+        if(x$F1[i]>0) cat(" + ") else cat("- ")
         
-        if(!(abs(mod$F1[i])==1)) cat(abs(round(mod$F1[i],dig)))
+        if(!(abs(x$F1[i])==1)) cat(abs(round(x$F1[i],dig)))
         print_se(se)
         cat("q^{-",i-1,"}",sep="")
       }
