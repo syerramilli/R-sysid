@@ -18,8 +18,9 @@ controlled by regulating the coolant flow.
 \details{
 Inputs: q, Coolant Flow l/min
 Outputs:
+\describe{
 \item{Ca}{Concentration mol/l}
-\item{T}{Temperature Kelvin}
+\item{T}{Temperature Kelvin}}
 }
 \keyword{datasets}
 

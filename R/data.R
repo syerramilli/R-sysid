@@ -55,8 +55,9 @@
 #' 
 #' Inputs: q, Coolant Flow l/min
 #' Outputs:
+#' \describe{
 #' \item{Ca}{Concentration mol/l}
-#' \item{T}{Temperature Kelvin}
+#' \item{T}{Temperature Kelvin}}
 #' 
 #' @format an \code{idframe} object with 7500 samples, one input and two
 #' outputs
@@ -71,8 +72,9 @@
 #' 
 #' Inputs: q, Coolant Flow l/min
 #' Outputs:
+#' \describe{
 #' \item{Ca}{Concentration mol/l}
-#' \item{T}{Temperature Kelvin}
+#' \item{T}{Temperature Kelvin}}
 #' 
 #' @format an \code{data.frame} object with 7500 rows and three columns:
 #' q, Ca and T
