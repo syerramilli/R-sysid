@@ -94,6 +94,15 @@ plot.estpoly <- function(model,newdata=NULL){
     geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point()
 }
 
+#' Plot residual characteristics
+#' 
+#' Computes the 1-step ahead prediction errors (residuals) for an estimated polynomial
+#' model, and plots auto-correlation of the residuals and the 
+#' cross-correlation of the residuals with the input signals.
+#' 
+#' @param model estimated polynomial model
+#' @param newdata an optional dataset on which predictions are to be computed. If
+#' not supplied, predictions are computed on the training dataset.
 #' @export
 residplot <- function(model,newdata=NULL){
   if(is.null(newdata)){
