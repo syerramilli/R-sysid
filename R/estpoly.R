@@ -1,3 +1,23 @@
+#' Estimated polynomial object
+#' 
+#' Estimated discrete-time polynomial model returned from an estimation
+#' routine.
+#' 
+#' @param sys an \code{idpoly} object containing the estimated polynomial
+#' coefficients
+#' @param fitted.values 1-step ahead predictions on the training dataset
+#' @param residuals 1-step ahead prediction errors
+#' @param options optimization specification ser used (applicable for non-linear least
+#' squares)
+#' @param call the matched call
+#' @param stats a list containing estimation statistics
+#' @param termination termination criteria for optimization
+#' @param input input signal of the training data-set
+#' 
+#' @details 
+#' Do not use \code{estpoly} for directly specifing an input-output polynomial model.
+#' \code{\link{idpoly}} is to be used instead
+#' 
 #' @export
 estpoly <- function(sys,fitted.values,residuals,options=NULL,
                     call,stats,termination=NULL,input){
