@@ -1,4 +1,11 @@
 # Generic form
+#' Multiple assignment operator
+#' 
+#' Assign multiple variables from a list or function return object
+#' 
+#' @param lhs,rhs the variables to be assingned, and the list or 
+#' function return object
+#' 
 #' @export
 '%=%' = function(l, r, ...) UseMethod('%=%')
 
