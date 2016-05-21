@@ -95,7 +95,7 @@ print.summary.estpoly <- function(x,digits=4){
 
 #' @export
 plot.estpoly <- function(model,newdata=NULL){
-  require(ggplot2)
+  loadNamespace("ggplot2")
   
   if(is.null(newdata)){
     ypred <- ts(fitted(model),names="Predicted")

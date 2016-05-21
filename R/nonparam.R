@@ -91,6 +91,7 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' 
 #' @export
 plot.impulseest <- function(model,sd=2){
+  loadNamespace("ggplot2")
   plotseq <- seq(model$noutputs*model$ninputs)
   g <- vector("list",model$nin*model$nout)
   

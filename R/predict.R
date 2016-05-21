@@ -98,6 +98,7 @@ predict.estpoly <- function(x,newdata=NULL,nahead=1){
 #' @import ggplot2 reshape2
 #' @export
 compare <- function(data,nahead=1,...){
+  loadNamespace("ggplot2")
   # Input Validation
   input_list <- as.list(substitute(list(...)))[-1]
   dots <- list(...)

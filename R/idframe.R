@@ -66,6 +66,7 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 #' 
 #' @export
 plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
+  loadNamespace("ggplot2")
     if(nInputSeries(x)==0){
       data <- outputData(x)
     } else{
@@ -191,6 +192,7 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
 #' 
 #' @export
 plot.idfrd <- function(x,col="steelblue",lwd=1){
+  loadNamespace("ggplot2")
   nfreq <- dim(x$freq)[1]
   mag <- 20*log10(Mod(x$resp))
   nout <- dim(mag)[1]; nin <- dim(mag)[2]
