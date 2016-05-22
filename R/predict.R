@@ -110,7 +110,7 @@ compare <- function(data,nahead=1,...){
                        sep=": ")
   df <- data.frame(Time = as.numeric(time(data)),
                    Actual=as.numeric(outputData(data)[,1]),Y)
-  meltdf <- melt(df,id="Time")
+  meltdf <- reshape2::melt(df,id="Time")
   
   ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line(size=1)+
     ggtitle(paste("Comparison with model predictions",nahead,"step(s) ahead"))+
