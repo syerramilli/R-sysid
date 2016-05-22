@@ -75,5 +75,5 @@ rarx <- function(x,order=c(1,1,1),lambda=0.95){
     theta[i+1,] <- t(t(theta[i,,drop=F])+eps_i[1]*kappa_i)
     Plast <- (diag(na+nb)-kappa_i%*%t(temp))%*%Plast/lambda
   }
-  list(theta=theta,yhat=yhat)
+  list(theta=theta[1+1:N,],yhat=yhat)
 }
