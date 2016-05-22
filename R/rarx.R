@@ -22,17 +22,15 @@ rarx <- function(x,order=c(1,1,1),lambda=0.95){
   # R0 <- reg(n+1)%*%t(reg(n+1))
   # Plast <- solve(R0)
   Plast <- 10^4*diag(na+nb)
-  theta <- matrix(0,N,na+nb)
-  theta[1,] <- Plast%*%reg(n+1)%*%y[1,,drop=FALSE]
+  theta <- matrix(0,N+1,na+nb)
   yhat <- y
-  yhat[1,] <- t(reg(n+1))%*%t(theta[1,,drop=FALSE])
   
-  for(i in 2:N){
+  for(i in 1:N){
     temp <- reg(n+i)
-    yhat[i,] <- t(temp)%*%t(theta[i-1,,drop=FALSE])
+    yhat[i,] <- t(temp)%*%t(theta[i,,drop=FALSE])
     eps_i <- y[i,,drop=FALSE] - yhat[i,,drop=FALSE]
     kappa_i <- Plast%*%temp/(lambda+t(temp)%*%Plast%*%temp)[1]
-    theta[i,] <- t(t(theta[i-1,,drop=F])+eps_i[1]*kappa_i)
+    theta[i+1,] <- t(t(theta[i,,drop=F])+eps_i[1]*kappa_i)
     Plast <- (diag(na+nb)-kappa_i%*%t(temp))%*%Plast/lambda
   }
   list(theta=theta,yhat=yhat,P=Plast)
