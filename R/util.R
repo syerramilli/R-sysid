@@ -3,7 +3,7 @@
 #' 
 #' Assign multiple variables from a list or function return object
 #' 
-#' @param lhs,rhs the variables to be assingned, and the list or 
+#' @param l,r the variables to be assigned, and the list or 
 #' function return object
 #' 
 #' @export

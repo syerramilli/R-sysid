@@ -114,6 +114,7 @@ trInfo <- function(InputOffset=numeric(0),OutputOffset=numeric(0),
 #' summary(cstr_mis) # finding out the number of NAs
 #' cstr <- misdata(cstr_mis)
 #' 
+#' @importFrom zoo na.approx
 #' @export
 misdata <- function(data){
   if (!requireNamespace("zoo", quietly = TRUE)) {

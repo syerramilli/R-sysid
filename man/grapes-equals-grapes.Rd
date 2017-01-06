@@ -7,7 +7,7 @@
 l \%=\% r
 }
 \arguments{
-\item{lhs, rhs}{the variables to be assingned, and the list or 
+\item{l, r}{the variables to be assigned, and the list or 
 function return object}
 }
 \description{
