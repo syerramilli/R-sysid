@@ -112,8 +112,8 @@ compare <- function(data,nahead=1,...){
                    Actual=as.numeric(outputData(data)[,1]),Y)
   meltdf <- reshape2::melt(df,id="Time")
   
-  ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line(size=1)+
-    ggtitle(paste("Comparison with model predictions",nahead,"step(s) ahead"))+
+  with(meltdf,ggplot(meltdf,aes(x=Time,y=value,color=variable,group=variable))+geom_line(size=1)+
+    ggtitle(paste(nahead,"step(s) ahead model predictions"))+
     theme_bw()+ylab(outputNames(data)) + labs(colour="") + 
-    scale_colour_hue(labels=c("Measured",temp),l=50)
+    scale_colour_hue(labels=c("Measured",temp),l=50))
 }

@@ -100,7 +100,7 @@ plot.impulseest <- function(model,sd=2){
     lim <- z$se*sd
     yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
     df <- data.frame(x=z$lags,y=coef(z),lim=lim)
-    g[[i]] <- ggplot(df,aes(x,y))+ 
+    g[[i]] <- with(df,ggplot(df,aes(x,y))+ 
       geom_segment(aes(xend=x,yend=0))+geom_hline(yintercept = 0) + 
       geom_point(size=2) + ggtitle(paste("From",z$x,"to",z$y))+
       geom_line(aes(y=lim),linetype="dashed",colour="steelblue") +
@@ -109,7 +109,7 @@ plot.impulseest <- function(model,sd=2){
       xlab(ifelse(yindex==model$nout,"Lags","")) + 
       theme(axis.title=element_text(size=12,color = "black",face = "plain"),
             title=element_text(size=9,color = "black",face="bold")) +
-      scale_x_continuous(expand = c(0.01,0.01))
+      scale_x_continuous(expand = c(0.01,0.01)))
   }
   multiplot(plotlist=g,layout=plotseq)
 }
@@ -141,12 +141,12 @@ step <- function(model){
     stepResp <- cumsum(coef(z))
     yindex <- (i-1)%/%model$nin + 1;uindex <- i-model$nin*(yindex-1)
     df <- data.frame(x=z$lags,y=stepResp)
-    g[[i]] <- ggplot(df,aes(x,y))+ 
+    g[[i]] <- with(df,ggplot(df,aes(x,y))+ 
       geom_step() + ggtitle(paste("From",z$x,"to",z$y)) +
       theme_bw(14) + ylab(ifelse(uindex==1,"Step Response","")) +
       xlab(ifelse(yindex==model$nout,"Lags","")) + 
       theme(axis.title=element_text(size=12,color = "black",face = "plain"),
-            title=element_text(size=9,,color = "black",face="bold"))
+            title=element_text(size=9,,color = "black",face="bold")))
   }
   multiplot(plotlist=g,layout=plotseq)
 }
@@ -214,7 +214,7 @@ mult_ccf <- function(X,Y=NULL,lag.max=30){
   N <- dim(X)[1]; nx <- dim(X)[2]
   ny <- ifelse(is.null(Y),nx,dim(Y)[2])
   
-  ccvfij <- function(i,j,lag=30) ccf(X[,i],Y[,j],plot=F,lag=lag,
+  ccvfij <- function(i,j,lag=30) ccf(X[,i],Y[,j],plot=F,lag.max =lag,
                                      type="covariance")
   Xindex <- matrix(sapply(1:nx,rep,nx),ncol=1)[,1]
   temp <- mapply(ccvfij,i=Xindex,j=rep(1:ny,ny),
