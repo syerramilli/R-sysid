@@ -1,3 +1,12 @@
+#' Number of series in input or output
+#' 
+#' Number of series in input or output in a idframe object
+#' 
+#' 
+#' @param data \code{idframe} object
+#' 
+#' @aliases nOutputSeries
+#' 
 #' @export
 nInputSeries <- function(data) {
   ifelse(is.null(data$input),0,ncol(data$input))
@@ -6,6 +15,15 @@ nInputSeries <- function(data) {
 #' @export
 nOutputSeries <- function(data) ncol(data$output)
 
+#' Output or Input-data 
+#' 
+#' Extract output-data or input-data in idframe objects
+#' 
+#' @param x \code{idframe} object
+#' @param series the indices to extract
+#' 
+#' @aliases inputData.idframe outputData outputData.idframe
+#' 
 #' @export
 inputData <- function(x,series) UseMethod("inputData")
 
@@ -29,6 +47,15 @@ inputData.idframe <- function(x,series=seq(nInputSeries(x))){
   x
 }
 
+#' Extract or set series' names
+#' 
+#' Extract or set names of series in input or output
+#' 
+#' @param x \code{idframe} object
+#' @param value vector of strings
+#' 
+#' @aliases inputNames<- inputNames<-.idframe outputNames outputNames outputNames<- outputNames<-.idframe
+#' 
 #' @export
 inputNames <- function(x) UseMethod("inputNames")
 
