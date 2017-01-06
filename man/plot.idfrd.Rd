@@ -4,7 +4,7 @@
 \alias{plot.idfrd}
 \title{Plotting idfrd objects}
 \usage{
-\method{plot}{idfrd}(x, col = "steelblue", lwd = 1)
+\method{plot}{idfrd}(x, col = "steelblue", lwd = 1, ...)
 }
 \arguments{
 \item{x}{An object of class \code{idframe}}
@@ -13,6 +13,8 @@
 steelblue"})}
 
 \item{lwd}{the line width, a positive number, defaulting to 1}
+
+\item{\ldots}{additional arguments}
 }
 \description{
 Generates the bode plot of the given frequency response data. It uses the

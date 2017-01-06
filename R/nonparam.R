@@ -27,7 +27,7 @@
 #' yk <- filter (uk,c(0.9,-0.4),method="recursive") + rnorm(1000,1)
 #' data <- idframe(output=data.frame(yk),input=data.frame(uk))
 #' fit <- impulseest(data)
-#' plot(fit)
+#' impulseplot(fit)
 #' 
 #' @export
 impulseest <- function(x,M=30,K=NULL,regul=F,lambda=1){
@@ -90,8 +90,7 @@ impulsechannel <- function(y,u,N,M,K=0,regul=F,lambda=1){
 #' @import ggplot2
 #' 
 #' @export
-plot.impulseest <- function(model,sd=2){
-  loadNamespace("ggplot2")
+impulseplot <- function(model,sd=2){
   plotseq <- seq(model$noutputs*model$ninputs)
   g <- vector("list",model$nin*model$nout)
   

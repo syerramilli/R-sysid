@@ -57,6 +57,7 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 #' @param lwd line width, in millimeters(Default=\code{1})
 #' @param main the plot title. (Default = \code{NULL})
 #' @param size text size (Default = \code{12})
+#' @param \ldots additional arguments
 #' 
 #' @examples
 #' data(cstr)
@@ -65,7 +66,7 @@ idframe <- function(output,input=NULL,Ts = 1,start=0,end=NULL,
 #' @import ggplot2 reshape2
 #' 
 #' @export
-plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
+plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12,...){
   loadNamespace("ggplot2")
     if(nInputSeries(x)==0){
       data <- outputData(x)
@@ -82,12 +83,12 @@ plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
 }
 
 #' @export
-summary.idframe <- function(x){
-  out_sum <- summary(outputData(x))
-  in_sum <- summary(inputData(x))
+summary.idframe <- function(object,...){
+  out_sum <- summary(outputData(object))
+  in_sum <- summary(inputData(object))
   
-  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=deltat(x),
-              unit=x$unit,nsample = dim(outputData(x))[1])
+  out <- list(out_sum=out_sum,in_sum=in_sum,Ts=deltat(object),
+              unit=object$unit,nsample = dim(outputData(object))[1])
   
   class(out) <- "summary.idframe"
   return(out)
@@ -190,6 +191,7 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
 #' @param col a specification for the line colour (Default : \code{"
 #' steelblue"})
 #' @param lwd the line width, a positive number, defaulting to 1
+#' @param \ldots additional arguments
 #' 
 #' @seealso \code{\link[ggplot2]{ggplot}}
 #' 
@@ -200,7 +202,7 @@ idfrd <- function(respData,freq,Ts,spec=NULL,covData=NULL,
 #' @import ggplot2 reshape2 signal
 #' 
 #' @export
-plot.idfrd <- function(x,col="steelblue",lwd=1){
+plot.idfrd <- function(x,col="steelblue",lwd=1,...){
   loadNamespace("ggplot2")
   nfreq <- dim(x$freq)[1]
   mag <- 20*log10(Mod(x$resp))
