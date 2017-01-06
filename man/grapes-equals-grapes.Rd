@@ -2,13 +2,17 @@
 % Please edit documentation in R/util.R
 \name{\%=\%}
 \alias{\%=\%}
+\alias{g}
 \title{Multiple assignment operator}
 \usage{
 l \%=\% r
 }
 \arguments{
-\item{l, r}{the variables to be assigned, and the list or 
-function return object}
+\item{l}{the variables to be assigned}
+
+\item{r}{the list or function-return object}
+
+\item{\ldots}{other arguments}
 }
 \description{
 Assign multiple variables from a list or function return object

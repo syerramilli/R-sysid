@@ -47,15 +47,7 @@ inputData.idframe <- function(x,series=seq(nInputSeries(x))){
   x
 }
 
-#' Extract or set series' names
-#' 
-#' Extract or set names of series in input or output
-#' 
-#' @param x \code{idframe} object
-#' @param value vector of strings
-#' 
-#' @aliases inputNames<- inputNames<-.idframe outputNames outputNames outputNames<- outputNames<-.idframe
-#' 
+
 #' @export
 inputNames <- function(x) UseMethod("inputNames")
 
@@ -70,6 +62,15 @@ inputNames.idframe <- function(x){
   seriesNames(inputData(x))
 }
 
+#' Extract or set series' names
+#' 
+#' Extract or set names of series in input or output
+#' 
+#' @param x \code{idframe} object
+#' @param value vector of strings
+#' 
+#' @aliases inputNames inputNames<-.idframe outputNames outputNames outputNames<- outputNames<-.idframe
+#' 
 #' @export
 "inputNames<-" <- function(x,value) UseMethod("inputNames<-")
 
