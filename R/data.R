@@ -79,7 +79,7 @@
 #' @format an \code{data.frame} object with 7500 rows and three columns:
 #' q, Ca and T
 #' 
-#' @source \url{ftp://ftp.esat.kuleuven.ac.be/pub/SISTA/espinosa/datasets/cstr.dat}
+#' @source \url{ftp://ftp.esat.kuleuven.be/pub/SISTA/data/process_industry/cstr.dat.gz}
 "cstrData"             
 
 #' Continuous stirred tank reactor data with missing values
