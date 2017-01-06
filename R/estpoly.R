@@ -110,8 +110,8 @@ plot.estpoly <- function(model,newdata=NULL){
     titstr <- "Predictions of Model on Test Set"
   }
   df <- data.frame(Predicted=ypred,Actual=yact,Time=time)
-  ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
-    geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point()
+  with(df,ggplot(df, aes(x = Actual,y=Predicted)) +  ggtitle(titstr) +
+    geom_abline(intercept=0,slope=1,colour="#D55E00") +  geom_point())
 }
 
 #' Plot residual characteristics
@@ -217,6 +217,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
 
   if(!fixedflag){
     # checking for correct specification of fixed parameters
+    fixedA <- NULL;fixedB <- NULL
     g(fixedA,fixedB) %=% lapply(fixed,length)
     if(fixedA != na || fixedB != nb)
       stop("Number of parameters incorrectly specified in 'fixed'")
@@ -597,7 +598,7 @@ bj <- function(z,order=c(1,1,1,1,0),
     
     # Initial guess
     theta0 <- matrix(params(init_sys))
-    ivs <- matrix(predict(init_sys,x))
+    ivs <- matrix(predict(init_sys,z))
     e_init <- y-ivs
   } else{
     nb <- order[1];nc <- order[2]; nd <- order[3];

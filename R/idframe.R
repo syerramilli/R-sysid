@@ -73,11 +73,11 @@ plot.idframe <- function(x,col="steelblue",lwd=1,main=NULL,size=12){
       data <- cbind(outputData(x),inputData(x))
       colnames(data) <- c(outputNames(x),inputNames(x))
     }
-    ggplot(melt(data.frame(time=as.numeric(time(data)), data), id.vars="time"), 
-          aes(time, value)) + geom_line(size=lwd,color=col) +
+    df <- melt(data.frame(time=as.numeric(time(data)), data), id.vars="time")
+    with(df,ggplot(df, aes(time, value)) + geom_line(size=lwd,color=col) +
       facet_grid(variable ~ .,scales="free") + theme_bw(size) + 
       ylab("Amplitude") + ggtitle(main) + 
-      xlab(paste("Time (",x$unit,")",sep=""))
+      xlab(paste("Time (",x$unit,")",sep="")))
       #theme(axis.title.x=element_text(size=11)) + ggtitle(main)
 }
 
@@ -210,14 +210,14 @@ plot.idfrd <- function(x,col="steelblue",lwd=1){
     melt_df <- reshape2::melt(df,id.var="Frequency")
     yindex <- (i-1)%/%nin + 1;uindex <- i-nin*(yindex-1)
     subtitle <- paste("From: u",uindex," to y",yindex,sep="")
-    g[[i]] <- ggplot(melt_df, aes(Frequency, value)) + 
+    g[[i]] <- with(melt_df,ggplot(melt_df, aes(Frequency, value)) + 
       geom_line(size=lwd,color=col) + scale_x_log10(expand = c(0.01,0.01)) + 
       facet_grid(variable ~ .,scales="free_y") +
       theme_bw(14) + ylab("") + ggtitle(subtitle) +
       xlab(ifelse(yindex==nout,"Frequency","")) + 
       theme(axis.title.x=element_text(color = "black",face = "plain"),
             title=element_text(size=9,color = "black",face="bold")) + 
-      geom_vline(xintercept=max(x$freq),size=1)
+      geom_vline(xintercept=max(x$freq),size=1))
   }
   
   multiplot(plotlist=g,layout=matrix(1:length(g),nrow=nout,byrow=T))
