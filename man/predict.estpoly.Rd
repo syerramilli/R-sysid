@@ -4,16 +4,18 @@
 \alias{predict.estpoly}
 \title{Predictions of identified model}
 \usage{
-\method{predict}{estpoly}(x, newdata = NULL, nahead = 1)
+\method{predict}{estpoly}(object, newdata = NULL, nahead = 1, ...)
 }
 \arguments{
-\item{x}{\code{estpoly} object containing the identified model}
+\item{object}{\code{estpoly} object containing the identified model}
 
 \item{newdata}{optional dataset to be used for predictions. If not supplied, 
 predictions are made on the training set.}
 
 \item{nahead}{number of steps ahead at which to predict (Default:1). For infinite-
 step ahead predictions or pure simulation, supply \code{Inf}.}
+
+\item{\ldots}{other arguments}
 }
 \value{
 Time-series containing the predictions

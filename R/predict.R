@@ -1,17 +1,17 @@
-predict.idpoly <- function(x,data,nahead=1){
+predict.idpoly <- function(object,data,nahead=1){
   y <- outputData(data); u<- inputData(data)
-  G <- signal::Arma(b=c(rep(0,x$ioDelay),x$B),
-                    a= as.numeric(polynom::polynomial(x$A)*
-                                    polynom::polynomial(x$F1)))
+  G <- signal::Arma(b=c(rep(0,object$ioDelay),object$B),
+                    a= as.numeric(polynom::polynomial(object$A)*
+                                    polynom::polynomial(object$F1)))
   det_sys <- as.numeric(signal::filter(G,u))
-  if(x$type=="oe" || nahead==Inf){
+  if(object$type=="oe" || nahead==Inf){
     ypred <- det_sys
   } else{
-    Hden <- as.numeric(polynom::polynomial(x$A)*polynom::polynomial(x$D))
-    Hinv <- signal::Arma(b=Hden,a=x$C)
+    Hden <- as.numeric(polynom::polynomial(object$A)*polynom::polynomial(object$D))
+    Hinv <- signal::Arma(b=Hden,a=object$C)
     filtered <- as.numeric(signal::filter(Hinv,as.numeric(y)-det_sys))
     if(nahead!=1){
-      H <- as.numeric(polynom::polynomial(x$C)*polyinv(Hden,nahead))
+      H <- as.numeric(polynom::polynomial(object$C)*polyinv(Hden,nahead))
       Hl <- signal::Ma(H[1:nahead])
       filtered <- as.numeric(signal::filter(Hl,filtered))
     }
@@ -41,11 +41,12 @@ polyinv <- function(x,k){
 #' 
 #' Predicts the output of an identified model (\code{estpoly}) object K steps ahead. 
 #' 
-#' @param x \code{estpoly} object containing the identified model
+#' @param object \code{estpoly} object containing the identified model
 #' @param newdata optional dataset to be used for predictions. If not supplied, 
 #' predictions are made on the training set.
 #' @param nahead number of steps ahead at which to predict (Default:1). For infinite-
 #' step ahead predictions or pure simulation, supply \code{Inf}.
+#' @param \ldots other arguments
 #' 
 #' @return 
 #' Time-series containing the predictions
@@ -62,14 +63,14 @@ polyinv <- function(x,k){
 #' and Practice}, CRC Press, Boca Raton. Chapter 18
 #' 
 #' @export
-predict.estpoly <- function(x,newdata=NULL,nahead=1){
+predict.estpoly <- function(object,newdata=NULL,nahead=1,...){
   if(is.null(newdata)&& nahead==1){
-    return(matrix(fitted(x)))
+    return(matrix(fitted(object)))
   } else{
-    model <- x$sys
+    model <- object$sys
     if(is.null(newdata)){
-      y <- fitted(x)+resid(x)
-      u <- x$input
+      y <- fitted(object)+resid(object)
+      u <- object$input
       z <- idframe(y,u,Ts = deltat(y),start=start(y))
     } else{
       z <- newdata

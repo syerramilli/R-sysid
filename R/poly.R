@@ -71,7 +71,7 @@ checkUnity <- function(x){
 }
 
 #' @export
-print.idpoly <- function(x,se=NULL,dig=3){
+print.idpoly <- function(x,se=NULL,dig=3,...){
   main <- paste("Discrete-time",toupper(x$type),"model:")
   if(x$type=="oe" || x$type=="bj"){
     main <- paste(main,"y[k] = B(z)/F(z) u[k] +")

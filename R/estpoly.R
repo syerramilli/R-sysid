@@ -35,15 +35,15 @@ print.estpoly <- function(x,...){
 }
 
 #' @export
-summary.estpoly <- function(x)
+summary.estpoly <- function(object,...)
 {
-  model <- x$sys
+  model <- object$sys
   coefs <- params(model)
   
-  se <- sqrt(diag(getcov(x)))
+  se <- sqrt(diag(getcov(object)))
   params <- data.frame(Estimated=coefs,se=se)
   
-  report <- list(fit=fitch(x),params=params)
+  report <- list(fit=fitch(object),params=params)
   res <- list(model=model,report=report)
   class(res) <- "summary.estpoly"
   res
@@ -87,24 +87,24 @@ fitch <- function(x){
 }
 
 #' @export
-print.summary.estpoly <- function(x,digits=4){
+print.summary.estpoly <- function(x,digits=4,...){
   print(x$model,se=x$report$params[,2],dig=digits)
   cat("\n Fit Characteristics \n")
   print(data.frame(x$report$fit),digits=digits)
 }
 
+#' @import ggplot2
 #' @export
-plot.estpoly <- function(model,newdata=NULL){
-  loadNamespace("ggplot2")
+plot.estpoly <- function(x,newdata=NULL,...){
   
   if(is.null(newdata)){
-    ypred <- ts(fitted(model),names="Predicted")
-    yact <- ts(fitted(model) + resid(model),names="Actual")
-    time <- time(model$input)
+    ypred <- ts(fitted(x),names="Predicted")
+    yact <- ts(fitted(x) + resid(x),names="Actual")
+    time <- time(x$input)
     titstr <- "Predictions of Model on Training Set"
   } else{  
     if(class(newdata)!="idframe") stop("Only idframe objects allowed")
-    ypred <- predict(model,newdata)
+    ypred <- predict(x,newdata)
     yact <- outputData(newdata)[,1]
     time <- time(newdata)
     titstr <- "Predictions of Model on Test Set"
