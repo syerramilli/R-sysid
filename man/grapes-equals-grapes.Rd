@@ -11,8 +11,6 @@ l \%=\% r
 \item{l}{the variables to be assigned}
 
 \item{r}{the list or function-return object}
-
-\item{\ldots}{other arguments}
 }
 \description{
 Assign multiple variables from a list or function return object

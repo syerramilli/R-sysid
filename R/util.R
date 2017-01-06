@@ -1,20 +1,18 @@
-# Generic form
 #' Multiple assignment operator
 #' 
 #' Assign multiple variables from a list or function return object
 #' 
 #' @param l the variables to be assigned
 #' @param r the list or function-return object
-#' @param \ldots other arguments
 #' 
 #' @aliases g
 #' 
 #' @export
-'%=%' = function(l,r,...) UseMethod('%=%')
+'%=%' = function(l,r) UseMethod('%=%')
 
 # Binary Operator
 #' @export
-'%=%.lbunch' = function(l,r,...) {
+'%=%.lbunch' = function(l,r) {
   Envir = as.environment(-1)
   
 #   if (length(r) > length(l))
