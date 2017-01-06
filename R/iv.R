@@ -148,7 +148,7 @@ iv4 <- function(z,order=c(0,1,0)){
   
   # Step 3
   w <- resid(mod_iv)
-  mod_ar <- ar(w,aic = F,order=na+nb)
+  mod_ar <- ar(w,aic = F,order.max =na+nb)
   Lhat <- signal::Arma(b=c(1,-mod_ar$ar),a=1)
   
   # Step 4
