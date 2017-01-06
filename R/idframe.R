@@ -108,6 +108,15 @@ print.summary.idframe <- function(x,...){
   print(x$in_sum)
 }
 
+#' Sampling times of IO data
+#'  
+#' \code{time} creates the vector of times at which data was sampled. \code{frequency} returns the number of damples per unit time and \code{deltat} the time-interval 
+#' between observations
+#'  
+#' @param x a idframe object, or a univariate or multivariate time-series, or a vector or matrix
+#'  
+#' @aliases frequency deltat
+#'  
 #' @export
 time <- function(x){
   if(class(x)[1]!="idframe"){

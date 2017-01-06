@@ -13,9 +13,12 @@
 #' A list containing two objects: the detrended data and the trend information
 #' 
 #' @details 
+#' 
 #' \code{R} by default doesn't allow return of multiple objects. The \code{\%=\%}
 #' operator and \code{g} function in this package facillitate this behaviour. See 
 #' the examples section for more information.
+#' 
+#' @aliases trInfo
 #' 
 #' @examples
 #' data(cstr)

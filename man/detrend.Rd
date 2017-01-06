@@ -2,6 +2,7 @@
 % Please edit documentation in R/preprocess.R
 \name{detrend}
 \alias{detrend}
+\alias{trInfo}
 \title{Remove offsets and linear trends}
 \usage{
 detrend(x, type = 0)
