@@ -5,10 +5,7 @@ Version: 1.0
 Date: 2017-01-06
 Author: Suraj Yerramilli, Arun Tangirala
 Maintainer: Suraj Yerramilli <surajyerramilli@gmail.com>
-Description: The sysid package provides functions for constructing mathematical
-    models of dynamic systems from measured input-output data. The package contains
-    functions for data visualization, data pre-processing, parametric and non-
-    parametric model estimation, and model predictions and validation.
+Description: Provides functions for constructing mathematical models of dynamical systems from measured input-output data. 
 License: GPL-3
 Depends: R (>= 3.1)
 Imports:
