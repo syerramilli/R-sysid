@@ -271,7 +271,7 @@ arx <- function(x,order=c(1,1,1),lambda=0.1,intNoise=FALSE,
   pinv <- innerinv%*% t(X)
   coef <- pinv%*%Y
   
-  eps <- X%*%coef
+  eps <- Y - X%*%coef
   sigma2 <- sum(eps^2)/(df+n)
   vcov <- sigma2 * innerinv
   fit <- (X%*%coef+fixedY)[1:N,,drop=F]
