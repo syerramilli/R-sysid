@@ -3,8 +3,13 @@ Type: Package
 Title: System Identification in R
 Version: 1.0.5
 Date: 2026-01-28
-Author: Suraj Yerramilli, Arun Tangirala
-Maintainer: Suraj Yerramilli <surajyerramilli@gmail.com>
+Authors@R: c(person(given = "Suraj",
+                    family = "Yerramilli",
+                    role = c("aut", "cre"),
+                    email = "surajyerramilli@gmail.com"),
+             person(given = "Arun",
+                    family = "Tangirala",
+                    role = "aut"))
 Description: Provides functions for constructing mathematical models of dynamical systems from measured input-output data. 
 License: GPL-3
 Depends: R (>= 3.1)
