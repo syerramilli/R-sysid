@@ -103,7 +103,7 @@ plot.estpoly <- function(x,newdata=NULL,...){
     time <- time(x$input)
     titstr <- "Predictions of Model on Training Set"
   } else{  
-    if(class(newdata)!="idframe") stop("Only idframe objects allowed")
+    if(!inherits(newdata, "idframe")) stop("Only idframe objects allowed")
     ypred <- predict(x,newdata)
     yact <- outputData(newdata)[,1]
     time <- time(newdata)
@@ -128,7 +128,7 @@ residplot <- function(model,newdata=NULL){
   if(is.null(newdata)){
     e <- resid(model); u <- model$input
   } else{
-    if(class(newdata)!="idframe") stop("Only idframe objects allowed")
+    if(!inherits(newdata, "idframe")) stop("Only idframe objects allowed")
     e <- newdata$output[,1] - predict(model,newdata)[,1]
     u <- newdata$input
   }

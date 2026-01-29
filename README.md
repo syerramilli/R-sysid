@@ -37,7 +37,7 @@ residplot(model)
 
 ## Documentation
 
-Full documentation is available on [CRAN](https://cran.r-project.org/web/packages/sysid/).
+Full documentation is available on [CRAN](https://CRAN.R-project.org/package=sysid).
 
 ## Citation
 

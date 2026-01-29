@@ -1,4 +1,4 @@
-predict.idpoly <- function(object,data,nahead=1){
+predict.idpoly <- function(object,data,nahead=1,...){
   y <- outputData(data); u<- inputData(data)
   G <- signal::Arma(b=c(rep(0,object$ioDelay),object$B),
                     a= as.numeric(polynom::polynomial(object$A)*

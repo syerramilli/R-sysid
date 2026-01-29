@@ -32,7 +32,7 @@
 detrend <- function(x,type=0){ 
   z <- x 
   reg <- time(x)
-  if(class(type)=="trInfo"){ # remove custom trend
+  if(inherits(type, "trInfo")){ # remove custom trend
     if(nOutputSeries(x)!=0){
       fit <- sweep(sweep(matrix(rep(reg,nOutputSeries(x)),ncol=nOutputSeries(x)),
                          2,type$OutputSlope,"*"),2,type$OutputOffset,"+")
@@ -171,7 +171,7 @@ misdata <- function(data){
 #' @export
 dataSlice <- function(data,start=NULL,end=NULL,freq=NULL){
   # check if the class is correct
-  if(class(data)!='idframe')
+  if(!inherits(data, "idframe"))
     stop("Not an idframe data")
   
   indexWindow <- function(y,start,end,freq){
