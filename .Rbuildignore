@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^*.txt$
+^*.json$
+^(?!README).*\.md$
