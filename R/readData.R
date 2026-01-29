@@ -54,9 +54,10 @@ read.idframe <- function(data,ninputs=NULL,Ts = 1,
 #' @examples
 #' dataMatrix <- data.frame(matrix(rnorm(1000),ncol=5))
 #' colnames(dataMatrix) <- c("u1","u2","y1","y2","y3")
-#' write.csv(dataMatrix,file="test.csv",row.names=FALSE)
-#'  
-#' data <- read.table.idframe("test.csv",ninputs=2,unit="minutes")
+#' tmpfile <- file.path(tempdir(),"test.csv")
+#' write.csv(dataMatrix,file=tmpfile,row.names=FALSE)
+#'
+#' data <- read.table.idframe(tmpfile,ninputs=2,unit="minutes")
 #' 
 #' @seealso  \code{\link[utils]{read.table}}
 #' @export 

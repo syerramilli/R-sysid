@@ -1,8 +1,8 @@
 Package: sysid
 Type: Package
 Title: System Identification in R
-Version: 1.0.4
-Date: 2017-01-06
+Version: 1.0.5
+Date: 2026-01-28
 Author: Suraj Yerramilli, Arun Tangirala
 Maintainer: Suraj Yerramilli <surajyerramilli@gmail.com>
 Description: Provides functions for constructing mathematical models of dynamical systems from measured input-output data. 
